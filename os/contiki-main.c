@@ -66,6 +66,10 @@
 #define LOG_LEVEL LOG_LEVEL_MAIN
 
 #if PLATFORM_MAIN_ACCEPTS_ARGS
+/*---------------------------------------------------------------------------*/
+int contiki_argc;
+char **contiki_argv;
+/*---------------------------------------------------------------------------*/
 #include "lib/list.h"
 
 LIST(contiki_options);
@@ -143,7 +147,7 @@ help_callback(char *optarg)
 CONTIKI_OPTION(CONTIKI_MAX_INIT_PRIO + 1, {"help", no_argument, NULL, 0},
                help_callback, "display this help and exit\n");
 /*---------------------------------------------------------------------------*/
-__attribute__((unused)) static int
+static int
 parse_argv(int *argc, char ***argv)
 {
   prog = *argv[0];
@@ -185,7 +189,13 @@ parse_argv(int *argc, char ***argv)
 int
 main(int argc, char **argv)
 {
-  platform_process_args(argc, argv);
+  int rv;
+  if((rv = parse_argv(&argc, &argv)) != 0) {
+    return rv;
+  }
+  /* Remember argc/argv after command line options. */
+  contiki_argc = argc;
+  contiki_argv = argv;
 #else
 int
 main(void)
