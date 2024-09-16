@@ -41,8 +41,8 @@
 
 #include <stdio.h> /* For printf() */
 /*---------------------------------------------------------------------------*/
-PROCESS(rainbow_world_process, "Hello world process");
-AUTOSTART_PROCESSES(&hello_world_process);
+PROCESS(rainbow_world_process, "Rainbow world process");
+AUTOSTART_PROCESSES(&rainbow_world_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(rainbow_world_process, ev, data)
 {
