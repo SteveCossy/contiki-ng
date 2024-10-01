@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "charconv": "c",
+        "bitset": "c",
+        "string": "c",
+        "vector": "c",
+        "exception": "c",
+        "format": "c",
+        "fstream": "c",
+        "limits": "c",
+        "sstream": "c",
+        "functional": "c",
+        "*.inc": "c",
+        "algorithm": "c"
+    }
+}

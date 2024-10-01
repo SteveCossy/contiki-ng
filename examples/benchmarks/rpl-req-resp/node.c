@@ -33,7 +33,7 @@
 /**
  * \file
  *         Benchmark: the root sends requests to all nodes in a randomized
- *         order, and receives resopnses back.
+ *         order, and receives responses back.
  * \author
  *         Simon Duquennoy <simon.duquennoy@ri.se>
  */
@@ -48,7 +48,8 @@
 /* Log configuration */
 #include "sys/log.h"
 #define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_INFO
+// #define LOG_LEVEL LOG_LEVEL_INFO
+#define LOG_LEVEL LOG_LEVEL_DBG
 
 #define UDP_PORT 8214
 #define SEND_INTERVAL (CLOCK_SECOND)
