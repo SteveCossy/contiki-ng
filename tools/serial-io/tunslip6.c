@@ -1095,7 +1095,8 @@ exit(1);
   if(inslip == NULL) err(1, "main: fdopen");
 
   tunfd = tun_alloc(tundev, tap);
-  if(tunfd == -1) err(1, "main: open /dev/tun");
+  if(tunfd == -1) err(1, "main: open /dev/net/tun");
+  /* Changed device name to ECS option */
   if (timestamp) stamptime();
   fprintf(stderr, "opened %s device ``/dev/%s''\n",
           tap ? "tap" : "tun", tundev);
