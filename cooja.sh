@@ -1,2 +1,2 @@
-cd /home/stevecos/contiki-ng/tools/cooja/
+cd ~/contiki-ng/tools/cooja/
 ./gradlew run &
