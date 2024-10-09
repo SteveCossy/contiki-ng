@@ -42,7 +42,8 @@
 /*---------------------------------------------------------------------------*/
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
-static char buf[256];
+static char buf[1024]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char tmp(64) /* SC-Oct-24 */
 static int blen;
 #define ADD(...) do {                                                   \
     blen += snprintf(&buf[blen], sizeof(buf) - blen, __VA_ARGS__);      \
