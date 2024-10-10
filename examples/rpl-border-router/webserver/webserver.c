@@ -124,9 +124,7 @@ static void list_neighbors_and_routes(void) {
   ADD("<pre>");  /* Start preformatted text */
 
   /* Iterate over all neighbours */
-  for(nbr = nbr_table_head(nbr_table_get(uip_ds6_nbr_table)); nbr != NULL; nbr = nbr_table_next(nbr_table_get(uip_ds6_nbr_table), nbr)) {
-    // Access the IP address of the neighbor
-    const uip_ipaddr_t *neighbor_ip = &nbr->ipaddr;
+  for(nbr = nbr_table_head(nbr_table); nbr != NULL; nbr = nbr_table_next(nbr_table, nbr)) {
 
     /* Add Neighbour IP Address */
     ADD("Neighbour IP Address: ");
