@@ -123,10 +123,11 @@ static void list_neighbors_and_routes(void) {
   ADD("<h2>Neighbours and Associated Routes</h2>");
   ADD("<pre>");  /* Start preformatted text */
 
-  /* Iterate over all neighbours */
-  for(nbr = nbr_table_head(nbr_table); nbr != NULL; nbr = nbr_table_next(nbr_table, nbr)) {
-
-    /* Add Neighbour IP Address */
+  // Iterate over the neighbor table using nbr_table_ds6_neighbors()
+  for(nbr = uip_ds6_nbr_head();
+      nbr != NULL;
+      nbr = uip_ds6_nbr_next(nbr)) {
+    
     ADD("Neighbour IP Address: ");
     ADD_IP(&nbr->ipaddr);
     ADD("\n");
