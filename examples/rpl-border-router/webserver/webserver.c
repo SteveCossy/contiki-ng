@@ -147,7 +147,7 @@ static void list_neighbors_and_routes(void) {
 
     /* Check for routes associated with this neighbour */
     ADD("  Routes associated with this neighbour:\n");
-
+    LOG_INFO(buf , "\n"); /* Debug */
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
       if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
@@ -259,8 +259,10 @@ Replace existing code to integrate the new function into the existing web server
   httpd_init();
   LOG_INFO("Contiki-NG Webserver started\n");
 
+  /* Debug
   ADD("Webserver Started");
   SEND(&s->sout);
+  */
 
   while(1) {
     PROCESS_WAIT_EVENT();
