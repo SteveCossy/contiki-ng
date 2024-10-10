@@ -54,11 +54,11 @@ static int blen;
 #define ADD(...) do {                                                   \
     blen += snprintf(&buf[blen], sizeof(buf) - blen, __VA_ARGS__);      \
   } while(0)
+*/
 #define SEND(s) do { \
   SEND_STRING(s, buf); \
   blen = 0; \
 } while(0);
-*/
 
 /* Use simple webserver with only one page for minimum footprint.
  * Multiple connections can result in interleaved tcp segments since
@@ -142,7 +142,8 @@ static void list_neighbors_and_routes(void) {
     ADD("  Routes associated with this neighbour:\n");
 
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
-      if(uip_ipaddr_cmp(&r->nexthop, &nbr->ipaddr)) {
+      // Use uip_ds6_route_nexthop() to get the next hop of the route
+      if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
         /* Add Route IP Address if the nexthop matches the neighbour's IP */
         ADD("    Route IP Address: ");
         ADD_IP(&r->ipaddr);
