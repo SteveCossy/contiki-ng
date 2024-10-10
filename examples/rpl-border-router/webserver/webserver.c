@@ -71,6 +71,7 @@ The ADD and ADD_IP Macros: These macros will help in appending content and
 formatting IP addresses into the output buffer:
 */
 #define ADD(str) snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "%s", str)
+/*  First version of ADD_IP macro
 #define ADD_IP(addr) do { snprintf(tmp, sizeof(tmp), "%02x%02x:%02x%02x:%02x%02x:%02x%02x:" \
                            "%02x%02x:%02x%02x:%02x%02x:%02x%02x", \
                            addr->u8[0], addr->u8[1], addr->u8[2], addr->u8[3], \
@@ -78,6 +79,11 @@ formatting IP addresses into the output buffer:
                            addr->u8[8], addr->u8[9], addr->u8[10], addr->u8[11], \
                            addr->u8[12], addr->u8[13], addr->u8[14], addr->u8[15]); \
                            ADD(tmp); } while(0)
+Updated version follows  */
+#define ADD_IP(addr) snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), \
+                             "%02x%02x:%02x%02x:%02x%02x:%02x%02x", \
+                             (addr)->u8[0], (addr)->u8[1], (addr)->u8[2], (addr)->u8[3], \
+                             (addr)->u8[4], (addr)->u8[5], (addr)->u8[6], (addr)->u8[7])
 
 
 /*---------------------------------------------------------------------------*/
