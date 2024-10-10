@@ -259,6 +259,9 @@ Replace existing code to integrate the new function into the existing web server
   httpd_init();
   LOG_INFO("Contiki-NG Webserver started\n");
 
+  ADD("Webserver Started");
+  SEND(&s->sout);
+
   while(1) {
     PROCESS_WAIT_EVENT();
 
