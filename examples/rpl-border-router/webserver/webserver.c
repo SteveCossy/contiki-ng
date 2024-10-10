@@ -44,7 +44,7 @@
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "RPL BR"
+#define LOG_MODULE "WEBSVR"
 #define LOG_LEVEL LOG_LEVEL_INFO
 
 
@@ -155,6 +155,8 @@ static void list_neighbors_and_routes(void) {
         ADD("    Route IP Address: ");
         ADD_IP(&r->ipaddr);
         ADD("\n");
+        LOG_INFO("Adding IP\n");
+
       }
     }
 
@@ -255,7 +257,7 @@ Replace existing code to integrate the new function into the existing web server
 */
   /* doesn't work httpd_simple_init(); */
   httpd_init();
-  LOG_INFO("Contiki-NG Border Router started\n");
+  LOG_INFO("Contiki-NG Webserver started\n");
 
   while(1) {
     PROCESS_WAIT_EVENT();
