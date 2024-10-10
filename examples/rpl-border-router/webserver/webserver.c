@@ -98,7 +98,9 @@ ipaddr_add(const uip_ipaddr_t *addr)
         ADD(":");
       }
       /* ADD("%x", a); */
-      ADD(a);
+      snprintf(tmp, sizeof(tmp), "%x", a);  // Format the variable 'a' as hexadecimal into 'tmp'
+      ADD(tmp);                             // Add the formatted string to the buffer using 'ADD'
+
     }
   }
 }
