@@ -46,6 +46,7 @@
 /*---------------------------------------------------------------------------*/
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
+static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
 static char buf[1024]; /* Increased from 256 to 1024  SC-Oct-24 */
 static int blen;
 /* 
@@ -80,7 +81,6 @@ formatting IP addresses into the output buffer:
 
 /*---------------------------------------------------------------------------*/
 static void
-static char tmp(64) /* Temporary buffer for IP addresses SC-Oct-24 */
 ipaddr_add(const uip_ipaddr_t *addr)
 {
   uint16_t a;
@@ -97,7 +97,8 @@ ipaddr_add(const uip_ipaddr_t *addr)
       } else if(i > 0) {
         ADD(":");
       }
-      ADD("%x", a);
+      /* ADD("%x", a); */
+      ADD(a);
     }
   }
 }
