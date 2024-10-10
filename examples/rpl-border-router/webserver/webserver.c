@@ -42,6 +42,12 @@
 #include "httpd-simple.h"
 #include "net/nbr-table.h"
 
+/* Log configuration */
+#include "sys/log.h"
+#define LOG_MODULE "RPL BR"
+#define LOG_LEVEL LOG_LEVEL_INFO
+
+
 #include <stdio.h>
 #include <string.h>
 
@@ -249,6 +255,7 @@ Replace existing code to integrate the new function into the existing web server
 */
   /* doesn't work httpd_simple_init(); */
   httpd_init();
+  LOG_INFO("Contiki-NG Border Router started\n");
 
   while(1) {
     PROCESS_WAIT_EVENT();
