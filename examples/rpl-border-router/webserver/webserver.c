@@ -39,6 +39,7 @@
 /* SC-Oct-24 */
 #include "net/ipv6/uip-ds6.h"
 #include "httpd-simple.h"
+#include "net/nbr-table.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -114,7 +115,7 @@ Create the Function to List Neighbours and Routes:
   SC-Oct-24
 */
 
-static void list_neighbours_and_routes(void) {
+static void list_neighbors_and_routes(void) {
   uip_ds6_nbr_t *nbr;
   uip_ds6_route_t *r;
 
@@ -123,7 +124,9 @@ static void list_neighbours_and_routes(void) {
   ADD("<pre>");  /* Start preformatted text */
 
   /* Iterate over all neighbours */
-  for(nbr = nbr_table_head(ds6_neighbours); nbr != NULL; nbr = nbr_table_next(ds6_neighbours, nbr)) {
+  for(nbr = nbr_table_head(nbr_table_get(uip_ds6_nbr_table)); nbr != NULL; nbr = nbr_table_next(nbr_table_get(uip_ds6_nbr_table), nbr)) {
+    // Access the IP address of the neighbor
+    const uip_ipaddr_t *neighbor_ip = &nbr->ipaddr;
 
     /* Add Neighbour IP Address */
     ADD("Neighbour IP Address: ");
@@ -250,7 +253,7 @@ Replace existing code to integrate the new function into the existing web server
       ADD("<h1>RPL Border Router</h1>");
 
       /* Add dynamic content: Neighbours and Routes */
-      list_neighbours_and_routes();
+      list_neighbors_and_routes();
 
       /* Add closing tags */
       ADD("</body></html>");
