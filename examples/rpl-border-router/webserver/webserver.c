@@ -47,8 +47,8 @@
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
 static char buf[1024]; /* Increased from 256 to 1024  SC-Oct-24 */
-static char tmp(64) /* Temporary buffer for IP addresses SC-Oct-24 */
 static int blen;
+/* 
 #define ADD(...) do {                                                   \
     blen += snprintf(&buf[blen], sizeof(buf) - blen, __VA_ARGS__);      \
   } while(0)
@@ -56,6 +56,7 @@ static int blen;
   SEND_STRING(s, buf); \
   blen = 0; \
 } while(0);
+*/
 
 /* Use simple webserver with only one page for minimum footprint.
  * Multiple connections can result in interleaved tcp segments since
@@ -79,6 +80,7 @@ formatting IP addresses into the output buffer:
 
 /*---------------------------------------------------------------------------*/
 static void
+static char tmp(64) /* Temporary buffer for IP addresses SC-Oct-24 */
 ipaddr_add(const uip_ipaddr_t *addr)
 {
   uint16_t a;
@@ -101,7 +103,7 @@ ipaddr_add(const uip_ipaddr_t *addr)
 }
 
 /*---------------------------------------------------------------------------
-Create the Function to List Neighbors and Routes:
+Create the Function to List Neighbours and Routes:
   Add the list_neighbours_and_routes() function to the file. 
   This function will dynamically generate the HTML content 
   listing the neighbours and associated routes, as described 
@@ -114,7 +116,7 @@ static void list_neighbours_and_routes(void) {
   uip_ds6_route_t *r;
 
   /* Add a heading for neighbours */
-  ADD("<h2>Neighbors and Associated Routes</h2>");
+  ADD("<h2>Neighbours and Associated Routes</h2>");
   ADD("<pre>");  /* Start preformatted text */
 
   /* Iterate over all neighbours */
@@ -152,7 +154,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
   PSOCK_BEGIN(&s->sout);
   SEND_STRING(&s->sout, TOP);
 
-  ADD("  Neighbors\n  <ul>\n");
+  ADD("  Neighbours\n  <ul>\n");
   SEND(&s->sout);
   for(nbr = uip_ds6_nbr_head();
       nbr != NULL;
@@ -244,8 +246,8 @@ Replace existing code to integrate the new function into the existing web server
       ADD("<html><head><title>RPL Border Router</title></head><body>");
       ADD("<h1>RPL Border Router</h1>");
 
-      /* Add dynamic content: Neighbors and Routes */
-      list_neighbors_and_routes();
+      /* Add dynamic content: Neighbours and Routes */
+      list_neighbours_and_routes();
 
       /* Add closing tags */
       ADD("</body></html>");
