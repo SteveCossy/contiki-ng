@@ -39,6 +39,7 @@
 /* SC-Oct-24 */
 #include "net/ipv6/uip-ds6.h"
 #include "httpd-simple.h"
+#include "contiki-net.h"
 #include "net/nbr-table.h"
 
 #include <stdio.h>
@@ -216,7 +217,9 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
         ADD(" (parent: ");
         ipaddr_add(&parent_ipaddr);
-        ADD(") %us", (unsigned int)link->lifetime);
+        /* ADD(") %us", (unsigned int)link->lifetime); */
+        snprintf(tmp, sizeof(tmp), ") %us", (unsigned int)link->lifetime);
+        ADD(tmp);
 
         ADD("</li>\n");
         SEND(&s->sout);
