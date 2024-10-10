@@ -38,8 +38,8 @@
 
 /* SC-Oct-24 */
 #include "net/ipv6/uip-ds6.h"
-#include "httpd-simple.h"
 #include "contiki-net.h"
+#include "httpd-simple.h"
 #include "net/nbr-table.h"
 
 #include <stdio.h>
@@ -245,10 +245,10 @@ Replace existing code to integrate the new function into the existing web server
   httpd_init();
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
-    httpd_appcall(data);
   }
 */
-  httpd_simple_init();
+  /* doesn't work httpd_simple_init(); */
+  httpd_init();
 
   while(1) {
     PROCESS_WAIT_EVENT();
@@ -268,7 +268,8 @@ Replace existing code to integrate the new function into the existing web server
       ADD("</body></html>");
 
       /* Send the generated HTML content */
-      httpd_simple_serve(buf, strlen(buf));
+      /* doesn't work httpd_simple_serve(buf, strlen(buf)); */
+    httpd_appcall(buf);
     }
   }
 
