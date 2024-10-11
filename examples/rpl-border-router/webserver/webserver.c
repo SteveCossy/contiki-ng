@@ -55,7 +55,7 @@
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
 static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
-static char buf[1024]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char buf[2048]; /* Increased from 256 to 1024  SC-Oct-24 */
 static int blen;
 /* 
 #define ADD(...) do {                                                   \
@@ -135,7 +135,7 @@ static void list_neighbors_and_routes(void) {
   /* Add a heading for neighbours */
   ADD("<h2>Neighbours and Associated Routes</h2>");
   ADD("<pre>");  /* Start preformatted text */
-
+  LOG_INFO("ADDed Stuff\n"); /* Debug */
   // Iterate over the neighbor table using nbr_table_ds6_neighbors()
   for(nbr = uip_ds6_nbr_head();
       nbr != NULL;
