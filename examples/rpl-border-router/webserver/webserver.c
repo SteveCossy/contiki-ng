@@ -147,7 +147,11 @@ static void list_neighbors_and_routes(void) {
 
     /* Check for routes associated with this neighbour */
     ADD("  Routes associated with this neighbour:\n");
-    LOG_INFO(buf , "\n"); /* Debug */
+    /* Debug */
+    LOG_INFO("Neighbour IP:");
+    uiplib_ipaddr_snprint(uip_buf, sizeof(uip_buf), &nbr->ipaddr);
+    printf("\n");
+
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
       if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
