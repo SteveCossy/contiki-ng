@@ -155,10 +155,10 @@ static void list_neighbors_and_routes(void) {
     printf(buf , "\n");
 
 /*Debug*/
-debug = uip_ds6_route_head();
-uip_ds6_route_next(debug);
+printf( uip_ds6_route_head() );
+/* uip_ds6_route_next(debug);
 uip_ds6_route_nexthop(debug);
-printf("For loop line", debug uip_ds6_route_next(debug)), uip_ds6_route_nexthop(debug)
+printf("For loop line", debug uip_ds6_route_next(debug), uip_ds6_route_nexthop(debug)) */
 
     for ( r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
