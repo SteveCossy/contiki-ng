@@ -163,15 +163,21 @@ printf("For loop line", debug uip_ds6_route_next(debug), uip_ds6_route_nexthop(d
     for ( r = uip_ds6_route_head(); 
       r != NULL; 
       r = uip_ds6_route_next(r)) {
+      // Debug
+      printf("nexthop(r) points to ");
+      uiplib_ipaddr_print(uip_ds6_route_nexthop(r));
+      printf("\n");
+
       // Use uip_ds6_route_nexthop() to get the next hop of the route
-      /* if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r)
-        Add Route IP Address if the nexthop matches the neighbour's IP */
+      // if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r)
+      if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
+      // Add Route IP Address if the nexthop matches the neighbour's IP 
         ADD("    Route IP Address: ");
         ADD_IP(&r->ipaddr);
         ADD("\n");
         printf(buf);
 
-      /*}*/
+      }
     }
 
     ADD("\n");  /* Add space between neighbours */
