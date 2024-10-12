@@ -151,8 +151,7 @@ static void list_neighbors_and_routes(void) {
     LOG_INFO("Neighbour IP:");
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
-    /* LOG_INFO("%s"); */
-    LOG_INFO(ip_buf);
+    printf("%s\n", ip_buf);
 
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
