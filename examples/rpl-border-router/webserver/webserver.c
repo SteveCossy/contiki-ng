@@ -147,11 +147,12 @@ static void list_neighbors_and_routes(void) {
 
     /* Check for routes associated with this neighbour */
     ADD("  Routes associated with this neighbour:\n");
-    /* Debug */
-    LOG_INFO("Neighbour IP:");
+    /* Debug 
+    LOG_INFO("Neighbour IP:");*/
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
-    printf("%s\n", ip_buf);
+    printf("\%s is " , "%s\n", ip_buf);
+    printf(buf , "\n");
 
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
