@@ -153,21 +153,17 @@ static void list_neighbors_and_routes(void) {
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
     printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
-
-/*Debug
-printf( uip_ds6_route_head() );
- uip_ds6_route_next(debug);
-uip_ds6_route_nexthop(debug);
-printf("For loop line", debug uip_ds6_route_next(debug), uip_ds6_route_nexthop(debug)) */
-
-    for ( r = uip_ds6_route_head(); 
-      r != NULL; 
-      r = uip_ds6_route_next(r)) {
       // Debug
+      r = uip_ds6_route_head();
+      r = uip_ds6_route_next(r);
       printf("nexthop(r) points to ");
       uiplib_ipaddr_print(uip_ds6_route_nexthop(r));
       printf("\n");
 
+
+    for ( r = uip_ds6_route_head(); 
+      r != NULL; 
+      r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
       // if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r)
       if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
