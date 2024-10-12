@@ -222,7 +222,7 @@
       <skin>org.contikios.cooja.plugins.skins.AddressVisualizerSkin</skin>
       <viewport>2.6557622718251297 0.0 0.0 2.6557622718251297 104.82946207224833 160.4061481626971</viewport>
     </plugin_config>
-    <bounds x="1" y="1" height="644" width="574" />
+    <bounds x="1" y="1" height="644" width="574" z="1" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.LogListener
@@ -231,7 +231,7 @@
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="361" y="0" height="818" width="740" z="1" />
+    <bounds x="384" y="-2" height="517" width="740" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.Notes

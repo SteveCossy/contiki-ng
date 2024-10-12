@@ -151,19 +151,19 @@ static void list_neighbors_and_routes(void) {
     LOG_INFO("Neighbour IP:");*/
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
-    printf("\%s is " , "%s\n", ip_buf);
+    printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
 
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
-      if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
-        /* Add Route IP Address if the nexthop matches the neighbour's IP */
+      /* if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
+        Add Route IP Address if the nexthop matches the neighbour's IP */
         ADD("    Route IP Address: ");
         ADD_IP(&r->ipaddr);
         ADD("\n");
-        LOG_INFO("Adding IP\n");
+        printf(buf);
 
-      }
+      /*}*/
     }
 
     ADD("\n");  /* Add space between neighbours */
