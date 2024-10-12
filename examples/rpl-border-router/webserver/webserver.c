@@ -149,8 +149,10 @@ static void list_neighbors_and_routes(void) {
     ADD("  Routes associated with this neighbour:\n");
     /* Debug */
     LOG_INFO("Neighbour IP:");
-    uiplib_ipaddr_snprint(uip_buf, sizeof(uip_buf), &nbr->ipaddr);
-    printf("\n");
+    char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
+    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
+    /* LOG_INFO("%s"); */
+    LOG_INFO(ip_buf);
 
     for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
       // Use uip_ds6_route_nexthop() to get the next hop of the route
