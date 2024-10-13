@@ -161,7 +161,7 @@ static void list_neighbors_and_routes(void) {
       printf("\n");
       printf("Nbr of routes func: %d\n", uip_ds6_route_num_routes());
       printf("Nbr of routes Var: %d\n", UIP_SR_LINK_NUM);
-
+/*
     for ( r = uip_ds6_route_head(); 
       r != NULL; 
       r = uip_ds6_route_next(r)) {
@@ -175,7 +175,22 @@ static void list_neighbors_and_routes(void) {
         printf(buf);
 
       }
+    } */
+   struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
+
+   for(node = uip_sr_node_head(); node != NULL; node = uip_sr_node_next(node)) {
+    const linkaddr_t *nexthop = uip_sr_node_get_link(node);  // Get the next hop (link-layer address) from the source route entry
+
+
+    if(linkaddr_cmp(nexthop, &nbr->lladdr)) {
+      // Add the route IP address if the nexthop matches the neighbour's link-layer address
+      ADD("    Source Route IP Address: ");
+      ADD_IP(&node->ipaddr);  // Assuming `node->ipaddr` stores the IP address of the source route entry
+      ADD("\n");
+      printf(buf);
     }
+}
+
 
     ADD("\n");  /* Add space between neighbours */
   }
