@@ -178,14 +178,18 @@ static void list_neighbors_and_routes(void) {
     } */
    struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
 
-   for(node = uip_sr_node_head(); node != NULL; node = uip_sr_node_next(node)) {
+   for(node = uip_sr_node_head(); 
+    node != NULL;
+    node = uip_sr_node_next(node)) {
     const linkaddr_t *nexthop = uip_sr_node_get_link(node);  // Get the next hop (link-layer address) from the source route entry
 
 
     if(linkaddr_cmp(nexthop, &nbr->lladdr)) {
       // Add the route IP address if the nexthop matches the neighbour's link-layer address
       ADD("    Source Route IP Address: ");
-      ADD_IP(&node->ipaddr);  // Assuming `node->ipaddr` stores the IP address of the source route entry
+      uip_ipaddr_t root_ipaddr;
+      uip_sr_get_root_ipaddr(&root_ipaddr, node);  // Get the IP address associated with this source route node
+      ADD_IP(&root_ipaddr);
       ADD("\n");
       printf(buf);
     }
