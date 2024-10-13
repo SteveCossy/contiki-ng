@@ -181,8 +181,7 @@ static void list_neighbors_and_routes(void) {
    for(node = uip_sr_node_head(); 
     node != NULL;
     node = uip_sr_node_next(node)) {
-    const linkaddr_t *nexthop = uip_sr_node_get_link(node);  // Get the next hop (link-layer address) from the source route entry
-
+    const linkaddr_t *nexthop = &node->parent;  // Assuming 'parent' field in uip_sr_node holds the link-layer address
 
     if(linkaddr_cmp(nexthop, &nbr->lladdr)) {
       // Add the route IP address if the nexthop matches the neighbour's link-layer address
