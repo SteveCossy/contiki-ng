@@ -159,7 +159,7 @@ static void list_neighbors_and_routes(void) {
       printf("nexthop(r) points to ");
       uiplib_ipaddr_print(uip_ds6_route_nexthop(r));
       printf("\n");
-
+      printf("Number of route: %d\n", uip_ds6_route_num_routes());
 
     for ( r = uip_ds6_route_head(); 
       r != NULL; 
