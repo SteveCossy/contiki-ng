@@ -130,7 +130,7 @@ Create the Function to List Neighbours and Routes:
 
 static void list_neighbors_and_routes(void) {
   uip_ds6_nbr_t *nbr;
-  uip_ds6_route_t *r;
+  uip_sr_node_t *r;
 
   /* Add a heading for neighbours */
   ADD("<h2>Neighbours and Associated Routes</h2>");
@@ -154,12 +154,12 @@ static void list_neighbors_and_routes(void) {
     printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
       // Debug
-      r = uip_ds6_route_head();
-      r = uip_ds6_route_next(r);
+      r = uip_sr_node_head();
+      r = uip_sr_node_next(r);
       printf("nexthop(r) points to ");
-      uiplib_ipaddr_print(uip_ds6_route_nexthop(r));
+      uiplib_ipaddr_print(uip_sr_node_nexthop(r));
       printf("\n");
-      printf("Nbr of routes func: %d\n", uip_ds6_route_num_routes());
+      printf("Nbr of routes func: %d\n", uip_sr_node_routes());
       printf("Nbr of routes Var: %d\n", UIP_SR_LINK_NUM);
 /*
     for ( r = uip_ds6_route_head(); 
@@ -176,6 +176,7 @@ static void list_neighbors_and_routes(void) {
 
       }
     } */
+   /*
    struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
 
    for(node = uip_sr_node_head(); 
@@ -192,7 +193,7 @@ static void list_neighbors_and_routes(void) {
       ADD("\n");
       printf(buf);
     }
-}
+}*/
 
 
     ADD("\n");  /* Add space between neighbours */
