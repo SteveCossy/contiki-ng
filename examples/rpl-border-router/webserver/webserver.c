@@ -155,12 +155,7 @@ static void list_neighbors_and_routes(void) {
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
 
-    if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
-      printf("Invalid IP address format\n");
-  } else {
-   // Now ipaddr contains the parsed IPv6 address
-      uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
-  }
+
 
     // printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
@@ -170,12 +165,18 @@ static void list_neighbors_and_routes(void) {
       r = uip_sr_node_next(r)) {
       NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
       NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-      printf("IP buf is currently:");
+    if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
+      printf("Invalid IP address format\n");
+    } else {
+   // Now ipaddr contains the parsed IPv6 address
+      uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
+    }
+      printf("IP buffer is currently:");
         uiplib_ipaddr_print(&ip_buffer);
       printf("  parent is:");
         uiplib_ipaddr_print(&parent_ipaddr);
       printf("\n");
-      if(uip_ipaddr_cmp(&ip_buf,&parent_ipaddr)) {
+      if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
         printf("r->parent points to ");
         uiplib_ipaddr_print(&parent_ipaddr);
         printf("\n");
@@ -186,7 +187,7 @@ static void list_neighbors_and_routes(void) {
         ADD("    Route IP Address: ");
         ADD_IP(&child_ipaddr);
         ADD("\n");
-        printf(buf);
+//        printf(buf);
       }
     } 
    /*
@@ -211,7 +212,7 @@ static void list_neighbors_and_routes(void) {
 
     ADD("\n");  /* Add space between neighbours */
   }
-
+  printf(buf); // Debug
   ADD("</pre>");  /* End preformatted text */
 }
 
