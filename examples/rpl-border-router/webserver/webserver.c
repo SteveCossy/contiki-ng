@@ -55,7 +55,7 @@
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
 static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
-static char buf[2048]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char buf[4096]; /* Increased from 256 to 1024  SC-Oct-24 */
 static int blen;
 /* 
 #define ADD(...) do {                                                   \
@@ -146,8 +146,7 @@ static void list_neighbors_and_routes(void) {
     ADD("Neighbour IP Address: ");
     ipaddr_add(&nbr->ipaddr);
     ADD("\n");
-    SEND(&s->sout);
-
+   
     /* Check for routes associated with this neighbour */
     ADD("  Routes associated with this neighbour:\n");
     /* Debug 
@@ -156,12 +155,17 @@ static void list_neighbors_and_routes(void) {
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
     // printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
-      
+    
     for ( r = uip_sr_node_head(); 
       r != NULL; 
       r = uip_sr_node_next(r)) {
       NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
       NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+      printf("IP buf is currently:");
+        uiplib_ipaddr_print(ip_buf);
+      printf("  parent is:");
+        uiplib_ipaddr_print(&parent_ipaddr);
+      printf("\n");
       if(uip_ipaddr_cmp(&ip_buf,&parent_ipaddr)) {
         printf("r->parent points to ");
         uiplib_ipaddr_print(&parent_ipaddr);
