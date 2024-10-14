@@ -141,98 +141,10 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
   PSOCK_BEGIN(&s->sout);
   SEND_STRING(&s->sout, TOP);
-/*
-  ADD("  Neighbours\n  <ul>\n");
-  SEND(&s->sout);
-  for(nbr = uip_ds6_nbr_head();
-      nbr != NULL;
-      nbr = uip_ds6_nbr_next(nbr)) {
-    ADD("    <li>");
-    ipaddr_add(&nbr->ipaddr);
-    ADD("</li>\n");
-    SEND(&s->sout);
-  }
-  */
+
   ADD("  </ul>\n");
   SEND(&s->sout);
-/*
-#if (UIP_MAX_ROUTES != 0)
-  {
-    static uip_ds6_route_t *r;
-    ADD("  Routes\n  <ul>\n");
-    SEND(&s->sout);
-    for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
-      ADD("    <li>");
-      ipaddr_add(&r->ipaddr);
-      ADD("/%u (via ", r->length);
-      ipaddr_add(uip_ds6_route_nexthop(r));
-      ADD(") %lus", (unsigned long)r->state.lifetime);
-      ADD("</li>\n");
-      SEND(&s->sout);
-    }
-    ADD("  </ul>\n");
-    SEND(&s->sout);
-  }
-#endif // UIP_MAX_ROUTES != 0 
 
-#if (UIP_SR_LINK_NUM != 0)
-  if(uip_sr_num_nodes() > 0) {
-    static uip_sr_node_t *link;
-    ADD("  Routing links\n  <ul>\n");
-    SEND(&s->sout);
-    for(link = uip_sr_node_head(); link != NULL; link = uip_sr_node_next(link)) {
-      if(link->parent != NULL) {
-        uip_ipaddr_t child_ipaddr;
-        uip_ipaddr_t parent_ipaddr;
-
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, link->parent);
-
-        ADD("    <li>");
-        ipaddr_add(&child_ipaddr);
-
-        ADD(" (parent: ");
-        ipaddr_add(&parent_ipaddr);
-        // ADD(") %us", (unsigned int)link->lifetime); 
-        snprintf(tmp, sizeof(tmp), ") %us", (unsigned int)link->lifetime);
-        ADD(tmp);
-
-        ADD("</li>\n");
-        SEND(&s->sout);
-      }
-    }
-    ADD("  </ul>");
-    SEND(&s->sout);
-  }
-#endif  UIP_SR_LINK_NUM != 0 */
-
-  SEND_STRING(&s->sout, BOTTOM);
-
-  PSOCK_END(&s->sout);
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(webserver_nogui_process, "Web server");
-PROCESS_THREAD(webserver_nogui_process, ev, data)
-{
-  PROCESS_BEGIN();
-
-/*- SC-Oct-24 ---------------------------------------------------------------
-Replace existing code to integrate the new function into the existing web server logic:
-  httpd_init();
-  while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
-  }
-*/
-  /* doesn't work httpd_simple_init(); */
-  httpd_init();
-  LOG_INFO("Contiki-NG Webserver started\n");
-
-  while(1) {
-    PROCESS_WAIT_EVENT();
-
-    if(ev == tcpip_event) {
-      /* Clear the buffer */
-      memset(buf, 0, sizeof(buf));
 
       /* Add the HTML header */
       ADD("<html><head><title>RPL Border Router</title></head><body>");
@@ -312,6 +224,35 @@ Replace existing code to integrate the new function into the existing web server
       /* Send the generated HTML content */
       /* doesn't work httpd_simple_serve(buf, strlen(buf)); */
     httpd_appcall(buf);
+    }
+
+  SEND_STRING(&s->sout, BOTTOM);
+
+  PSOCK_END(&s->sout);
+}
+/*---------------------------------------------------------------------------*/
+PROCESS(webserver_nogui_process, "Web server");
+PROCESS_THREAD(webserver_nogui_process, ev, data)
+{
+  PROCESS_BEGIN();
+
+/*- SC-Oct-24 ---------------------------------------------------------------
+Replace existing code to integrate the new function into the existing web server logic:
+  httpd_init();
+  while(1) {
+    PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
+  }
+*/
+  /* doesn't work httpd_simple_init(); */
+  httpd_init();
+  LOG_INFO("Contiki-NG Webserver started\n");
+
+  while(1) {
+    PROCESS_WAIT_EVENT();
+
+    if(ev == tcpip_event) {
+      /* Clear the buffer */
+      memset(buf, 0, sizeof(buf));
     }
   }
 
