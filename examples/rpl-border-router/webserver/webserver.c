@@ -145,7 +145,7 @@ static void list_neighbors_and_routes(void) {
       nbr = uip_ds6_nbr_next(nbr)) {
     
     ADD("Neighbour IP Address: ");
-    ipaddr_add(&nbr->ipaddr);
+      ipaddr_add(&nbr->ipaddr);
     ADD("\n");
    
     /* Check for routes associated with this neighbour */
@@ -185,25 +185,6 @@ static void list_neighbors_and_routes(void) {
 //        printf(buf);
       }
     } 
-   /*
-   struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
-
-   for(node = uip_sr_node_head(); 
-    node != NULL;
-    node = uip_sr_node_next(node)) {
-    const linkaddr_t *nexthop = &node->parent;  // Assuming 'parent' field in uip_sr_node holds the link-layer address
-
-    if(linkaddr_cmp(nexthop, &nbr->lladdr)) {
-      // Add the route IP address if the nexthop matches the neighbour's link-layer address
-      ADD("    Source Route IP Address: ");
-      uip_ipaddr_t root_ipaddr;
-      uip_sr_get_root_ipaddr(&root_ipaddr, node);  // Get the IP address associated with this source route node
-      ADD_IP(&root_ipaddr);
-      ADD("\n");
-      printf(buf);
-    }
-}*/
-
 
     ADD("\n");  /* Add space between neighbours */
   printf(buf); // Debug
@@ -215,11 +196,11 @@ static void list_neighbors_and_routes(void) {
 static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
-  static uip_ds6_nbr_t *nbr;
+ // static uip_ds6_nbr_t *nbr;
 
   PSOCK_BEGIN(&s->sout);
   SEND_STRING(&s->sout, TOP);
-
+/*
   ADD("  Neighbours\n  <ul>\n");
   SEND(&s->sout);
   for(nbr = uip_ds6_nbr_head();
@@ -230,9 +211,10 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     ADD("</li>\n");
     SEND(&s->sout);
   }
+  */
   ADD("  </ul>\n");
   SEND(&s->sout);
-
+/*
 #if (UIP_MAX_ROUTES != 0)
   {
     static uip_ds6_route_t *r;
@@ -250,7 +232,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     ADD("  </ul>\n");
     SEND(&s->sout);
   }
-#endif /* UIP_MAX_ROUTES != 0 */
+#endif // UIP_MAX_ROUTES != 0 
 
 #if (UIP_SR_LINK_NUM != 0)
   if(uip_sr_num_nodes() > 0) {
@@ -270,7 +252,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
         ADD(" (parent: ");
         ipaddr_add(&parent_ipaddr);
-        /* ADD(") %us", (unsigned int)link->lifetime); */
+        // ADD(") %us", (unsigned int)link->lifetime); 
         snprintf(tmp, sizeof(tmp), ") %us", (unsigned int)link->lifetime);
         ADD(tmp);
 
@@ -281,7 +263,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     ADD("  </ul>");
     SEND(&s->sout);
   }
-#endif /* UIP_SR_LINK_NUM != 0 */
+#endif  UIP_SR_LINK_NUM != 0 */
 
   SEND_STRING(&s->sout, BOTTOM);
 
@@ -303,11 +285,6 @@ Replace existing code to integrate the new function into the existing web server
   /* doesn't work httpd_simple_init(); */
   httpd_init();
   LOG_INFO("Contiki-NG Webserver started\n");
-
-  /* Debug
-  ADD("Webserver Started");
-  SEND(&s->sout);
-  */
 
   while(1) {
     PROCESS_WAIT_EVENT();
