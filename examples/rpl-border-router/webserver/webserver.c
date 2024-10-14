@@ -128,71 +128,10 @@ Create the Function to List Neighbours and Routes:
   SC-Oct-24
 */
 
-static void list_neighbors_and_routes(void) {
-  uip_ds6_nbr_t *nbr;
-  uip_sr_node_t *r;
-  uip_ipaddr_t child_ipaddr;
-  uip_ipaddr_t parent_ipaddr;
-  uip_ipaddr_t ip_buffer;
+//tatic void list_neighbors_and_routes(void) {
 
-  /* Add a heading for neighbours */
-  ADD("<h2>Neighbours and Associated Routes</h2>");
-  ADD("<pre>");  /* Start preformatted text */
-  // LOG_INFO("ADDed Stuff\n"); /* Debug */
-  // Iterate over the neighbor table using nbr_table_ds6_neighbors()
-  for(nbr = uip_ds6_nbr_head();
-      nbr != NULL;
-      nbr = uip_ds6_nbr_next(nbr)) {
-    
-    ADD("Neighbour IP Address: ");
-      ipaddr_add(&nbr->ipaddr);
-    ADD("\n");
-   
-    /* Check for routes associated with this neighbour */
-    ADD("  Routes associated with this neighbour:\n");
-    /* Debug 
-    LOG_INFO("Neighbour IP:");*/
-    char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
-    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
-    
-    for ( r = uip_sr_node_head(); 
-      r != NULL; 
-      r = uip_sr_node_next(r)) {
-      if(r->parent != NULL) {
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-        if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
-          printf("Invalid IP address format\n");
-        } else {
-      // Now ipaddr contains the parsed IPv6 address
-          uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
-        }
-        printf("IP buffer is currently:");
-        uiplib_ipaddr_print(&ip_buffer);
-        printf("  parent is:");
-        uiplib_ipaddr_print(&parent_ipaddr);
-        printf("\n");
-        if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
-          printf("r->parent points to ");
-          uiplib_ipaddr_print(&parent_ipaddr);
-          printf("\n");
-          printf("r points to ");
-          uiplib_ipaddr_print(&child_ipaddr);
-          printf("\n");
-          // Add Route IP Address if the nexthop matches the neighbour's IP 
-          ADD("    Route IP Address: ");
-          ADD_IP(&child_ipaddr);
-          ADD("\n");
-        }
-//        printf(buf);
-      }
-    } 
 
-    ADD("\n");  /* Add space between neighbours */
-  printf(buf); // Debug
-  }
-  ADD("</pre>");  /* End preformatted text */
-}
+//}
 
 /*---------------------------------------------------------------------------*/
 static
@@ -300,7 +239,72 @@ Replace existing code to integrate the new function into the existing web server
       ADD("<h1>RPL Border Router</h1>");
 
       /* Add dynamic content: Neighbours and Routes */
-      list_neighbors_and_routes();
+      // list_neighbors_and_routes();
+
+  uip_ds6_nbr_t *nbr;
+  uip_sr_node_t *r;
+  uip_ipaddr_t child_ipaddr;
+  uip_ipaddr_t parent_ipaddr;
+  uip_ipaddr_t ip_buffer;
+
+  /* Add a heading for neighbours */
+  ADD("<h2>Neighbours and Associated Routes</h2>");
+  ADD("<pre>");  /* Start preformatted text */
+  // LOG_INFO("ADDed Stuff\n"); /* Debug */
+  // Iterate over the neighbor table using nbr_table_ds6_neighbors()
+  for(nbr = uip_ds6_nbr_head();
+      nbr != NULL;
+      nbr = uip_ds6_nbr_next(nbr)) {
+    
+    ADD("Neighbour IP Address: ");
+      ipaddr_add(&nbr->ipaddr);
+    ADD("\n");
+   
+    /* Check for routes associated with this neighbour */
+    ADD("  Routes associated with this neighbour:\n");
+    /* Debug 
+    LOG_INFO("Neighbour IP:");*/
+    char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
+    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
+    
+    for ( r = uip_sr_node_head(); 
+      r != NULL; 
+      r = uip_sr_node_next(r)) {
+      if(r->parent != NULL) {
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+        if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
+          printf("Invalid IP address format\n");
+        } else {
+      // Now ipaddr contains the parsed IPv6 address
+          uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
+        }
+        printf("IP buffer is currently:");
+        uiplib_ipaddr_print(&ip_buffer);
+        printf("  parent is:");
+        uiplib_ipaddr_print(&parent_ipaddr);
+        printf("\n");
+        if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
+          printf("r->parent points to ");
+          uiplib_ipaddr_print(&parent_ipaddr);
+          printf("\n");
+          printf("r points to ");
+          uiplib_ipaddr_print(&child_ipaddr);
+          printf("\n");
+          // Add Route IP Address if the nexthop matches the neighbour's IP 
+          ADD("    Route IP Address: ");
+          ADD_IP(&child_ipaddr);
+          ADD("\n");
+        }
+//        printf(buf);
+      }
+    } 
+
+    ADD("\n");  /* Add space between neighbours */
+    SEND(&s->sout)
+  printf(buf); // Debug
+  }
+  ADD("</pre>");  /* End preformatted text */
 
       /* Add closing tags */
       ADD("</body></html>");
