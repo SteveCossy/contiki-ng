@@ -55,7 +55,7 @@
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
 static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
-static char buf[2048]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char buf[9000]; /* Increased from 256 to 1024  SC-Oct-24 */
 static int blen;
 /* 
 #define ADD(...) do {                                                   \
@@ -158,32 +158,30 @@ static void list_neighbors_and_routes(void) {
     for ( r = uip_sr_node_head(); 
       r != NULL; 
       r = uip_sr_node_next(r)) {
-      if(r->parent != NULL) {
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-        if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
-          printf("Invalid IP address format\n");
-        } else {
-      // Now ipaddr contains the parsed IPv6 address
-          uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
-        }
-        printf("IP buffer is currently:");
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+    if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
+      printf("Invalid IP address format\n");
+    } else {
+   // Now ipaddr contains the parsed IPv6 address
+      uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
+    }
+      printf("IP buffer is currently:");
         uiplib_ipaddr_print(&ip_buffer);
-        printf("  parent is:");
+      printf("  parent is:");
+        uiplib_ipaddr_print(&parent_ipaddr);
+      printf("\n");
+      if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
+        printf("r->parent points to ");
         uiplib_ipaddr_print(&parent_ipaddr);
         printf("\n");
-        if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
-          printf("r->parent points to ");
-          uiplib_ipaddr_print(&parent_ipaddr);
-          printf("\n");
-          printf("r points to ");
-          uiplib_ipaddr_print(&child_ipaddr);
-          printf("\n");
-          // Add Route IP Address if the nexthop matches the neighbour's IP 
-          ADD("    Route IP Address: ");
-          ADD_IP(&child_ipaddr);
-          ADD("\n");
-        }
+        printf("r points to ");
+        uiplib_ipaddr_print(&child_ipaddr);
+        printf("\n");
+        // Add Route IP Address if the nexthop matches the neighbour's IP 
+        ADD("    Route IP Address: ");
+        ADD_IP(&child_ipaddr);
+        ADD("\n");
 //        printf(buf);
       }
     } 
