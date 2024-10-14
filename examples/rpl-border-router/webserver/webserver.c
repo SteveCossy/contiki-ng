@@ -137,43 +137,32 @@ static void list_neighbors_and_routes(void) {
   /* Add a heading for neighbours */
   ADD("<h2>Neighbours and Associated Routes</h2>");
   ADD("<pre>");  /* Start preformatted text */
-  LOG_INFO("ADDed Stuff\n"); /* Debug */
+  // LOG_INFO("ADDed Stuff\n"); /* Debug */
   // Iterate over the neighbor table using nbr_table_ds6_neighbors()
   for(nbr = uip_ds6_nbr_head();
       nbr != NULL;
       nbr = uip_ds6_nbr_next(nbr)) {
     
     ADD("Neighbour IP Address: ");
-    ADD_IP(&nbr->ipaddr);
+    ipaddr_add(&nbr->ipaddr);
     ADD("\n");
+    SEND(&s->sout);
 
     /* Check for routes associated with this neighbour */
     ADD("  Routes associated with this neighbour:\n");
     /* Debug 
     LOG_INFO("Neighbour IP:");*/
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
-    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
-    printf("IP_buf is %s\n", ip_buf);
+    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
+    // printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
-      /* Debug
-      r = uip_sr_node_head();
-      r = uip_sr_node_next(r);
-      NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
-      NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-      printf("r->parent points to ");
-      uiplib_ipaddr_print(&parent_ipaddr);
-      printf("\n");
-      printf("r points to ");
-      uiplib_ipaddr_print(&child_ipaddr);
-      printf("\n");
-*/
-
+      
     for ( r = uip_sr_node_head(); 
       r != NULL; 
       r = uip_sr_node_next(r)) {
       NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
       NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-      if(uip_ipaddr_cmp(&child_ipaddr,&parent_ipaddr)) {
+      if(uip_ipaddr_cmp(&ip_buf,&parent_ipaddr)) {
         printf("r->parent points to ");
         uiplib_ipaddr_print(&parent_ipaddr);
         printf("\n");
