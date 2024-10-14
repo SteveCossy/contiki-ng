@@ -224,7 +224,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
       /* Send the generated HTML content */
       /* doesn't work httpd_simple_serve(buf, strlen(buf)); */
     httpd_appcall(buf);
-    }
+    
 
   SEND_STRING(&s->sout, BOTTOM);
 
