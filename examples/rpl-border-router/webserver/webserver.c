@@ -155,7 +155,7 @@ static void list_neighbors_and_routes(void) {
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr);
     printf("IP_buf is %s\n", ip_buf);
     printf(buf , "\n");
-      // Debug
+      /* Debug
       r = uip_sr_node_head();
       r = uip_sr_node_next(r);
       NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
@@ -166,27 +166,26 @@ static void list_neighbors_and_routes(void) {
       printf("r points to ");
       uiplib_ipaddr_print(&child_ipaddr);
       printf("\n");
-
+*/
 
     for ( r = uip_sr_node_head(); 
       r != NULL; 
       r = uip_sr_node_next(r)) {
-            NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
-            NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
-            printf("r->parent points to ");
-            uiplib_ipaddr_print(&parent_ipaddr);
-            printf("\n");
-            printf("r points to ");
-            uiplib_ipaddr_print(&child_ipaddr);
-            printf("\n");
-            /*
-      if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
-      // Add Route IP Address if the nexthop matches the neighbour's IP 
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+      if(uip_ipaddr_cmp(&child_ipaddr,&parent_ipaddr)) {
+        printf("r->parent points to ");
+        uiplib_ipaddr_print(&parent_ipaddr);
+        printf("\n");
+        printf("r points to ");
+        uiplib_ipaddr_print(&child_ipaddr);
+        printf("\n");
+        // Add Route IP Address if the nexthop matches the neighbour's IP 
         ADD("    Route IP Address: ");
-        ADD_IP(&r->ipaddr);
+        ADD_IP(&child_ipaddr);
         ADD("\n");
         printf(buf);
-      }*/
+      }
     } 
    /*
    struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
