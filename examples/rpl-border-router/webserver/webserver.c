@@ -154,8 +154,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
       // list_neighbors_and_routes();
 
   uip_ds6_nbr_t *nbr;
-  static uip_sr_node_t *r;
-  uip_ipaddr_t child_ipaddr;
+   uip_ipaddr_t child_ipaddr;
   uip_ipaddr_t parent_ipaddr;
   uip_ipaddr_t ip_buffer;
 
@@ -167,7 +166,9 @@ PT_THREAD(generate_routes(struct httpd_state *s))
   for(nbr = uip_ds6_nbr_head();
       nbr != NULL;
       nbr = uip_ds6_nbr_next(nbr)) {
-    
+
+    static uip_sr_node_t *link;
+
     ADD("Neighbour IP Address: ");
       ipaddr_add(&nbr->ipaddr);
     ADD("\n");
@@ -179,12 +180,12 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
     
-    for ( r = uip_sr_node_head(); 
-      r != NULL; 
-      r = uip_sr_node_next(r)) {
-      if(r->parent != NULL) {
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+    for ( link = uip_sr_node_head(); 
+      link != NULL; 
+      link = uip_sr_node_next(link)) {
+      if(link->parent != NULL) {
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr,link->parent);
         if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
           printf("Invalid IP address format\n");
         } else {
@@ -197,10 +198,10 @@ PT_THREAD(generate_routes(struct httpd_state *s))
         uiplib_ipaddr_print(&parent_ipaddr);
         printf("\n");
         if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
-          printf("r->parent points to ");
+          printf("link->parent points to ");
           uiplib_ipaddr_print(&parent_ipaddr);
           printf("\n");
-          printf("r points to ");
+          printf("link points to ");
           uiplib_ipaddr_print(&child_ipaddr);
           printf("\n");
           // Add Route IP Address if the nexthop matches the neighbour's IP 
