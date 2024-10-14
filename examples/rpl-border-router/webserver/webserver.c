@@ -131,6 +131,8 @@ Create the Function to List Neighbours and Routes:
 static void list_neighbors_and_routes(void) {
   uip_ds6_nbr_t *nbr;
   uip_sr_node_t *r;
+  uip_ipaddr_t child_ipaddr;
+  uip_ipaddr_t parent_ipaddr;
 
   /* Add a heading for neighbours */
   ADD("<h2>Neighbours and Associated Routes</h2>");
@@ -156,26 +158,36 @@ static void list_neighbors_and_routes(void) {
       // Debug
       r = uip_sr_node_head();
       r = uip_sr_node_next(r);
-      printf("nexthop(r) points to ");
-      uiplib_ipaddr_print(uip_sr_node_nexthop(r));
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
+      NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+      printf("r->parent points to ");
+      uiplib_ipaddr_print(&parent_ipaddr);
       printf("\n");
-      printf("Nbr of routes func: %d\n", uip_sr_node_routes());
-      printf("Nbr of routes Var: %d\n", UIP_SR_LINK_NUM);
-/*
-    for ( r = uip_ds6_route_head(); 
+      printf("r points to ");
+      uiplib_ipaddr_print(&child_ipaddr);
+      printf("\n");
+
+
+    for ( r = uip_sr_node_head(); 
       r != NULL; 
-      r = uip_ds6_route_next(r)) {
-      // Use uip_ds6_route_nexthop() to get the next hop of the route
-      // if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r)
+      r = uip_sr_node_next(r)) {
+            NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, r);
+            NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, r->parent);
+            printf("r->parent points to ");
+            uiplib_ipaddr_print(&parent_ipaddr);
+            printf("\n");
+            printf("r points to ");
+            uiplib_ipaddr_print(&child_ipaddr);
+            printf("\n");
+            /*
       if(uip_ipaddr_cmp(uip_ds6_route_nexthop(r), &nbr->ipaddr)) {
       // Add Route IP Address if the nexthop matches the neighbour's IP 
         ADD("    Route IP Address: ");
         ADD_IP(&r->ipaddr);
         ADD("\n");
         printf(buf);
-
-      }
-    } */
+      }*/
+    } 
    /*
    struct uip_sr_node *node;  // Define node as a pointer to the source route entry (uip_sr_node structure)
 
