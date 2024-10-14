@@ -55,7 +55,7 @@
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
 static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
-static char buf[4096]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char buf[9000]; /* Increased from 256 to 1024  SC-Oct-24 */
 static int blen;
 /* 
 #define ADD(...) do {                                                   \
@@ -154,11 +154,6 @@ static void list_neighbors_and_routes(void) {
     LOG_INFO("Neighbour IP:");*/
     char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
     uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
-
-
-
-    // printf("IP_buf is %s\n", ip_buf);
-    printf(buf , "\n");
     
     for ( r = uip_sr_node_head(); 
       r != NULL; 
@@ -211,8 +206,8 @@ static void list_neighbors_and_routes(void) {
 
 
     ADD("\n");  /* Add space between neighbours */
-  }
   printf(buf); // Debug
+  }
   ADD("</pre>");  /* End preformatted text */
 }
 
