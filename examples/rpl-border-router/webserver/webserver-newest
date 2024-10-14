@@ -154,7 +154,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
       // list_neighbors_and_routes();
 
   uip_ds6_nbr_t *nbr;
-  static uip_sr_node_t *r;
+  uip_sr_node_t *r;
   uip_ipaddr_t child_ipaddr;
   uip_ipaddr_t parent_ipaddr;
   uip_ipaddr_t ip_buffer;
