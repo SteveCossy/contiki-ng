@@ -2,7 +2,7 @@
 <simconf version="2023090101">
   <simulation>
     <title>My simulation</title>
-    <speedlimit>2.0</speedlimit>
+    <speedlimit>20.0</speedlimit>
     <randomseed>123456</randomseed>
     <motedelay_us>1000000</motedelay_us>
     <radiomedium>
@@ -220,9 +220,11 @@
       <skin>org.contikios.cooja.plugins.skins.UDGMVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.MoteTypeVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.AddressVisualizerSkin</skin>
+      <skin>org.contikios.cooja.plugins.skins.PositionVisualizerSkin</skin>
+      <skin>org.contikios.cooja.plugins.skins.AttributeVisualizerSkin</skin>
       <viewport>2.6557622718251297 0.0 0.0 2.6557622718251297 104.82946207224833 160.4061481626971</viewport>
     </plugin_config>
-    <bounds x="1" y="1" height="644" width="574" z="1" />
+    <bounds x="1" y="1" height="916" width="1019" z="3" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.LogListener
@@ -231,7 +233,7 @@
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="384" y="-2" height="517" width="740" />
+    <bounds x="1181" y="278" height="674" width="740" z="2" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.Notes
@@ -239,7 +241,7 @@
       <notes>Enter notes here</notes>
       <decorations>true</decorations>
     </plugin_config>
-    <bounds x="400" y="0" height="160" width="740" z="18" />
+    <bounds x="1139" y="181" height="160" width="740" z="1" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
@@ -248,7 +250,7 @@
       <port>60001</port>
       <bound>true</bound>
     </plugin_config>
-    <bounds x="462" y="653" height="126" width="362" z="6" />
+    <bounds x="462" y="653" height="126" width="362" z="8" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -257,7 +259,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="21" y="375" height="177" width="350" z="21" />
+    <bounds x="21" y="375" height="177" width="350" z="22" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -266,7 +268,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="865" y="32" height="130" width="350" z="8" />
+    <bounds x="865" y="32" height="130" width="350" z="10" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -275,7 +277,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="505" y="36" height="126" width="350" z="5" />
+    <bounds x="505" y="36" height="126" width="350" z="7" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -284,7 +286,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="875" y="298" height="122" width="350" z="10" />
+    <bounds x="875" y="298" height="122" width="350" z="12" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -293,7 +295,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="29" y="427" height="138" width="350" z="20" />
+    <bounds x="29" y="427" height="138" width="350" z="21" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -302,7 +304,7 @@
       <interface>Position</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="0" y="0" height="300" width="350" z="19" />
+    <bounds x="0" y="0" height="300" width="350" z="20" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
@@ -311,7 +313,7 @@
       <port>60016</port>
       <bound>true</bound>
     </plugin_config>
-    <bounds x="57" y="524" height="126" width="362" z="3" />
+    <bounds x="57" y="524" height="126" width="362" z="5" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -320,12 +322,12 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1233" y="674" height="126" width="350" z="15" />
+    <bounds x="1233" y="674" height="126" width="350" z="17" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInformation
     <mote_arg>14</mote_arg>
-    <bounds x="36" y="642" height="157" width="383" z="4" />
+    <bounds x="36" y="642" height="157" width="383" z="6" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -334,7 +336,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="874" y="678" height="118" width="350" z="12" />
+    <bounds x="874" y="678" height="118" width="350" z="14" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -343,7 +345,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1227" y="299" height="116" width="350" z="17" />
+    <bounds x="1227" y="299" height="116" width="350" z="19" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -352,7 +354,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1227" y="174" height="116" width="350" z="14" />
+    <bounds x="1227" y="174" height="116" width="350" z="16" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -361,7 +363,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="873" y="174" height="116" width="350" z="9" />
+    <bounds x="873" y="174" height="116" width="350" z="11" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -370,7 +372,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="873" y="424" height="127" width="350" z="11" />
+    <bounds x="873" y="424" height="127" width="350" z="13" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -379,7 +381,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1228" y="421" height="120" width="350" z="16" />
+    <bounds x="1228" y="421" height="120" width="350" z="18" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -388,7 +390,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1225" y="38" height="123" width="350" z="13" />
+    <bounds x="1225" y="38" height="123" width="350" z="15" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -397,7 +399,7 @@
       <interface>IP Addresses</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="872" y="551" height="117" width="350" z="7" />
+    <bounds x="872" y="551" height="117" width="350" z="9" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.RadioLogger
@@ -406,6 +408,15 @@
       <formatted_time />
       <analyzers name="6lowpan-pcap" />
     </plugin_config>
-    <bounds x="379" y="493" height="300" width="672" z="2" />
+    <bounds x="379" y="493" height="300" width="672" z="4" />
+  </plugin>
+  <plugin>
+    org.contikios.cooja.plugins.RadioLogger
+    <plugin_config>
+      <split>445</split>
+      <formatted_time />
+      <analyzers name="6lowpan-pcap" />
+    </plugin_config>
+    <bounds x="884" y="52" height="759" width="953" />
   </plugin>
 </simconf>

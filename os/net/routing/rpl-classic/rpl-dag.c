@@ -59,7 +59,8 @@
 #include <string.h>
 
 #define LOG_MODULE "RPL"
-#define LOG_LEVEL LOG_LEVEL_RPL
+// define LOG_LEVEL LOG_LEVEL_RPL
+#define LOG_LEVEL LOG_LEVEL_DBG
 
 /* A configurable function called after every RPL parent switch. */
 #ifdef RPL_CALLBACK_PARENT_SWITCH
