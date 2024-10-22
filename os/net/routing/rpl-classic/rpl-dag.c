@@ -393,6 +393,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id)
   dag = rpl_alloc_dag(instance_id, dag_id);
   if(dag == NULL) {
     LOG_ERR("Failed to allocate a DAG\n");
+    printf("Allocating a DAG");
     return NULL;
   }
 
