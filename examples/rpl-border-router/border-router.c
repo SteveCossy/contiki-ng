@@ -35,7 +35,8 @@
 /* Log configuration */
 #include "sys/log.h"
 #define LOG_MODULE "RPL BR"
-#define LOG_LEVEL LOG_LEVEL_INFO
+// #define LOG_LEVEL LOG_LEVEL_INFO
+#define LOG_LEVEL LOG_LEVEL_DBG
 
 /* Declare and auto-start this file's process */
 PROCESS(contiki_ng_br, "Contiki-NG Border Router");

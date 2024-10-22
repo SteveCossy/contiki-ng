@@ -247,7 +247,6 @@ Replace existing code to integrate the new function into the existing web server
   /* doesn't work httpd_simple_init(); */
   httpd_init();
   LOG_INFO("Contiki-NG Webserver started\n");
-
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
     httpd_appcall(data);
