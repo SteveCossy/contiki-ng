@@ -233,7 +233,7 @@
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="1181" y="278" height="674" width="740" z="2" />
+    <bounds x="1181" y="278" height="674" width="740" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.Notes
@@ -241,7 +241,7 @@
       <notes>Enter notes here</notes>
       <decorations>true</decorations>
     </plugin_config>
-    <bounds x="1139" y="181" height="160" width="740" z="1" />
+    <bounds x="1139" y="181" height="160" width="740" z="2" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
@@ -417,6 +417,6 @@
       <formatted_time />
       <analyzers name="6lowpan-pcap" />
     </plugin_config>
-    <bounds x="884" y="52" height="759" width="953" />
+    <bounds x="884" y="52" height="759" width="953" z="1" />
   </plugin>
 </simconf>

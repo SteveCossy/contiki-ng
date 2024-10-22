@@ -51,5 +51,6 @@
 #endif
 
 #endif /* PROJECT_CONF_H_ */
-#define LOG_CONF_LEVEL_RPL                         LOG_LEVEL_DBG
-#define LOG_CONF_LEVEL_MAIN                        LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_MAIN LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_DBG
