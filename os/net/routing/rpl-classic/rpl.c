@@ -57,7 +57,7 @@
 
 #define LOG_MODULE "RPL"
 //#define LOG_LEVEL LOG_LEVEL_RPL
-#define LOG_LEVEL LOG_LEVEL_DBK
+#define LOG_LEVEL LOG_LEVEL_DBG
 
 #if RPL_CONF_STATS
 rpl_stats_t rpl_stats;
