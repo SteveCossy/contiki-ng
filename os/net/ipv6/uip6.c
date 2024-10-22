@@ -342,7 +342,6 @@ upper_layer_chksum(uint8_t proto)
   uint16_t sum;
 
   upper_layer_len = uipbuf_get_len_field(UIP_IP_BUF) - uip_ext_len;
-  printf("This is IPv6"); // debug
 
   LOG_DBG("Upper layer checksum len: %d from: %d\n", upper_layer_len,
          (int)(UIP_IP_PAYLOAD(uip_ext_len) - uip_buf));

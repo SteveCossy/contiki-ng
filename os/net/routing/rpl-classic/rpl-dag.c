@@ -2,7 +2,7 @@
  * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
+ * Redistribution and use in source and binary forms, with or withoutcd 
  * modification, are permitted provided that the following conditions
  * are met:
  * 1. Redistributions of source code must retain the above copyright
@@ -239,6 +239,7 @@ rpl_parent_is_reachable(rpl_parent_t *p)
 static void
 rpl_set_preferred_parent(rpl_dag_t *dag, rpl_parent_t *p)
 {
+  printf("Preferred parent/n")
   if(dag == NULL || dag->preferred_parent == p) {
     return;
   }
