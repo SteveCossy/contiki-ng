@@ -71,3 +71,6 @@ CONTIKI_NG_DRIVERS_STORAGE_DIR = $(CONTIKI_NG_DRIVERS_DIR)/storage
 # tools/ is used exclusively to invoke commands therein and is always used in
 # conjunction with $(CONTIKI)
 CONTIKI_NG_TOOLS_DIR = $(CONTIKI)/tools
+
+# overide the default 'LITE' build - Steve 29 Oct 2024
+MAKE_ROUTING = MAKE_ROUTING_RPL_CLASSIC
