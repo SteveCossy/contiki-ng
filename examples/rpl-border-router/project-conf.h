@@ -51,6 +51,13 @@
 #endif
 
 #endif /* PROJECT_CONF_H_ */
+
+// Set debugging on
 #define LOG_CONF_LEVEL_RPL  LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_MAIN LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_DBG
+
+// Set RPL_CLASSIC
+#define ROUTING_CONF_RPL_CLASSIC 1
+#define ROUTING_CONF_RPL_LITE 0
+
