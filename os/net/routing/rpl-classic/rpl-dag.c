@@ -239,7 +239,6 @@ rpl_parent_is_reachable(rpl_parent_t *p)
 static void
 rpl_set_preferred_parent(rpl_dag_t *dag, rpl_parent_t *p)
 {
-  printf("Preferred parent **********************/n");
   if(dag == NULL || dag->preferred_parent == p) {
     return;
   }
@@ -391,8 +390,8 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id)
     }
   }
 
+  LOG_DBG("Allocating a DAG **********************\n");
   dag = rpl_alloc_dag(instance_id, dag_id);
-  printf("Allocating a DAG **********************/n");
   if(dag == NULL) {
     LOG_ERR("Failed to allocate a DAG\n");
     return NULL;
