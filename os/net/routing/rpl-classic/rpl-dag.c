@@ -239,7 +239,7 @@ rpl_parent_is_reachable(rpl_parent_t *p)
 static void
 rpl_set_preferred_parent(rpl_dag_t *dag, rpl_parent_t *p)
 {
-  printf("Preferred parent **********************/n")
+  printf("Preferred parent **********************/n");
   if(dag == NULL || dag->preferred_parent == p) {
     return;
   }
