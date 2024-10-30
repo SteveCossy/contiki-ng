@@ -7,6 +7,9 @@ CONTIKI = ../..
 # The BR is either native or embedded, and in the latter case must support SLIP
 PLATFORMS_EXCLUDE = z1
 
+# https://docs.contiki-ng.org/en/master/doc/tutorials/Shell.html
+MODULES += os/services/shell
+
 # Include RPL BR module
 include $(CONTIKI)/Makefile.dir-variables
 MODULES += $(CONTIKI_NG_SERVICES_DIR)/rpl-border-router
