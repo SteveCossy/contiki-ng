@@ -70,7 +70,11 @@ import org.contikios.cooja.positioners.LinearPositioner;
 import org.contikios.cooja.positioners.ManualPositioner;
 import org.contikios.cooja.positioners.RandomPositioner;
 import org.contikios.cooja.util.EventTriggers;
+// plugins added
 import org.contikios.cooja.plugins.LogListener;
+import org.contikios.cooja.plugins.skins.LogVisualizerSkin;
+import org.contikios.cooja.plugins.Visualizer;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
