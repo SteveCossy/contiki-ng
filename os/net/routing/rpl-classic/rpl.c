@@ -56,8 +56,7 @@
 #include <string.h>
 
 #define LOG_MODULE "RPL"
-//#define LOG_LEVEL LOG_LEVEL_RPL
-#define LOG_LEVEL LOG_LEVEL_DBG
+#define LOG_LEVEL LOG_LEVEL_RPL
 
 #if RPL_CONF_STATS
 rpl_stats_t rpl_stats;
