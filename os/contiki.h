@@ -54,4 +54,4 @@
 // compile with Contiki-ng Classic
 #define ROUTING_CONF_RPL_CLASSIC 1
 #define ROUTING_CONF_RPL_LITE 0
-#define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
+// #define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
