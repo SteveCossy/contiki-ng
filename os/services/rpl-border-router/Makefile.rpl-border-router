@@ -6,4 +6,5 @@ MODULES += os/services/rpl-border-router/$(TARGET)
 
 ifneq ($(TARGET),native)
 	MODULES += os/services/rpl-border-router/embedded
+        MODULES += os/services/shell
 endif
