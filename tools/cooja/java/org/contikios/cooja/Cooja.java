@@ -72,8 +72,21 @@ import org.contikios.cooja.positioners.RandomPositioner;
 import org.contikios.cooja.util.EventTriggers;
 // plugins added
 import org.contikios.cooja.plugins.LogListener;
-import org.contikios.cooja.plugins.skins.LogVisualizerSkin;
 import org.contikios.cooja.plugins.Visualizer;
+import org.contikios.cooja.plugins.skins.LogVisualizerSkin;
+import org.contikios.cooja.plugins.skins.AddressVisualizerSkin;
+import org.contikios.cooja.plugins.skins.AttributeVisualizerSkin;
+import org.contikios.cooja.plugins.skins.DGRMVisualizerSkin;
+import org.contikios.cooja.plugins.skins.GridVisualizerSkin;
+import org.contikios.cooja.plugins.skins.IDVisualizerSkin;
+import org.contikios.cooja.plugins.skins.LEDVisualizerSkin;
+import org.contikios.cooja.plugins.skins.LogisticLossVisualizerSkin;
+import org.contikios.cooja.plugins.skins.LogVisualizerSkin;
+import org.contikios.cooja.plugins.skins.MoteTypeVisualizerSkin;
+import org.contikios.cooja.plugins.skins.PositionVisualizerSkin;
+import org.contikios.cooja.plugins.skins.TrafficVisualizerSkin;
+import org.contikios.cooja.plugins.skins.UDGMVisualizerSkin;
+
 
 import org.jdom2.Document;
 import org.jdom2.Element;
