@@ -1213,6 +1213,10 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
            dio->instance_id, dag->rank);
   LOG_INFO_6ADDR(&dag->dag_id);
   LOG_INFO_("\n");
+  printf("Joined DAG with instance ID %u, rank %hu, DAG ID ",
+           dio->instance_id, dag->rank);
+  print_ipv6_addr(&dag->dag_id);
+  printf("\n");
 
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
