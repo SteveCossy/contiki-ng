@@ -62,6 +62,8 @@
 #define LOG_LEVEL LOG_LEVEL_RPL
 // #define LOG_LEVEL LOG_LEVEL_DBG
 
+#include "uip-debug.h"
+
 /* A configurable function called after every RPL parent switch. */
 #ifdef RPL_CALLBACK_PARENT_SWITCH
 void RPL_CALLBACK_PARENT_SWITCH(rpl_parent_t *old, rpl_parent_t *new);
@@ -917,7 +919,7 @@ best_parent(rpl_dag_t *dag, int fresh_only)
     /* Now we have an acceptable parent, check if it is the new best. */
     best = of->best_parent(best, p);
   }
-
+  printf("Found best");
   return best;
 }
 /*---------------------------------------------------------------------------*/
@@ -1215,7 +1217,7 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
   LOG_INFO_("\n");
   printf("Joined DAG with instance ID %u, rank %hu, DAG ID ",
            dio->instance_id, dag->rank);
-  print_ipv6_addr(&dag->dag_id);
+  uip_debug_ipaddr_print(&dag->dag_id);
   printf("\n");
 
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
