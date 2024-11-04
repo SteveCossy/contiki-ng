@@ -103,6 +103,10 @@ rpl_print_neighbor_list(void)
 
     LOG_DBG("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
             default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
+    // Debug print
+    printf("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
+            default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
+
     while(p != NULL) {
       const struct link_stats *stats = rpl_get_parent_link_stats(p);
       uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
@@ -869,9 +873,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     }
 
     rpl_reset_dio_timer(instance);
-    if(LOG_DBG_ENABLED) {
+    // if(LOG_DBG_ENABLED) {
       rpl_print_neighbor_list();
-    }
+    // }
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
             (unsigned)old_rank, best_dag->rank);
@@ -919,7 +923,7 @@ best_parent(rpl_dag_t *dag, int fresh_only)
     /* Now we have an acceptable parent, check if it is the new best. */
     best = of->best_parent(best, p);
   }
-  printf("Found best");
+
   return best;
 }
 /*---------------------------------------------------------------------------*/
