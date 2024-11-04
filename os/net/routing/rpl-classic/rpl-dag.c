@@ -1221,6 +1221,8 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
            dio->instance_id, dag->rank);
   LOG_INFO_6ADDR(&dag->dag_id);
   LOG_INFO_("\n");
+
+  // DEBUG 
   printf("Joined DAG with instance ID %u, rank %hu, DAG ID ",
            dio->instance_id, dag->rank);
   uip_debug_ipaddr_print(&dag->dag_id);
