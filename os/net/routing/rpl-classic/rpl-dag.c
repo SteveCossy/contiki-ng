@@ -94,6 +94,7 @@ rpl_instance_t *default_instance;
 void
 rpl_print_neighbor_list(void)
 {
+
   if(default_instance != NULL && default_instance->current_dag != NULL &&
      default_instance->of != NULL) {
     int curr_dio_interval = default_instance->dio_intcurrent;
@@ -873,9 +874,10 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     }
 
     rpl_reset_dio_timer(instance);
-    // if(LOG_DBG_ENABLED) {
+    if(LOG_DBG_ENABLED) {
       rpl_print_neighbor_list();
-    // }
+    }
+
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
             (unsigned)old_rank, best_dag->rank);
