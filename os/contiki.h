@@ -31,6 +31,13 @@
  * Author: Adam Dunkels <adam@sics.se>
  *
  */
+
+// Set debugging here for Hello-World
+#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_MAIN LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
+
 #ifndef CONTIKI_H_
 #define CONTIKI_H_
 
@@ -54,6 +61,5 @@
 // compile with Contiki-ng Classic - added by Steve a while ago
 #define ROUTING_CONF_RPL_CLASSIC 1
 /* The following lines don't appear to be necessary 
-#define ROUTING_CONF_RPL_LITE 0
-#define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
-*/
+#define ROUTING_CONF_RPL_LITE 0 */
+

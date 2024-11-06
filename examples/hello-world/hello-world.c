@@ -37,12 +37,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-// Steve - 6 November
-#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_DBG
-#define LOG_CONF_LEVEL_MAIN LOG_LEVEL_DBG
-#define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_DBG
-#define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
-
+// Steve - 6 November Setting Debug didn't work here
 
 #include "contiki.h"
 

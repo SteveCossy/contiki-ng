@@ -105,7 +105,7 @@ rpl_print_neighbor_list(void)
     LOG_DBG("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
             default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
     // Debug print
-    printf("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
+    // printf("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
             default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
 
     while(p != NULL) {
