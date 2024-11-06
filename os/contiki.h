@@ -55,5 +55,5 @@
 #define ROUTING_CONF_RPL_CLASSIC 1
 /* The following lines don't appear to be necessary 
 #define ROUTING_CONF_RPL_LITE 0
-// #define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
 */

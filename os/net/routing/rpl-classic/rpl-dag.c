@@ -1227,7 +1227,7 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
            dio->instance_id, dag->rank);
   uip_debug_ipaddr_print(&dag->dag_id);
   printf("\n");
-  printf("Log Level RPL is %i \n", LOG_CONF_LEVEL_RPL);
+  printf("Log Level RPL is %i. Debug Level is %i. \n", LOG_CONF_LEVEL_RPL, LOG_LEVEL_DBG);
 
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
