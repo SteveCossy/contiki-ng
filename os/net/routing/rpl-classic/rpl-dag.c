@@ -107,7 +107,6 @@ rpl_print_neighbor_list(void)
     // Debug print
     printf("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
             default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
-    printf("Log Level RPL is %i", LOG_CONF_LEVEL_RPL);
 
     while(p != NULL) {
       const struct link_stats *stats = rpl_get_parent_link_stats(p);
@@ -1228,6 +1227,7 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
            dio->instance_id, dag->rank);
   uip_debug_ipaddr_print(&dag->dag_id);
   printf("\n");
+  printf("Log Level RPL is %i \n", LOG_CONF_LEVEL_RPL);
 
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
