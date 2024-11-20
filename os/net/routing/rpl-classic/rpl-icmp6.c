@@ -896,6 +896,7 @@ dao_input_storing(void)
   }
 
   display_dodag();
+  rpl_dag_root_print();
 
   LOG_INFO("Adding DAO route\n");
 
