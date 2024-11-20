@@ -155,7 +155,7 @@ void display_dodag(void) {
         printf("\n");
       }
 
-      printf("Neighbors:\n");
+      printf("Neighbours:\n");
       rpl_print_neighbor_list();
     }
   }
@@ -896,7 +896,6 @@ dao_input_storing(void)
   }
 
   display_dodag();
-  rpl_dag_root_print();
 
   LOG_INFO("Adding DAO route\n");
 
