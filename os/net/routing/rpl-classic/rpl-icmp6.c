@@ -131,6 +131,7 @@ prepare_for_dao_fwd(uint8_t sequence, uip_ds6_route_t *rep)
 #endif /* RPL_WITH_STORING */
 /*---------------------------------------------------------------------------*/
 #include "net/routing/rpl-classic/rpl.h"
+#include "net/ipv6/uip-debug.h"
 //	#include "net/routing/rpl-classic/rpl-dag.h"
 
 void display_dodag(void) {
@@ -143,6 +144,7 @@ void display_dodag(void) {
     dag = instance->current_dag;
     if(dag != NULL) {
       printf("DODAG ID: ");
+      
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
 
@@ -158,7 +160,7 @@ void display_dodag(void) {
     }
   }
 }
-\end{lstlisting}
+
 /*---------------------------------------------------------------------------*/
 static int
 get_global_addr(uip_ipaddr_t *addr)
@@ -893,8 +895,8 @@ dao_input_storing(void)
     return;
   }
 
-  display_dodag(void)
-  
+  display_dodag();
+
   LOG_INFO("Adding DAO route\n");
 
   /* Update and add neighbor, and fail if there is no room. */
