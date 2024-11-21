@@ -48,6 +48,7 @@
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uip-nd6.h"
 #include "net/ipv6/uip-ds6-nbr.h"
+#include "net/ipv6/uip-debug.h" // added for display_dodag
 #include "net/nbr-table.h"
 #include "net/ipv6/multicast/uip-mcast6.h"
 #include "lib/list.h"
@@ -104,9 +105,6 @@ rpl_print_neighbor_list(void)
 
     LOG_DBG("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
             default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
-    // Debug print
-    // printf("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
-    //        default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
 
     while(p != NULL) {
       const struct link_stats *stats = rpl_get_parent_link_stats(p);
@@ -124,6 +122,37 @@ rpl_print_neighbor_list(void)
       p = nbr_table_next(rpl_parents, p);
     }
     LOG_DBG("RPL: end of list\n");
+  }
+}
+/*---------------------------------------------------------------------------*/
+//#include "net/routing/rpl-classic/rpl.h"
+//#include "net/ipv6/uip-debug.h"
+//	#include "net/routing/rpl-classic/rpl-dag.h"
+
+void display_dodag(void) {
+  rpl_instance_t *instance;
+  rpl_dag_t *dag;
+  rpl_parent_t *parent;
+
+  instance = rpl_get_default_instance();
+  if(instance != NULL) {
+    dag = instance->current_dag;
+    if(dag != NULL) {
+      printf("DODAG ID: ");
+      
+      uip_debug_ipaddr_print(&dag->dag_id);
+      printf(", Rank: %u\n", dag->rank);
+
+      parent = dag->preferred_parent;
+      if(parent != NULL) {
+        printf("Preferred Parent: ");
+        uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
+        printf("\n");
+      }
+
+      printf("Neighbours:\n");
+      rpl_print_neighbor_list();
+    }
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -877,6 +906,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     if(LOG_DBG_ENABLED) {
       rpl_print_neighbor_list();
     }
+    display_dodag();
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",

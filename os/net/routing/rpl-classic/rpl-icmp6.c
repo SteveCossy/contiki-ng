@@ -129,39 +129,39 @@ prepare_for_dao_fwd(uint8_t sequence, uip_ds6_route_t *rep)
   return dao_sequence;
 }
 #endif /* RPL_WITH_STORING */
-/*---------------------------------------------------------------------------*/
-#include "net/routing/rpl-classic/rpl.h"
-#include "net/ipv6/uip-debug.h"
-//	#include "net/routing/rpl-classic/rpl-dag.h"
+// /*---------------------------------------------------------------------------*/
+// #include "net/routing/rpl-classic/rpl.h"
+// #include "net/ipv6/uip-debug.h"
+// //	#include "net/routing/rpl-classic/rpl-dag.h"
 
-void display_dodag(void) {
-  rpl_instance_t *instance;
-  rpl_dag_t *dag;
-  rpl_parent_t *parent;
+// void display_dodag(void) {
+//   rpl_instance_t *instance;
+//   rpl_dag_t *dag;
+//   rpl_parent_t *parent;
 
-  instance = rpl_get_default_instance();
-  if(instance != NULL) {
-    dag = instance->current_dag;
-    if(dag != NULL) {
-      printf("DODAG ID: ");
+//   instance = rpl_get_default_instance();
+//   if(instance != NULL) {
+//     dag = instance->current_dag;
+//     if(dag != NULL) {
+//       printf("DODAG ID: ");
       
-      uip_debug_ipaddr_print(&dag->dag_id);
-      printf(", Rank: %u\n", dag->rank);
+//       uip_debug_ipaddr_print(&dag->dag_id);
+//       printf(", Rank: %u\n", dag->rank);
 
-      parent = dag->preferred_parent;
-      if(parent != NULL) {
-        printf("Preferred Parent: ");
-        uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
-        printf("\n");
-      }
+//       parent = dag->preferred_parent;
+//       if(parent != NULL) {
+//         printf("Preferred Parent: ");
+//         uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
+//         printf("\n");
+//       }
 
-      printf("Neighbours:\n");
-      rpl_print_neighbor_list();
-    }
-  }
-}
+//       printf("Neighbours:\n");
+//       rpl_print_neighbor_list();
+//     }
+//   }
+// }
 
-/*---------------------------------------------------------------------------*/
+// /*---------------------------------------------------------------------------*/
 static int
 get_global_addr(uip_ipaddr_t *addr)
 {
@@ -894,8 +894,6 @@ dao_input_storing(void)
     }
     return;
   }
-
-  display_dodag();
 
   LOG_INFO("Adding DAO route\n");
 
