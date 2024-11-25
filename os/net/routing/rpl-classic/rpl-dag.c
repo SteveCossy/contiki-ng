@@ -175,7 +175,7 @@ void display_dodag(void) {
           const struct link_stats *stats = rpl_get_parent_link_stats(p);
           uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
 //          printf("RPL: nbr %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
-          printf("IP Address %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
+          printf("IP Address %s %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
                   parent_addr != NULL ? parent_addr->u8 : 0x0,
                   p->rank,
                   rpl_get_parent_link_metric(p),
