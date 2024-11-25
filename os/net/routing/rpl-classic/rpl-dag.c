@@ -185,6 +185,7 @@ void display_dodag(void) {
                   p == default_instance->current_dag->preferred_parent ? 'p' : ' ',
                   stats != NULL ? (unsigned)((clock_now - stats->last_tx_time) / (60 * CLOCK_SECOND)) : -1u
                   );
+          uip_debug_ipaddr_print(&parent_addr->u8);
           p = nbr_table_next(rpl_parents, p);
         }
         printf("RPL: end of list\n");
