@@ -151,7 +151,36 @@ void display_dodag(void) {
       }
 
       printf("Neighbours:\n");
-      rpl_print_neighbor_list();
+//      rpl_print_neighbor_list();
+
+      if(default_instance != NULL && default_instance->current_dag != NULL &&
+        default_instance->of != NULL) {
+        int curr_dio_interval = default_instance->dio_intcurrent;
+        int curr_rank = default_instance->current_dag->rank;
+        rpl_parent_t *p = nbr_table_head(rpl_parents);
+        clock_time_t clock_now = clock_time();
+
+        LOG_DBG("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
+                default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
+
+        while(p != NULL) {
+          const struct link_stats *stats = rpl_get_parent_link_stats(p);
+          uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
+          LOG_DBG("RPL: nbr %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
+                  parent_addr != NULL ? parent_addr->u8[15] : 0x0,
+                  p->rank,
+                  rpl_get_parent_link_metric(p),
+                  rpl_rank_via_parent(p),
+                  stats != NULL ? stats->freshness : 0,
+                  link_stats_is_fresh(stats) ? 'f' : ' ',
+                  p == default_instance->current_dag->preferred_parent ? 'p' : ' ',
+                  stats != NULL ? (unsigned)((clock_now - stats->last_tx_time) / (60 * CLOCK_SECOND)) : -1u
+                  );
+          p = nbr_table_next(rpl_parents, p);
+        }
+        LOG_DBG("RPL: end of list\n");
+      }
+
     }
   }
 }
