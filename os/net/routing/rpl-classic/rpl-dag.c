@@ -138,18 +138,16 @@ void display_dodag(void) {
   if(instance != NULL) {
     dag = instance->current_dag;
     if(dag != NULL) {
-      printf("DODAG ID: ");
-      
-      uip_debug_ipaddr_print(&dag->dag_id);
-      printf(", Rank: %u\n", dag->rank);
 
       uip_ds6_addr_t *lladdr;
-      //124-    memcpy(&uip_lladdr.addr, &linkaddr_node_addr, sizeof(uip_lladdr.addr));
-      //125-    process_start(&tcpip_process, NULL);
       lladdr = uip_ds6_get_link_local(-1);
-      printf("Link-local IPv6 address: ");
+      printf("This node Link-local IPv6 address: ");
       LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
       printf("\n");
+      
+      printf("DODAG ID: ");
+      uip_debug_ipaddr_print(&dag->dag_id);
+      printf(", Rank: %u\n", dag->rank);
 
       parent = dag->preferred_parent;
       if(parent != NULL) {
@@ -175,8 +173,10 @@ void display_dodag(void) {
           const struct link_stats *stats = rpl_get_parent_link_stats(p);
           uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
 //          printf("RPL: nbr %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
-          printf("IP Address %s %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
-                  parent_addr != NULL ? parent_addr->u8 : 0x0,
+          printf("IP Address ");
+          uip_debug_ipaddr_print(parent_addr != NULL ? parent_addr : 0x0);
+
+          printf(" Rank: %5u, Link cost %5u via %5u \n     Freshness %2u %c%c (last tx %u min ago)\n",
                   p->rank,
                   rpl_get_parent_link_metric(p),
                   rpl_rank_via_parent(p),
@@ -185,7 +185,6 @@ void display_dodag(void) {
                   p == default_instance->current_dag->preferred_parent ? 'p' : ' ',
                   stats != NULL ? (unsigned)((clock_now - stats->last_tx_time) / (60 * CLOCK_SECOND)) : -1u
                   );
-          uip_debug_ipaddr_print(&parent_addr->u8);
           p = nbr_table_next(rpl_parents, p);
         }
         printf("RPL: end of list\n");
