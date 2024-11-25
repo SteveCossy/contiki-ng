@@ -143,6 +143,14 @@ void display_dodag(void) {
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
 
+      uip_ds6_addr_t *lladdr;
+      //124-    memcpy(&uip_lladdr.addr, &linkaddr_node_addr, sizeof(uip_lladdr.addr));
+      //125-    process_start(&tcpip_process, NULL);
+      lladdr = uip_ds6_get_link_local(-1);
+      printf("Link-local IPv6 address: ");
+      LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      printf("\n");
+
       parent = dag->preferred_parent;
       if(parent != NULL) {
         printf("Preferred Parent: ");
@@ -166,8 +174,9 @@ void display_dodag(void) {
         while(p != NULL) {
           const struct link_stats *stats = rpl_get_parent_link_stats(p);
           uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
-          printf("RPL: nbr %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
-                  parent_addr != NULL ? parent_addr->u8[15] : 0x0,
+//          printf("RPL: nbr %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
+          printf("IP Address %02x %5u, %5u => %5u -- %2u %c%c (last tx %u min ago)\n",
+                  parent_addr != NULL ? parent_addr->u8 : 0x0,
                   p->rank,
                   rpl_get_parent_link_metric(p),
                   rpl_rank_via_parent(p),
