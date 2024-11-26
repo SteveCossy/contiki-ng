@@ -52,12 +52,10 @@
 
 #endif /* PROJECT_CONF_H_ */
 
-// Set debugging on
+// Set debugging on or off with LOG_LEVEL_NONE
 
 /*
-#define LOG_CONF_LEVEL_RPL     LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_MAIN    LOG_LEVEL_DBG
-#define LOG_CONF_LEVEL_IPV6    LOG_LEVEL_DBG
 
 #define LOG_CONF_LEVEL_6LOWPAN LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_TCPIP   LOG_LEVEL_DBG
