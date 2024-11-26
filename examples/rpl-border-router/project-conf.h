@@ -52,7 +52,10 @@
 
 #endif /* PROJECT_CONF_H_ */
 
-// Set debugging on or off with LOG_LEVEL_NONE
+// Set debugging on, or off with LOG_LEVEL_NONE
+
+// It appears that borader-router.c requires LOG_CONF_LEVEL_BR to exist
+#define LOG_CONF_LEVEL_BR   LOG_LEVEL_NONE
 
 /*
 #define LOG_CONF_LEVEL_MAIN    LOG_LEVEL_DBG
