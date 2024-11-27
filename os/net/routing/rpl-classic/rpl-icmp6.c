@@ -895,6 +895,8 @@ dao_input_storing(void)
     return;
   }
 
+display_routing_table(void) // Added by Steve
+
   LOG_INFO("Adding DAO route\n");
 
   /* Update and add neighbor, and fail if there is no room. */

@@ -333,6 +333,9 @@ uip_ds6_route_t *
 uip_ds6_route_add(const uip_ipaddr_t *ipaddr, uint8_t length,
                   const uip_ipaddr_t *nexthop)
 {
+
+display_routing_table(void); // Added Steve 2024-11-27
+
 #if (UIP_MAX_ROUTES != 0)
   uip_ds6_route_t *r;
   struct uip_ds6_route_neighbor_route *nbrr;

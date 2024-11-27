@@ -207,7 +207,7 @@ void display_routing_table(void) {
   // Iterate through all routing table entries
   for(route = uip_ds6_route_head(); route != NULL; route = uip_ds6_route_next(route)) {
     // Print the destination prefix
-    uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
+    const uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
     printf("Dest prefix: ");
     uip_debug_ipaddr_print(&route->ipaddr);
     printf("/%u, ", route->length);
@@ -974,7 +974,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     }
     
     display_dodag();
-    display_routing_table()
+    display_routing_table();
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
