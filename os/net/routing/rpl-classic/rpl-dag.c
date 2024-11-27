@@ -48,7 +48,8 @@
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uip-nd6.h"
 #include "net/ipv6/uip-ds6-nbr.h"
-#include "net/ipv6/uip-debug.h" // added for display_dodag
+#include "net/ipv6/uip-debug.h" // added for display_dodag & display_routing_table
+#include "net/ipv6/uip-ds6-route.h" // added for display_routing_table
 #include "net/nbr-table.h"
 #include "net/ipv6/multicast/uip-mcast6.h"
 #include "lib/list.h"
@@ -193,6 +194,33 @@ void display_dodag(void) {
     }
   }
 }
+/*---------------------------------------------------------------------------*/
+//#include "contiki.h"
+//#include "net/ipv6/uip-ds6-route.h"
+//#include "net/ip/uip-debug.h"
+
+void display_routing_table(void) {
+  uip_ds6_route_t *route;
+
+  printf("IPv6 Routing Table:\n");
+
+  // Iterate through all routing table entries
+  for(route = uip_ds6_route_head(); route != NULL; route = uip_ds6_route_next(route)) {
+    // Print the destination prefix
+    uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
+    printf("Dest prefix: ");
+    uip_debug_ipaddr_print(&route->ipaddr);
+    printf("/%u, ", route->length);
+
+    // Print the next-hop address
+    printf("Next hop: ");
+    uip_debug_ipaddr_print(ipaddr);
+    printf(", Lifetime: %lu\n", (unsigned long)route->state.lifetime);
+  }
+
+  printf("End of routing table.\n");
+}
+
 /*---------------------------------------------------------------------------*/
 uip_ds6_nbr_t *
 rpl_get_nbr(rpl_parent_t *parent)
@@ -944,7 +972,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     if(LOG_DBG_ENABLED) {
       rpl_print_neighbor_list();
     }
+    
     display_dodag();
+    display_routing_table()
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
