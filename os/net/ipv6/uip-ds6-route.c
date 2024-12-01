@@ -97,6 +97,33 @@ LIST(notificationlist);
 #endif
 
 /*---------------------------------------------------------------------------*/
+//#include "contiki.h"
+//#include "net/ipv6/uip-ds6-route.h"
+//#include "net/ip/uip-debug.h"
+
+void display_routing_table(void) {
+  uip_ds6_route_t *route;
+
+  printf("IPv6 Routing Table:\n");
+
+  // Iterate through all routing table entries
+  for(route = uip_ds6_route_head(); route != NULL; route = uip_ds6_route_next(route)) {
+    // Print the destination prefix
+    const uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
+    printf("Dest prefix: ");
+    uip_debug_ipaddr_print(&route->ipaddr);
+    printf("/%u, ", route->length);
+
+    // Print the next-hop address
+    printf("Next hop: ");
+    uip_debug_ipaddr_print(ipaddr);
+    printf(", Lifetime: %lu\n", (unsigned long)route->state.lifetime);
+  }
+
+  printf("End of routing table.\n");
+}
+
+/*---------------------------------------------------------------------------*/
 static void
 assert_nbr_routes_list_sane(void)
 {
