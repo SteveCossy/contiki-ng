@@ -111,7 +111,7 @@ void display_routing_table(void) {
     // Print the destination prefix
     const uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
     printf("Dest prefix: ");
-    uip_debug_ipaddr_print(&route->ipaddr);
+    uiplib_ipaddr_print(&route->ipaddr);
     printf("/%u, ", route->length);
 
     // Print the next-hop address
