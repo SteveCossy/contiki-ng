@@ -61,5 +61,5 @@
 
 // compile with Contiki-ng Classic - added by Steve
 #define ROUTING_CONF_RPL_CLASSIC 1
-#define uiplib_ipaddr_print(addr)
+//void uiplib_ipaddr_print(const uip_ipaddr_t *addr);
 

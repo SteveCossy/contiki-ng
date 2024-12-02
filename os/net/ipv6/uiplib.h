@@ -84,7 +84,7 @@ int uiplib_ip6addrconv(const char *addrstr, uip_ip6addr_t *addr);
  *
  * \param addr A pointer to a uip_ipaddr_t that will be printed with printf().
  */
-void uiplib_ipaddr_print(const uip_ipaddr_t *addr);
+void uiplib_ipaddr_print(const uip_ipaddr_t *addr); // attempted move to contiki.h - 2 Dec 2024
 
 /**
  * Write at most size - 1 characters of the IP address to the output string.

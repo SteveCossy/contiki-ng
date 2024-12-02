@@ -51,6 +51,10 @@
 #define LOG_MODULE "IPv6 Route"
 #define LOG_LEVEL LOG_LEVEL_IPV6
 
+// enable definition of Display Routing Table here
+#include "net/ipv6/uiplib.h"
+#include "net/ipv6/uip-debug.h"
+
 #if BUILD_WITH_ORCHESTRA
 
 /* A configurable function called after adding a new neighbor as next hop */
@@ -97,9 +101,13 @@ LIST(notificationlist);
 #endif
 
 /*---------------------------------------------------------------------------*/
-//#include "contiki.h"
-//#include "net/ipv6/uip-ds6-route.h"
-//#include "net/ip/uip-debug.h"
+/* Headers required by this function
+#include "contiki.h"
+#include "net/ipv6/uip-ds6-route.h"
+#include "net/ip/uip-debug.h"
+#include "net/ipv6/uiplib.h"
+#include "net/ipv6/uip-debug.h"
+*/
 
 void display_routing_table(void) {
   uip_ds6_route_t *route;

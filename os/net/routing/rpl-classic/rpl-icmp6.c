@@ -895,7 +895,7 @@ dao_input_storing(void)
     return;
   }
 
-display_routing_table(); // Added by Steve
+// display_routing_table(); // Added by Steve
 
   LOG_INFO("Adding DAO route\n");
 
