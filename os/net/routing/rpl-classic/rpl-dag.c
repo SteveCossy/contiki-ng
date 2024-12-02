@@ -143,7 +143,8 @@ void display_dodag(void) {
       uip_ds6_addr_t *lladdr;
       lladdr = uip_ds6_get_link_local(-1);
       printf("This node Link-local IPv6 address: ");
-      LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      //LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
       printf("\n");
       
       printf("DODAG ID: ");
