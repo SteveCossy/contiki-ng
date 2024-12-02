@@ -59,8 +59,7 @@
 
 #endif /* CONTIKI_H_ */
 
-// compile with Contiki-ng Classic - added by Steve a while ago
+// compile with Contiki-ng Classic - added by Steve
 #define ROUTING_CONF_RPL_CLASSIC 1
-/* The following lines don't appear to be necessary 
-#define ROUTING_CONF_RPL_LITE 0 */
+#define uiplib_ipaddr_print(addr)
 
