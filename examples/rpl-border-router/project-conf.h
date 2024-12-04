@@ -52,7 +52,7 @@
 
 #endif /* PROJECT_CONF_H_ */
 
-// Set debugging on, or off with LOG_LEVEL_NONE
+// Set debugging to LOG_LEVEL_NONE, LOG_LEVEL_INFO, LOG_LEVEL_DBG
 
 // It appears that borader-router.c requires LOG_CONF_LEVEL_BR to exist
 #define LOG_CONF_LEVEL_BR   LOG_LEVEL_NONE
@@ -66,8 +66,9 @@
 #define LOG_CONF_LEVEL_TCPIP    NONE
 #define LOG_CONF_LEVEL_IPV6     LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_6LOWPAN  NONE
-#define LOG_CONF_LEVEL_NULLNET  NONE
-#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_DBG
+#define LOG_CONF_LEVEL_NULLNET  NONE */
+#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_INFO 
+/*
 #define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
 */
 // Set RPL_CLASSIC
