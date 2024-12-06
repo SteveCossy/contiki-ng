@@ -80,3 +80,5 @@ Added to create second DODAG
 */
 #define RPL_CONF_MAX_INSTANCES 2   // Allow up to two RPL instances
 #define RPL_CONF_MOP RPL_MOP_NON_STORING   // Set the Mode of Operation
+
+#define Steves_test "project-conf.h"
