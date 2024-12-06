@@ -67,7 +67,7 @@
 #define LOG_CONF_LEVEL_IPV6     LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_6LOWPAN  NONE
 #define LOG_CONF_LEVEL_NULLNET  NONE */
-#define LOG_CONF_LEVEL_RPL  LOG_LEVEL_INFO 
+
 /*
 #define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
 */
@@ -75,3 +75,8 @@
 // #define ROUTING_CONF_RPL_CLASSIC 1
 // #define ROUTING_CONF_RPL_LITE 0
 
+/*
+Added to create second DODAG
+*/
+#define RPL_CONF_MAX_INSTANCES 2   // Allow up to two RPL instances
+// #define RPL_CONF_MOP RPL_MOP_NON_STORING   // Set the Mode of Operation

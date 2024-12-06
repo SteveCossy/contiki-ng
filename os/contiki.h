@@ -66,3 +66,7 @@
 #define ROUTING_CONF_RPL_CLASSIC 1
 //void uiplib_ipaddr_print(const uip_ipaddr_t *addr);
 
+/*
+Added to create second DODAG
+*/
+#define RPL_CONF_MAX_INSTANCES 2   // Allow up to two RPL instances
