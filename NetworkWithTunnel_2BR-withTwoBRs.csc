@@ -179,7 +179,7 @@
       <mote>
         <interface_config>
           org.contikios.cooja.interfaces.Position
-          <pos x="30.460063006007754" y="23.87044550638181" />
+          <pos x="55.87911949226313" y="47.47385510076181" />
         </interface_config>
         <interface_config>
           org.contikios.cooja.contikimote.interfaces.ContikiMoteID
@@ -246,26 +246,18 @@
       <skin>org.contikios.cooja.plugins.skins.AddressVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.PositionVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.AttributeVisualizerSkin</skin>
-      <viewport>3.3046073148081083 0.0 0.0 3.3046073148081083 107.05479970684304 21.439490905293507</viewport>
+      <viewport>3.3046073148081083 0.0 0.0 3.3046073148081083 92.05479970684287 47.4394909052935</viewport>
     </plugin_config>
-    <bounds x="1" y="1" height="858" width="1019" />
+    <bounds x="25" y="228" height="606" width="1019" z="1" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.LogListener
     <plugin_config>
-      <filter>ID:16</filter>
+      <filter>ID:18</filter>
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="113" y="29" height="674" width="662" z="1" />
-  </plugin>
-  <plugin>
-    org.contikios.cooja.plugins.Notes
-    <plugin_config>
-      <notes>Enter notes here</notes>
-      <decorations>true</decorations>
-    </plugin_config>
-    <bounds x="1157" y="359" height="160" width="740" z="3" />
+    <bounds x="870" y="23" height="429" width="662" z="2" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -274,7 +266,7 @@
       <interface>Serial port</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1065" y="261" height="615" width="661" z="2" />
+    <bounds x="434" y="21" height="411" width="661" z="5" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.RadioLogger
@@ -283,25 +275,24 @@
       <formatted_time />
       <analyzers name="6lowpan-pcap" />
     </plugin_config>
-    <bounds x="790" y="2" height="496" width="953" z="4" />
+    <bounds x="157" y="8" height="496" width="953" z="4" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
     <mote_arg>14</mote_arg>
     <plugin_config>
       <port>60016</port>
-      <bound>true</bound>
+      <bound>false</bound>
     </plugin_config>
-    <bounds x="1535" y="511" height="126" width="362" z="5" />
+    <bounds x="1535" y="511" height="126" width="362" z="3" />
   </plugin>
   <plugin>
-    org.contikios.cooja.plugins.VariableWatcher
-    <mote_arg>14</mote_arg>
+    org.contikios.cooja.serialsocket.SerialSocketServer
+    <mote_arg>16</mote_arg>
     <plugin_config>
-      <varname>addr_contexts</varname>
-      <vartype>0</vartype>
-      <varformat>2</varformat>
+      <port>60018</port>
+      <bound>false</bound>
     </plugin_config>
-    <bounds x="1053" y="56" height="281" width="480" z="6" />
+    <bounds x="1546" y="24" height="126" width="362" />
   </plugin>
 </simconf>
