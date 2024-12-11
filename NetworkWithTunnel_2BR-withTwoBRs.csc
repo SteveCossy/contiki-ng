@@ -248,16 +248,16 @@
       <skin>org.contikios.cooja.plugins.skins.AttributeVisualizerSkin</skin>
       <viewport>3.3046073148081083 0.0 0.0 3.3046073148081083 92.05479970684287 47.4394909052935</viewport>
     </plugin_config>
-    <bounds x="25" y="228" height="606" width="1019" z="1" />
+    <bounds x="25" y="228" height="606" width="1019" z="4" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.LogListener
     <plugin_config>
-      <filter>ID:18</filter>
+      <filter>DAG</filter>
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="870" y="23" height="429" width="662" z="2" />
+    <bounds x="870" y="23" height="622" width="662" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -275,24 +275,24 @@
       <formatted_time />
       <analyzers name="6lowpan-pcap" />
     </plugin_config>
-    <bounds x="157" y="8" height="496" width="953" z="4" />
+    <bounds x="157" y="8" height="496" width="953" z="1" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
     <mote_arg>14</mote_arg>
     <plugin_config>
       <port>60016</port>
-      <bound>false</bound>
+      <bound>true</bound>
     </plugin_config>
-    <bounds x="1535" y="511" height="126" width="362" z="3" />
+    <bounds x="1535" y="511" height="126" width="362" z="2" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
     <mote_arg>16</mote_arg>
     <plugin_config>
       <port>60018</port>
-      <bound>false</bound>
+      <bound>true</bound>
     </plugin_config>
-    <bounds x="1546" y="24" height="126" width="362" />
+    <bounds x="1546" y="24" height="126" width="362" z="3" />
   </plugin>
 </simconf>
