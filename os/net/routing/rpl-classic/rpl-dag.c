@@ -125,7 +125,10 @@ rpl_print_neighbor_list(void)
     LOG_DBG("RPL: end of list\n");
   }
 }
-/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------
+Extra code to enable two DODAGs. Documentation is here:
+okular /home/stevecos/Documents/technotes/Contiki-NG_TwoDODAG.pdf
+---------------------------------------------------------------------------*/
 //#include "net/routing/rpl-classic/rpl.h"
 //#include "net/ipv6/uip-debug.h"
 //	#include "net/routing/rpl-classic/rpl-dag.h"
