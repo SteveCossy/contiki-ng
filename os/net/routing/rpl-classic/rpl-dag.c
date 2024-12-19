@@ -440,7 +440,7 @@ get_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
 }
 /*---------------------------------------------------------------------------*/
 rpl_dag_t *
-rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id)
+rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 {
   rpl_dag_t *dag;
   rpl_instance_t *instance;
