@@ -123,6 +123,14 @@ rpl_dag_root_start(void)
     return -1;
   }
 
+/*---------------------------------------------------------------------------
+Extra code to enable two DODAGs. Documentation is here:
+okular /home/stevecos/Documents/technotes/Contiki-NG_TwoDODAG.pdf &
+Maybe rpl-dag.c:474,1231,1330 is a better place ...
+---------------------------------------------------------------------------*/
+
+
+
   rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
   rpl_dag_t *dag = rpl_get_any_dag();
   if(dag == NULL) {
