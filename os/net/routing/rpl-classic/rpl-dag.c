@@ -470,29 +470,35 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 
   LOG_DBG("Allocating a DAG **********************\n");
   dag = rpl_alloc_dag(instance_id, dag_id);
-  if(dag == NULL) {
+  if(dag != NULL) { // Was if(dag == NULL) {
+	 	// DAG successfully allocated
+	  printf("New DAG allocated with ID: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&dag->dag_id));
+	} else {
+		// DAG allocation failed
+		printf("Failed to allocate first DAG\n");
     LOG_ERR("Failed to allocate a DAG\n");
     return NULL;
   }
 
  LOG_DBG("Allocating another DAG **********************\n");
 	// Define instance ID and DAG ID
-	uint8_t instance_id = 42;
-	uip_ipaddr_t dag_id;
+	uint8_t instance_id2 = 42;
+	uip_ipaddr_t dag_id2;
 			
 	// Initialize the DAG ID
-	uip_ip6addr(&dag_id, 0xaaaa, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
+	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
   //static uip_ip6addr_t ip64_prefix = {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0, 0, 0, 0}};
 
 			
 	// Allocate a new DAG
-	rpl_dag_t *dag2 = rpl_alloc_dag(instance_id, &dag_id);
+	rpl_dag_t *dag2 = rpl_alloc_dag(instance_id2, &dag_id2);
   if(dag != NULL) {
 	 	// DAG successfully allocated
-	  printf("New DAG allocated with ID: %s\n", uip_ipaddr_to_str(&dag->dag_id));
+	  printf("New DAG allocated with ID: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&dag2->dag_id));
 	} else {
 		// DAG allocation failed
-		printf("Failed to allocate DAG\n");
+		printf("Failed to allocate second DAG\n");
+    return NULL;
 	}
 
   instance = dag->instance;
