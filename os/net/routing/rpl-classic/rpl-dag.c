@@ -721,6 +721,14 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
     }
   }
 
+    // dag_id added by steve
+    /* printf("Address for dag: ");
+		  uip_debug_ipaddr_print(dag_id);
+		  printf("\n"); */
+    if(dag_id != NULL) {
+      uip_ipaddr_copy(&dag->dag_id, &dag_id);
+    }
+
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
     if(!dag->used) {
       memset(dag, 0, sizeof(*dag));
