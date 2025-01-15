@@ -709,7 +709,7 @@ rpl_alloc_instance(uint8_t instance_id)
 rpl_dag_t *
 rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
 {
-  rpl_dag_t *dag, *end;
+  rpl_dag_t *dagr, *end;
   rpl_instance_t *instance;
 
   instance = rpl_get_instance(instance_id);
@@ -722,22 +722,23 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
   }
 
     // dag_id added by steve
-    printf("Address for dag: ");
+    printf("Address for dagr: ");
 		  uip_debug_ipaddr_print(dag_id);
 		  printf("\n"); 
-    /* if(dag_id != NULL) {
-      uip_ipaddr_copy(&dag->dag_id, &dag_id);
-    }*/
-    memcpy(dag->dag_id, dag_id, sizeof(dag_id));
+    /**/ 
+    if(dag_id != NULL) {
+      uip_ipaddr_copy(&dagr->dag_id, &dag_id);
+    }
+    memcpy(&dagr->dag_id, dag_id, sizeof(dag_id));
 
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-    if(!dag->used) {
+    if(!dagr->used) {
       memset(dag, 0, sizeof(*dag));
-      dag->used = 1;
-      dag->rank = RPL_INFINITE_RANK;
-      dag->min_rank = RPL_INFINITE_RANK;
-      dag->instance = instance;
+      dagr->used = 1;
+      dagr->rank = RPL_INFINITE_RANK;
+      dagr->min_rank = RPL_INFINITE_RANK;
+      dagr->instance = instance;
       return dag;
     }
   }
