@@ -40,6 +40,7 @@
  * @{
  */
 
+//#include "contiki-default-conf.h"
 #include "contiki.h"
 #include "net/link-stats.h"
 #include "net/routing/rpl-classic/rpl.h"
