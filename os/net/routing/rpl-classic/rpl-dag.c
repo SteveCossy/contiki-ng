@@ -728,7 +728,7 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
     /* if(dag_id != NULL) {
       uip_ipaddr_copy(&dag->dag_id, &dag_id);
     }*/
-    memcpy(&dag->dag_id, dag_id, sizeof(dag_id));
+    memcpy(dag->dag_id, dag_id, sizeof(dag_id));
 
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
