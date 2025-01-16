@@ -490,10 +490,10 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 			
 	// Initialize the DAG ID
 	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
-   /* printf("Second DAG IP: ");
+    printf("Second DAG IP: ");
 		uip_debug_ipaddr_print(&dag_id2);
 		printf("\n");
-	*/
+	
 	// Allocate a new DAG
 	// rpl_dag_t *dag2 = rpl_alloc_dag(instance_id, &dag_id2);
   if(dag != NULL) {
@@ -506,7 +506,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 		printf("Failed to allocate second DAG\n");
     return NULL;
 	}
-
+*/
   instance = dag->instance;
 
   dag->version = version;
