@@ -133,9 +133,9 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   LOG_DBG("Allocating another DAG **********************\n");
 	// Define instance ID and DAG ID
 	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
-	uip_ipaddr_t *dag_id2;
+	uip_ipaddr_t dag_id2;
 	// Initialize the DAG ID
-	uip_ip6addr(dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
+	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
   
   rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
   rpl_dag_t *dag = rpl_get_any_dag();
@@ -155,7 +155,7 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   }
 
  // Now the second dag
-  rpl_set_root(RPL_DEFAULT_INSTANCE, dag_id2);
+  rpl_set_root(RPL_DEFAULT_INSTANCE, &dag_id2);
 
   uip_ipaddr_t prefix;
   uip_ip6addr_copy(&prefix, ipaddr);
