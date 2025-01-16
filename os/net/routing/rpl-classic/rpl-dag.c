@@ -485,7 +485,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 
  LOG_DBG("Allocating another DAG **********************\n");
 	// Define instance ID and DAG ID
-	uint8_t instance_id2 = 42;
+	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
 	uip_ipaddr_t dag_id2;
 			
 	// Initialize the DAG ID
@@ -495,7 +495,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 		printf("\n");
 	*/
 	// Allocate a new DAG
-	rpl_dag_t *dag2 = rpl_alloc_dag(instance_id2, &dag_id2);
+	rpl_dag_t *dag2 = rpl_alloc_dag(instance_id, &dag_id2);
   if(dag != NULL) {
 	 	// DAG successfully allocated
 	  printf("Second DAG allocated with ID: ");
