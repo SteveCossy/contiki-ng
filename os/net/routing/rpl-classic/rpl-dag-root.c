@@ -130,8 +130,8 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 ---------------------------------------------------------------------------*/
 
   // LOG_INFO("This is a good place to put second DODAG\n" );
-  LOG_DBG("Allocating another DAG **********************\n");
-	// Define instance ID and DAG ID
+  LOG_INFO("Creating new DODAGs (dags)\n");
+  // Define instance ID and DAG ID
 	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
 	uip_ipaddr_t dag_id2;
 	// Initialize the DAG ID
@@ -162,7 +162,7 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   uip_ip6addr_copy(&prefix, ipaddr);
   rpl_set_prefix(dag, &prefix, 64);
 
-  LOG_INFO("created two new RPL dags\n");
+  LOG_INFO("Created new RPL dags\n");
   return 0;
 }
 /*---------------------------------------------------------------------------*/

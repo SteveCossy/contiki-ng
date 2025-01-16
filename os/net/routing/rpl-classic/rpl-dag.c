@@ -473,12 +473,12 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   dag = rpl_alloc_dag(instance_id, dag_id);
   if(dag != NULL) { // Was if(dag == NULL) {
 	 	// DAG successfully allocated
-	  printf("First DAG allocated with ID: ");
+	  printf("DAG allocated with ID: ");
 		uip_debug_ipaddr_print(&dag->dag_id);
 		printf("\n");
 	} else {
 		// DAG allocation failed
-		printf("Failed to allocate first DAG\n");
+		printf("Failed to allocate a DAG\n");
     LOG_ERR("Failed to allocate a DAG\n");
     return NULL;
   }
