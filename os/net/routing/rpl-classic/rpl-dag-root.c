@@ -129,7 +129,7 @@ okular /home/stevecos/Documents/technotes/Contiki-NG_TwoDODAG.pdf &
 Maybe rpl-dag.c:474,1231,1330 is a better place ...
 ---------------------------------------------------------------------------*/
 
-
+  LOG_INFO("This is a good place to put second DODAG" );
 
   rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
   rpl_dag_t *dag = rpl_get_any_dag();

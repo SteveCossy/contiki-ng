@@ -332,10 +332,10 @@ rpl_purge_dags(void)
         if(instance->dag_table[i].used) {
           if(instance->dag_table[i].lifetime == 0) {
             if(!instance->dag_table[i].joined) {
-              LOG_INFO("Max Dag per Instance: %d\n", RPL_MAX_DAG_PER_INSTANCE ); // Logging constants for debugging
-             // LOG_INFO( RPL_MAX_DAG_PER_INSTANCE);
-              LOG_INFO( "Max Insances: %d\n", RPL_MAX_INSTANCES );
-             // LOG_INFO( RPL_MAX_INSTANCES );
+
+              LOG_INFO("RPL_MAX_DAG_PER_INSTANCE: %d\n", RPL_MAX_DAG_PER_INSTANCE ); // Logging constants for debugging
+              LOG_INFO("RPL_MAX_INSTANCES: %d\n", RPL_MAX_INSTANCES );
+              
               LOG_INFO("Removing dag ");
               LOG_INFO_6ADDR(&instance->dag_table[i].dag_id);
               LOG_INFO_("\n");
