@@ -490,8 +490,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 			
 	// Initialize the DAG ID
 	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
-  //static uip_ip6addr_t ip64_prefix = {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0, 0, 0, 0}};
-  /* printf("Second DAG IP: ");
+   /* printf("Second DAG IP: ");
 		uip_debug_ipaddr_print(&dag_id2);
 		printf("\n");
 	*/
@@ -730,9 +729,9 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
       dag->rank = RPL_INFINITE_RANK;
       dag->min_rank = RPL_INFINITE_RANK;
       dag->instance = instance;
-/**/
+
        // Initialize dag->dag_id after clearing the memory added by steve
-      if(dag_id != NULL) {
+      if(dag_id != NULL ) {
            memcpy(&dag->dag_id, dag_id, sizeof(*dag_id));
       }
       return dag;
