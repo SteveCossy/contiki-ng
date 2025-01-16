@@ -137,6 +137,10 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 	// Initialize the DAG ID
 	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
   
+ // Start the internal id dag first
+  rpl_set_root(RPL_DEFAULT_INSTANCE, &dag_id2);
+
+// Start the dag with external address
   rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
   rpl_dag_t *dag = rpl_get_any_dag();
   if(dag == NULL) {
@@ -153,9 +157,6 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
     uip_ds6_defrt_rm(dag->instance->def_route);
     dag->instance->def_route = NULL;
   }
-
- // Now the second dag
-  rpl_set_root(RPL_DEFAULT_INSTANCE, &dag_id2);
 
   uip_ipaddr_t prefix;
   uip_ip6addr_copy(&prefix, ipaddr);
