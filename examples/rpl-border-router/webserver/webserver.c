@@ -36,32 +36,17 @@
 #include "net/ipv6/uip-ds6-route.h"
 #include "net/ipv6/uip-sr.h"
 
-/* SC-Oct-24 */
-#include "net/ipv6/uip-ds6.h"
-#include "contiki-net.h"
-#include "httpd-simple.h"
-#include "net/nbr-table.h"
-
-/* Log configuration */
-#include "sys/log.h"
-#define LOG_MODULE "WEBSVR"
-#define LOG_LEVEL LOG_LEVEL_INFO
-
-
 #include <stdio.h>
 #include <string.h>
 
 /*---------------------------------------------------------------------------*/
 static const char *TOP = "<html>\n  <head>\n    <title>Contiki-NG</title>\n  </head>\n<body>\n";
 static const char *BOTTOM = "\n</body>\n</html>\n";
-static char tmp[64]; /* Temporary buffer for IP addresses SC-Oct-24 */
-static char buf[2048]; /* Increased from 256 to 1024  SC-Oct-24 */
+static char buf[256];
 static int blen;
-/* 
 #define ADD(...) do {                                                   \
     blen += snprintf(&buf[blen], sizeof(buf) - blen, __VA_ARGS__);      \
   } while(0)
-*/
 #define SEND(s) do { \
   SEND_STRING(s, buf); \
   blen = 0; \
@@ -72,26 +57,6 @@ static int blen;
  * a single static buffer is used for all segments.
  */
 #include "httpd-simple.h"
-
-/*- SC-Oct-24 ---------------------------------------------------------------
-The ADD and ADD_IP Macros: These macros will help in appending content and 
-formatting IP addresses into the output buffer:
-*/
-#define ADD(str) snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "%s", str)
-/*  First version of ADD_IP macro
-#define ADD_IP(addr) do { snprintf(tmp, sizeof(tmp), "%02x%02x:%02x%02x:%02x%02x:%02x%02x:" \
-                           "%02x%02x:%02x%02x:%02x%02x:%02x%02x", \
-                           addr->u8[0], addr->u8[1], addr->u8[2], addr->u8[3], \
-                           addr->u8[4], addr->u8[5], addr->u8[6], addr->u8[7], \
-                           addr->u8[8], addr->u8[9], addr->u8[10], addr->u8[11], \
-                           addr->u8[12], addr->u8[13], addr->u8[14], addr->u8[15]); \
-                           ADD(tmp); } while(0)
-Updated version follows  */
-#define ADD_IP(addr) snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), \
-                             "%02x%02x:%02x%02x:%02x%02x:%02x%02x", \
-                             (addr)->u8[0], (addr)->u8[1], (addr)->u8[2], (addr)->u8[3], \
-                             (addr)->u8[4], (addr)->u8[5], (addr)->u8[6], (addr)->u8[7])
-
 
 /*---------------------------------------------------------------------------*/
 static void
@@ -111,121 +76,79 @@ ipaddr_add(const uip_ipaddr_t *addr)
       } else if(i > 0) {
         ADD(":");
       }
-      /* ADD("%x", a); */
-      snprintf(tmp, sizeof(tmp), "%x", a);  // Format the variable 'a' as hexadecimal into 'tmp'
-      ADD(tmp);                             // Add the formatted string to the buffer using 'ADD'
-
+      ADD("%x", a);
     }
   }
 }
-
-/*---------------------------------------------------------------------------
-Create the Function to List Neighbours and Routes:
-  Add the list_neighbours_and_routes() function to the file. 
-  This function will dynamically generate the HTML content 
-  listing the neighbours and associated routes, as described 
-  in the earlier code:
-  SC-Oct-24
-*/
-
-//tatic void list_neighbors_and_routes(void) {
-
-
-//}
-
 /*---------------------------------------------------------------------------*/
 static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
- // static uip_ds6_nbr_t *nbr;
+  static uip_ds6_nbr_t *nbr;
 
   PSOCK_BEGIN(&s->sout);
   SEND_STRING(&s->sout, TOP);
 
-  ADD("  </ul>\n");
+  ADD("  Neighbors\n  <ul>\n");
   SEND(&s->sout);
-
-
-      /* Add the HTML header */
-      ADD("<html><head><title>RPL Border Router</title></head><body>");
-      ADD("<h1>RPL Border Router</h1>");
-
-      /* Add dynamic content: Neighbours and Routes */
-      // list_neighbors_and_routes();
-
-  uip_ds6_nbr_t *nbr;
-   uip_ipaddr_t child_ipaddr;
-  uip_ipaddr_t parent_ipaddr;
-  uip_ipaddr_t ip_buffer;
-
-  /* Add a heading for neighbours */
-  ADD("<h2>Neighbours and Associated Routes</h2>");
-  ADD("<pre>");  /* Start preformatted text */
-  // LOG_INFO("ADDed Stuff\n"); /* Debug */
-  // Iterate over the neighbor table using nbr_table_ds6_neighbors()
   for(nbr = uip_ds6_nbr_head();
       nbr != NULL;
       nbr = uip_ds6_nbr_next(nbr)) {
-
-    static uip_sr_node_t *link;
-
-    ADD("Neighbour IP Address: ");
-      ipaddr_add(&nbr->ipaddr);
-    ADD("\n");
-   
-    /* Check for routes associated with this neighbour */
-    ADD("  Routes associated with this neighbour:\n");
-    /* Debug 
-    LOG_INFO("Neighbour IP:");*/
-    char ip_buf[UIPLIB_IPV6_MAX_STR_LEN];
-    uiplib_ipaddr_snprint(ip_buf, sizeof(ip_buf), &nbr->ipaddr); // ADD this neighbour
-    
-    for ( link = uip_sr_node_head(); 
-      link != NULL; 
-      link = uip_sr_node_next(link)) {
-      if(link->parent != NULL) {
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
-        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr,link->parent);
-        if(uiplib_ipaddrconv(ip_buf, &ip_buffer) == 0) {
-          printf("Invalid IP address format\n");
-        } else {
-      // Now ipaddr contains the parsed IPv6 address
-          uiplib_ipaddr_print(&ip_buffer);  // For example, print the address
-        }
-        printf("IP buffer is currently:");
-        uiplib_ipaddr_print(&ip_buffer);
-        printf("  parent is:");
-        uiplib_ipaddr_print(&parent_ipaddr);
-        printf("\n");
-        if(uip_ipaddr_cmp(&ip_buffer,&parent_ipaddr)) {
-          printf("link->parent points to ");
-          uiplib_ipaddr_print(&parent_ipaddr);
-          printf("\n");
-          printf("link points to ");
-          uiplib_ipaddr_print(&child_ipaddr);
-          printf("\n");
-          // Add Route IP Address if the nexthop matches the neighbour's IP 
-          ADD("    Route IP Address: ");
-          ADD_IP(&child_ipaddr);
-          ADD("\n");
-        }
-//        printf(buf);
-      }
-    } 
-
-    ADD("\n");  /* Add space between neighbours */
-    SEND(&s->sout)
-  printf(buf); // Debug
+    ADD("    <li>");
+    ipaddr_add(&nbr->ipaddr);
+    ADD("</li>\n");
+    SEND(&s->sout);
   }
-  ADD("</pre>");  /* End preformatted text */
+  ADD("  </ul>\n");
+  SEND(&s->sout);
 
-      /* Add closing tags */
-      ADD("</body></html>");
+#if (UIP_MAX_ROUTES != 0)
+  {
+    static uip_ds6_route_t *r;
+    ADD("  Routes\n  <ul>\n");
+    SEND(&s->sout);
+    for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
+      ADD("    <li>");
+      ipaddr_add(&r->ipaddr);
+      ADD("/%u (via ", r->length);
+      ipaddr_add(uip_ds6_route_nexthop(r));
+      ADD(") %lus", (unsigned long)r->state.lifetime);
+      ADD("</li>\n");
+      SEND(&s->sout);
+    }
+    ADD("  </ul>\n");
+    SEND(&s->sout);
+  }
+#endif /* UIP_MAX_ROUTES != 0 */
 
-      /* Send the generated HTML content */
-      /* doesn't work httpd_simple_serve(buf, strlen(buf)); */
-    httpd_appcall(buf);
-    
+#if (UIP_SR_LINK_NUM != 0)
+  if(uip_sr_num_nodes() > 0) {
+    static uip_sr_node_t *link;
+    ADD("  Routing links\n  <ul>\n");
+    SEND(&s->sout);
+    for(link = uip_sr_node_head(); link != NULL; link = uip_sr_node_next(link)) {
+      if(link->parent != NULL) {
+        uip_ipaddr_t child_ipaddr;
+        uip_ipaddr_t parent_ipaddr;
+
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
+        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, link->parent);
+
+        ADD("    <li>");
+        ipaddr_add(&child_ipaddr);
+
+        ADD(" (parent: ");
+        ipaddr_add(&parent_ipaddr);
+        ADD(") %us", (unsigned int)link->lifetime);
+
+        ADD("</li>\n");
+        SEND(&s->sout);
+      }
+    }
+    ADD("  </ul>");
+    SEND(&s->sout);
+  }
+#endif /* UIP_SR_LINK_NUM != 0 */
 
   SEND_STRING(&s->sout, BOTTOM);
 
@@ -237,16 +160,8 @@ PROCESS_THREAD(webserver_nogui_process, ev, data)
 {
   PROCESS_BEGIN();
 
-/*- SC-Oct-24 ---------------------------------------------------------------
-Replace existing code to integrate the new function into the existing web server logic:
   httpd_init();
-  while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
-  }
-*/
-  /* doesn't work httpd_simple_init(); */
-  httpd_init();
-  LOG_INFO("Contiki-NG Webserver started\n");
+
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
     httpd_appcall(data);
@@ -254,7 +169,6 @@ Replace existing code to integrate the new function into the existing web server
 
   PROCESS_END();
 }
-
 /*---------------------------------------------------------------------------*/
 httpd_simple_script_t
 httpd_simple_get_script(const char *name)
