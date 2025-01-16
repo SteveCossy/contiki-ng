@@ -154,11 +154,14 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
     dag->instance->def_route = NULL;
   }
 
+ // Now the second dag
+  rpl_set_root(RPL_DEFAULT_INSTANCE, dag_id2);
+
   uip_ipaddr_t prefix;
   uip_ip6addr_copy(&prefix, ipaddr);
   rpl_set_prefix(dag, &prefix, 64);
 
-  LOG_INFO("created a new RPL dag\n");
+  LOG_INFO("created two new RPL dags\n");
   return 0;
 }
 /*---------------------------------------------------------------------------*/
