@@ -146,6 +146,8 @@
 #define RPL_DEFAULT_INSTANCE	       0x1e
 #endif /* RPL_CONF_DEFAULT_INSTANCE */
 
+#define RPL_SECOND_INSTANCE	       0x1e
+
 /*
  * This value decides if this node must stay as a leaf or not
  * as allowed by draft-ietf-roll-rpl-19#section-8.5
