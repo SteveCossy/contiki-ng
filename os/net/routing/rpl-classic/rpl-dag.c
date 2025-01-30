@@ -1002,7 +1002,18 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
 
     instance = rpl_get_default_instance();
     display_dodag(instance);
-    display_dodag(*RPL_SECOND_INSTANCE); // See if the second DODAG is still here
+
+    // See if the second DODAG is still here
+		rpl_instance_t *instance2 = rpl_get_instance(RPL_SECOND_INSTANCE);
+		if (instance2 != NULL) {
+			printf("Displaying RPL instance two 0x%x!\n", RPL_SECOND_INSTANCE);
+			display_dodag(instance2);
+		} else {
+			printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
+		}
+
+
+
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
