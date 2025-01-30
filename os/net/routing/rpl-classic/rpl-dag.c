@@ -517,8 +517,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 */
   instance = dag->instance;
 
-  instance = rpl_get_default_instance();
-  display_dodag(instance);
+//  instance = rpl_get_default_instance();
 
   dag->version = version;
   dag->joined = 1;
@@ -570,6 +569,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   LOG_ANNOTATE("#A root=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
   rpl_reset_dio_timer(instance);
+  display_dodag(instance);
 
   return dag;
 }
