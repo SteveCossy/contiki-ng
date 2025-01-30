@@ -1002,6 +1002,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
 
     instance = rpl_get_default_instance();
     display_dodag(instance);
+    display_dodag(*RPL_SECOND_INSTANCE); // See if the second DODAG is still here
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
