@@ -139,7 +139,7 @@ void display_dodag( rpl_instance_t *instance ) {
 
   //instance = rpl_get_default_instance();
   if(instance != NULL) {
-    dag = instance->current_dag;
+    dag = &instance->dag_table[2]; // debug only *******************
     if(dag != NULL) {
 
       uip_ds6_addr_t *lladdr;
