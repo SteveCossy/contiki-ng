@@ -569,7 +569,10 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   LOG_ANNOTATE("#A root=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
   rpl_reset_dio_timer(instance);
+
+  // Note that this funtion didn't work before instance values were set above
   display_dodag(instance);
+  printf("RPL_SECOND_INSTANCE: %d\n", RPL_SECOND_INSTANCE);
 
   return dag;
 }
