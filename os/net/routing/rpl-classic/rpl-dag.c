@@ -132,12 +132,12 @@ rpl_print_neighbor_list(void)
 //#include "net/ipv6/uip-debug.h"
 //	#include "net/routing/rpl-classic/rpl-dag.h"
 
-void display_dodag(void) {
-  rpl_instance_t *instance;
+//void display_dodag(void) {
+void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag;
   rpl_parent_t *parent;
 
-  instance = rpl_get_default_instance();
+  //instance = rpl_get_default_instance();
   if(instance != NULL) {
     dag = instance->current_dag;
     if(dag != NULL) {
@@ -195,6 +195,10 @@ void display_dodag(void) {
       }
 
     }
+  }
+  else // instance != NULL
+  {
+    printf("No DAG instance found.\n");
   }
 }
 
@@ -985,8 +989,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
     if(LOG_DBG_ENABLED) {
       rpl_print_neighbor_list();
     }
-    
-    display_dodag();
+
+    instance = rpl_get_default_instance();
+    display_dodag(instance);
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",

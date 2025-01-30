@@ -200,7 +200,7 @@ handle_dio_timer(void *ptr)
   if(LOG_DBG_ENABLED) {
     rpl_print_neighbor_list();
   }
-  display_dodag();
+  //display_dodag();
 }
 /*---------------------------------------------------------------------------*/
 void
