@@ -480,6 +480,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 	  printf("DAG allocated with ID: ");
 		uip_debug_ipaddr_print(&dag->dag_id);
 		printf("\n");
+    display_dodag(instance);
 	} else {
 		// DAG allocation failed
 		printf("Failed to allocate a DAG\n");
