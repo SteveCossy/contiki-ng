@@ -195,6 +195,10 @@ void display_dodag( rpl_instance_t *instance ) {
       }
 
     }
+    else // DAG == NULL
+    {
+    printf("No DAG found with this instance.\n");
+    }
   }
   else // instance != NULL
   {
