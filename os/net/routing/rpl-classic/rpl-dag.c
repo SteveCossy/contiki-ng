@@ -516,7 +516,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 	}
 */
   //instance = dag->instance;
-  display_dodag(instance);
+  //display_dodag(instance);
 
   dag->version = version;
   dag->joined = 1;
