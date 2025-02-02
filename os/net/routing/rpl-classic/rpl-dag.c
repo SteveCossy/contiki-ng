@@ -139,7 +139,9 @@ void display_dodag( rpl_instance_t *instance ) {
 
   //instance = rpl_get_default_instance();
   if(instance != NULL) {
-    dag = &instance->dag_table[0]; // debug only *******************
+    // dag = &instance->dag_table[0];
+  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+
     if(dag != NULL) {
 
       uip_ds6_addr_t *lladdr;
@@ -199,6 +201,7 @@ void display_dodag( rpl_instance_t *instance ) {
     {
     printf("No DAG found with this instance.\n");
     }
+  }
   }
   else // instance != NULL
   {
@@ -987,9 +990,6 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
 		} else {
 			printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
 		}
-
-
-
 
   } else if(best_dag->rank != old_rank) {
     LOG_DBG("Preferred parent update, rank changed from %u to %u\n",
