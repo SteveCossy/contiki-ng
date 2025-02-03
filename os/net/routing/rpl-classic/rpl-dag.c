@@ -156,6 +156,8 @@ void display_dodag( rpl_instance_t *instance ) {
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
 
+      printf("DODAG used: %hhu\n",&dag->used);
+
       parent = dag->preferred_parent;
       if(parent != NULL) {
         printf("Preferred Parent: ");
