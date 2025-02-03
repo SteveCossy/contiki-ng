@@ -136,7 +136,7 @@ rpl_print_neighbor_list(void)
 void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag, *end;
   rpl_parent_t *parent;
-  rpl_instance_t *default_instance == NULL;
+  rpl_instance_t *default_instance = NULL;
 
   //instance = rpl_get_default_instance();
   if(instance != NULL) {
