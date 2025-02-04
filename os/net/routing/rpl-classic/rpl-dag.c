@@ -162,6 +162,12 @@ void display_dodag( rpl_instance_t *instance ) {
         printf("DODAG not used!\n");
       }
 
+      if(dag->joined) {
+        printf("DODAG joined!\n");
+      } else {
+        printf("DODAG not joined!\n");
+      }
+
       parent = dag->preferred_parent;
       if(parent != NULL) {
         printf("Preferred Parent: ");
