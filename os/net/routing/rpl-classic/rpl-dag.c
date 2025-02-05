@@ -476,7 +476,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
     for(i = 0; i < RPL_MAX_DAG_PER_INSTANCE; ++i) {
       dag = &instance->dag_table[i];
       if(dag->used) {
-        if(uip_ipaddr_cmp(&dag->dag_id, dag_id)) {
+/*        if(uip_ipaddr_cmp(&dag->dag_id, dag_id)) {
           version = dag->version;
           RPL_LOLLIPOP_INCREMENT(version);
         } else {
@@ -488,7 +488,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
             LOG_INFO("Dropping a DAG when setting this node as root\n");
           }
           rpl_free_dag(dag);
-        }
+        } */
       }
     }
   }
