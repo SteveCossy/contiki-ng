@@ -228,7 +228,7 @@
       <skin>org.contikios.cooja.plugins.skins.AttributeVisualizerSkin</skin>
       <viewport>2.6557622718251297 0.0 0.0 2.6557622718251297 104.82946207224833 160.4061481626971</viewport>
     </plugin_config>
-    <bounds x="1" y="1" height="858" width="1019" z="6" />
+    <bounds x="3" y="3" height="791" width="1141" z="4" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.LogListener
@@ -237,7 +237,7 @@
       <formatted_time />
       <coloring />
     </plugin_config>
-    <bounds x="231" y="181" height="674" width="740" />
+    <bounds x="559" y="22" height="674" width="740" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.Notes
@@ -245,7 +245,7 @@
       <notes>Enter notes here</notes>
       <decorations>true</decorations>
     </plugin_config>
-    <bounds x="1157" y="359" height="160" width="740" z="2" />
+    <bounds x="529" y="344" height="352" width="914" z="1" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -254,7 +254,7 @@
       <interface>Serial port</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="937" y="258" height="579" width="661" z="1" />
+    <bounds x="220" y="97" height="775" width="772" z="5" />
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.RadioLogger
@@ -263,7 +263,7 @@
       <formatted_time />
       <analyzers name="6lowpan-pcap" />
     </plugin_config>
-    <bounds x="790" y="2" height="496" width="953" z="3" />
+    <bounds x="516" y="94" height="496" width="953" z="-1" minimized="true" />
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
@@ -272,16 +272,15 @@
       <port>60016</port>
       <bound>true</bound>
     </plugin_config>
-    <bounds x="1535" y="511" height="126" width="362" z="4" />
+    <bounds x="1029" y="717" height="126" width="362" z="2" />
   </plugin>
   <plugin>
-    org.contikios.cooja.plugins.VariableWatcher
-    <mote_arg>14</mote_arg>
+    org.contikios.cooja.plugins.MoteInterfaceViewer
+    <mote_arg>11</mote_arg>
     <plugin_config>
-      <varname>addr_contexts</varname>
-      <vartype>0</vartype>
-      <varformat>2</varformat>
+      <interface>Serial port</interface>
+      <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <bounds x="1053" y="56" height="281" width="480" z="5" />
+    <bounds x="940" y="11" height="300" width="510" z="3" />
   </plugin>
 </simconf>
