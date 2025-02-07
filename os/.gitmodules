@@ -1,0 +1,3 @@
+[submodule "net/security/tinydtls"]
+	path = net/security/tinydtls
+	url = git@gitlab.ecs.vuw.ac.nz:stevecos/contiki-os.git
