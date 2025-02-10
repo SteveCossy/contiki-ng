@@ -140,11 +140,6 @@ void display_dodag( rpl_instance_t *instance ) {
 
   //instance = rpl_get_default_instance();
   if(instance != NULL) {
-    // dag = &instance->dag_table[0];
-  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-
-    if(dag != NULL) {
-
       uip_ds6_addr_t *lladdr;
       lladdr = uip_ds6_get_link_local(-1);
       printf("This node Link-local IPv6 address: ");
@@ -152,6 +147,12 @@ void display_dodag( rpl_instance_t *instance ) {
       uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
       printf("\n");
       
+    // dag = &instance->dag_table[0];
+  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+
+    if(dag != NULL) {
+
+
       printf("DODAG ID: ");
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
