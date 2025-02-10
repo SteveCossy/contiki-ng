@@ -643,8 +643,16 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
     LOG_DBG("No prefix to announce (len %d)\n",
             dag->prefix_info.length);
   }
-  
-display_dodag();
+
+// See if the second DODAG is still here
+rpl_instance_t *instance2 = rpl_get_instance(RPL_SECOND_INSTANCE);
+if (instance2 != NULL) {
+  printf("Displaying RPL instance two 0x%x!\n", RPL_SECOND_INSTANCE);
+  display_dodag(instance2);
+} else {
+  printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
+}
+
 
 #if RPL_LEAF_ONLY
   if(LOG_DBG_ENABLED) {
