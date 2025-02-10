@@ -145,6 +145,24 @@ new_dio_interval(rpl_instance_t *instance)
   /* Reset the redundancy counter. */
   instance->dio_counter = 0;
 
+ uip_ipaddr_t *lladdr, ipaddr2;
+ lladdr = uip_ds6_get_link_local(-1);
+ //uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
+uip_ip6addr(&ipaddr2, 0xaaaa , 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001 )
+;
+ if(uip_ipaddr_cmp(&lladdr, &ipaddr2)) {
+  printf("They are the same");
+ } else {
+  printf("They are different");
+/* Code copied from display_DODAG function
+      uip_ds6_addr_t *lladdr;
+      lladdr = uip_ds6_get_link_local(-1);
+      printf("This node Link-local IPv6 address: ");
+      //LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      printf("\n");
+ */     
+ }
   /* Schedule the timer. */
   LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
            (unsigned long)ticks);
