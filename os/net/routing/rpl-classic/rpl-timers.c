@@ -110,6 +110,8 @@ new_dio_interval(rpl_instance_t *instance)
 {
   uint32_t time;
   clock_time_t ticks;
+  static inline void
+uip_debug_ipaddr_print(const uip_ipaddr_t *addr)
 
   /* TODO: too small timer intervals for many cases. */
   time = 1UL << instance->dio_intcurrent;
@@ -153,6 +155,11 @@ new_dio_interval(rpl_instance_t *instance)
  uip_ip6addr(&ipaddr2, 0xfd80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
  //uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
  uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
+
+ uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
+ printf(" and ");
+ uip_debug_ipaddr_print(lladdr != NULL ? &ipaddr2        : NULL);
+ printf("\n");
 
  if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) {
   printf("They are the same\n");
