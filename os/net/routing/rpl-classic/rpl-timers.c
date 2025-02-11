@@ -145,13 +145,14 @@ new_dio_interval(rpl_instance_t *instance)
   /* Reset the redundancy counter. */
   instance->dio_counter = 0;
 
- //uip_ds6_addr_t *lladdr, ipaddr2;
- uip_ipaddr_t *lladdr, ipaddr2;
- lladdr = uip_ds6_get_link_local(-1);
+ //uip_ds6_addr_t *lladdr;
+ uip_ipaddr_t lladdr2, ipaddr2;
+ //lladdr = uip_ds6_get_link_local(-1);
  //uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
  uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
+ uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
 
- if(uip_ipaddr_cmp(&lladdr, &ipaddr2)) {
+ if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) {
   printf("They are the same");
  } else {
   printf("They are different");
