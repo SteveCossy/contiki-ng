@@ -149,30 +149,23 @@ new_dio_interval(rpl_instance_t *instance)
 
  uip_ds6_addr_t *lladdr;
  uip_ipaddr_t lladdr2, ipaddr2;
- lladdr = uip_ds6_get_link_local(-1);
- //uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
- 
+ lladdr = uip_ds6_get_link_local(-1); 
  uip_ip6addr(&ipaddr2, 0xfe80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
- //uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
  uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
 
- uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
+ /*uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
  printf(" and ");
  uip_debug_ipaddr_print(lladdr != NULL ? &ipaddr2        : NULL);
  printf("\n");
+ */
 
  if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) {
-  printf("They are the same\n");
+  /* Schedule a DIO for second DODAG. */
+  LOG_INFO("Scheduling DIO timer for second DODAG in %lu ticks\n",
+           (unsigned long)ticks);
+  ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
  } else {
-  printf("They are different\n");
-/* Code copied from display_DODAG function
-      uip_ds6_addr_t *lladdr;
-      lladdr = uip_ds6_get_link_local(-1);
-      printf("This node Link-local IPv6 address: ");
-      //LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
-      uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
-      printf("\n");
- */     
+  LOG_INFO("Not a BR\n");
  }
   /* Schedule the timer. */
   LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
