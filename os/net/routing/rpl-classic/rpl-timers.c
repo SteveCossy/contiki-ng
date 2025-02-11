@@ -145,17 +145,19 @@ new_dio_interval(rpl_instance_t *instance)
   /* Reset the redundancy counter. */
   instance->dio_counter = 0;
 
- //uip_ds6_addr_t *lladdr;
+ uip_ds6_addr_t *lladdr;
  uip_ipaddr_t lladdr2, ipaddr2;
- //lladdr = uip_ds6_get_link_local(-1);
+ lladdr = uip_ds6_get_link_local(-1);
  //uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
- uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
- uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
+ 
+ uip_ip6addr(&ipaddr2, 0xfd00, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
+ //uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
+ uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
 
  if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) {
-  printf("They are the same");
+  printf("They are the same\n");
  } else {
-  printf("They are different");
+  printf("They are different\n");
 /* Code copied from display_DODAG function
       uip_ds6_addr_t *lladdr;
       lladdr = uip_ds6_get_link_local(-1);
