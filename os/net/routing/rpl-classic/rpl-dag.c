@@ -152,7 +152,6 @@ void display_dodag( rpl_instance_t *instance ) {
 
     if(dag != NULL) {
 
-
       printf("DODAG ID: ");
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
