@@ -166,12 +166,12 @@ new_dio_interval(rpl_instance_t *instance)
   ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);*/
   
   rpl_dag_t *dag, *end ;
-  uip_ds6_addr_t *ipaddr3;
+  uip_ds6_addr_t *ipaddr3  = {0};
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
   if(dag->used) {
     ipaddr2 = dag->dag_id;
-    uip_ipaddr_copy(&ipaddr3->ipaddr, &ipaddr2);
+    // uip_ipaddr_copy(&ipaddr3->ipaddr, &ipaddr2);
     LOG_INFO("DODAG IPv6 address for DIO: ");
     LOG_INFO_6ADDR(ipaddr3 != NULL ? &ipaddr3->ipaddr : NULL);
     LOG_INFO_("\n");
