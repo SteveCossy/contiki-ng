@@ -47,6 +47,8 @@
 #include "lib/random.h"
 #include "sys/ctimer.h"
 #include "sys/log.h"
+#include "net/ipv6/uip-debug.h"
+
 
 #define LOG_MODULE "RPL"
 #define LOG_LEVEL LOG_LEVEL_RPL
@@ -110,8 +112,6 @@ new_dio_interval(rpl_instance_t *instance)
 {
   uint32_t time;
   clock_time_t ticks;
-  static inline void
-uip_debug_ipaddr_print(const uip_ipaddr_t *addr)
 
   /* TODO: too small timer intervals for many cases. */
   time = 1UL << instance->dio_intcurrent;
@@ -152,7 +152,7 @@ uip_debug_ipaddr_print(const uip_ipaddr_t *addr)
  lladdr = uip_ds6_get_link_local(-1);
  //uip_ip6addr(&ipaddr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
  
- uip_ip6addr(&ipaddr2, 0xfd80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
+ uip_ip6addr(&ipaddr2, 0xfe80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
  //uip_ip6addr(&lladdr2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012);
  uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
 
