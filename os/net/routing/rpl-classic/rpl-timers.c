@@ -48,6 +48,7 @@
 #include "sys/ctimer.h"
 #include "sys/log.h"
 #include "net/ipv6/uip-debug.h"
+#include "net/ipv6/uip.h"
 
 
 #define LOG_MODULE "RPL"
@@ -166,14 +167,16 @@ new_dio_interval(rpl_instance_t *instance)
   ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);*/
   
   rpl_dag_t *dag, *end ;
-  uip_ds6_addr_t *ipaddr3  = {0};
+  //uip_ds6_addr_t *ipaddr3  = {0};
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
   if(dag->used) {
     ipaddr2 = dag->dag_id;
     // uip_ipaddr_copy(&ipaddr3->ipaddr, &ipaddr2);
     LOG_INFO("DODAG IPv6 address for DIO: ");
-    LOG_INFO_6ADDR(ipaddr3 != NULL ? &ipaddr3->ipaddr : NULL);
+    // LOG_INFO_6ADDR(ipaddr3 != NULL ? &ipaddr3->ipaddr : NULL); // needs uip_ipaddr_t uip_ds6_addr
+    // LOG_INFO_6ADDR(ipaddr2 != NULL ? ipaddr2 : NULL);
+    uip_debug_ipaddr_print(&ipaddr2);
     LOG_INFO_("\n");
 
   }
