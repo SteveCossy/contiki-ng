@@ -167,17 +167,16 @@ new_dio_interval(rpl_instance_t *instance)
   ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);*/
   
   rpl_dag_t *dag, *end ;
-  //uip_ds6_addr_t *ipaddr3  = {0};
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
   if(dag->used) {
     ipaddr2 = dag->dag_id;
-    // uip_ipaddr_copy(&ipaddr3->ipaddr, &ipaddr2);
     LOG_INFO("DODAG IPv6 address for DIO: ");
-    // LOG_INFO_6ADDR(ipaddr3 != NULL ? &ipaddr3->ipaddr : NULL); // needs uip_ipaddr_t uip_ds6_addr
-    // LOG_INFO_6ADDR(ipaddr2 != NULL ? ipaddr2 : NULL);
     uip_debug_ipaddr_print(&ipaddr2);
+    LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
+           (unsigned long)ticks);
     LOG_INFO_("\n");
+    ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
 
   }
   }
@@ -212,13 +211,16 @@ handle_dio_timer(void *ptr)
 
   if(instance->dio_send) {
     /* Send DIO if counter is less than desired redundancy. */
+    LOG_INFO("DIO transmission instance: %d\n", instance->instance_id);
     if(instance->dio_redundancy == 0 || instance->dio_counter < instance->dio_redundancy) {
 #if RPL_CONF_STATS
       instance->dio_totsend++;
 #endif /* RPL_CONF_STATS */
+      LOG_INFO("Starting DIO transmission (%d >= %d)\n",
+              instance->dio_counter, instance->dio_redundancy);
       dio_output(instance, NULL);
     } else {
-      LOG_DBG("Suppressing DIO transmission (%d >= %d)\n",
+      LOG_INFO("Suppressing DIO transmission (%d >= %d)\n", // was DBG
               instance->dio_counter, instance->dio_redundancy);
     }
     instance->dio_send = 0;

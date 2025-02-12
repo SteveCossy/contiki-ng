@@ -644,7 +644,8 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
             dag->prefix_info.length);
   }
 
-// See if the second DODAG is still here
+// See if the second DODAG is still here 
+/* Spoiler alert - it is!
 rpl_instance_t *instance2 = rpl_get_instance(RPL_SECOND_INSTANCE);
 if (instance2 != NULL) {
   printf("Displaying RPL instance two 0x%x!\n", RPL_SECOND_INSTANCE);
@@ -652,7 +653,7 @@ if (instance2 != NULL) {
 } else {
   printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
 }
-
+*/
 
 #if RPL_LEAF_ONLY
   if(LOG_DBG_ENABLED) {
