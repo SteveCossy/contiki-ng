@@ -173,6 +173,7 @@ new_dio_interval(rpl_instance_t *instance)
     ipaddr2 = dag->dag_id;
     LOG_INFO("DODAG IPv6 address for DIO: ");
     uip_debug_ipaddr_print(&ipaddr2);
+    LOG_INFO_("\n");
     LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
            (unsigned long)ticks);
     LOG_INFO_("\n");
