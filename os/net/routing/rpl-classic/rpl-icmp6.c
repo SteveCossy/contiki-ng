@@ -653,7 +653,32 @@ if (instance2 != NULL) {
 } else {
   printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
 }
+ uip_ds6_addr_t *lladdr;
+ uip_ipaddr_t lladdr2, ipaddr2;
+ lladdr = uip_ds6_get_link_local(-1); 
+ uip_ip6addr(&ipaddr2, 0xfe80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
+ uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
+
+ if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR
+  
+  rpl_dag_t *dag, *end ;
+
+  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+  if(dag->used) {
+    ipaddr2 = dag->dag_id;
+    LOG_INFO("DODAG IPv6 address for DIO: ");
+    uip_debug_ipaddr_print(&ipaddr2);
+    LOG_INFO_("\n");
+    LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
+           (unsigned long)ticks);
+    LOG_INFO_("\n");
+    ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
+
+  }
+  }
+ } 
 */
+
 
 #if RPL_LEAF_ONLY
   if(LOG_DBG_ENABLED) {
@@ -680,6 +705,27 @@ if (instance2 != NULL) {
     LOG_INFO_("\n");
     uip_icmp6_send(uc_addr, ICMP6_RPL, RPL_CODE_DIO, pos);
   }
+  uip_ds6_addr_t *lladdr;
+  uip_ipaddr_t lladdr2, ipaddr2;
+  lladdr = uip_ds6_get_link_local(-1); 
+  uip_ip6addr(&ipaddr2, 0xfe80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
+  uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
+
+  if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR 
+    if(uc_addr == NULL) {
+      LOG_INFO("Second multicast-DIO with rank %u\n",
+              (unsigned)instance->current_dag->rank);
+      uip_create_linklocal_rplnodes_mcast(&addr);
+      uip_icmp6_send(&addr, ICMP6_RPL, RPL_CODE_DIO, pos);
+    } else {
+      LOG_INFO("Second unicast-DIO with rank %u to ",
+              (unsigned)instance->current_dag->rank);
+      LOG_INFO_6ADDR(uc_addr);
+      LOG_INFO_("\n");
+      uip_icmp6_send(uc_addr, ICMP6_RPL, RPL_CODE_DIO, pos);
+    }
+  }
+
 #endif /* RPL_LEAF_ONLY */
 }
 /*---------------------------------------------------------------------------*/
