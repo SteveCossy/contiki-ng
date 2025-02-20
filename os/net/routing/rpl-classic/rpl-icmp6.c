@@ -54,9 +54,11 @@
 #include "lib/random.h"
 
 #include "sys/log.h"
+#include "net/ipv6/uip-debug.h"
 
 #include <limits.h>
 #include <string.h>
+
 
 #define LOG_MODULE "RPL"
 #define LOG_LEVEL LOG_LEVEL_RPL
@@ -77,9 +79,9 @@ static void dao_output_target_seq(rpl_parent_t *parent, uip_ipaddr_t *prefix,
                                   uint8_t lifetime, uint8_t seq_no);
 
 /* Some debug callbacks that are useful when debugging RPL networks. */
-#ifdef RPL_DEBUG_DIO_INPUT
+//#ifdef RPL_DEBUG_DIO_INPUT
 void RPL_DEBUG_DIO_INPUT(uip_ipaddr_t *, rpl_dio_t *);
-#endif
+//#endif
 
 #ifdef RPL_DEBUG_DAO_OUTPUT
 void RPL_DEBUG_DAO_OUTPUT(rpl_parent_t *);
@@ -518,7 +520,7 @@ void
 dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
 {
   unsigned char *buffer;
-  int pos;
+  int pos, pos_dagid, pos_rank;
   int is_root;
   rpl_dag_t *dag = instance->current_dag;
 #if !RPL_LEAF_ONLY
@@ -542,6 +544,7 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
   buffer[pos++] = dag->version;
   is_root = (dag->rank == ROOT_RANK(instance));
 
+  pos_rank = pos;
 #if RPL_LEAF_ONLY
   LOG_DBG("LEAF ONLY DIO rank set to RPL_INFINITE_RANK\n");
   set16(buffer, pos, RPL_INFINITE_RANK);
@@ -574,6 +577,7 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
   buffer[pos++] = 0; /* flags */
   buffer[pos++] = 0; /* reserved */
 
+  pos_dagid = pos;
   memcpy(buffer + pos, &dag->dag_id, sizeof(dag->dag_id));
   pos += 16;
 
@@ -712,6 +716,18 @@ if (instance2 != NULL) {
   uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
 
   if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR 
+  
+ //   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+  dag = &instance->dag_table[0];
+  set16(buffer, pos_rank, 0x08);
+  // set16(buffer, pos, dag->rank);
+  if(dag->used) {
+    LOG_INFO("DODAG IPv6 address for Second DIO: ");
+    uip_debug_ipaddr_print(&dag->dag_id); // was &ipaddr2
+    LOG_INFO_("\n");
+
+    memcpy(buffer + pos_dagid, &dag->dag_id, sizeof(dag->dag_id));
+  
     if(uc_addr == NULL) {
       LOG_INFO("Second multicast-DIO with rank %u\n",
               (unsigned)instance->current_dag->rank);
@@ -724,9 +740,16 @@ if (instance2 != NULL) {
       LOG_INFO_("\n");
       uip_icmp6_send(uc_addr, ICMP6_RPL, RPL_CODE_DIO, pos);
     }
-  }
+  } else {
+    LOG_INFO("Second dag is not used: ");
+    uip_debug_ipaddr_print(&ipaddr2);
+    LOG_INFO_("\n");
+  //} for(dag
+  } 
+} // This is our BR 
 
 #endif /* RPL_LEAF_ONLY */
+
 }
 /*---------------------------------------------------------------------------*/
 static void
