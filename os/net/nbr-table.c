@@ -514,7 +514,7 @@ nbr_table_key_next(const nbr_table_key_t *key)
   return list_item_next(key);
 }
 /*---------------------------------------------------------------------------*/
-#if DEBUG
+// #if DEBUG
 static void
 print_table()
 {
@@ -539,4 +539,4 @@ handle_periodic_timer(void *ptr)
   print_table();
   ctimer_reset(&periodic_timer);
 }
-#endif
+// #endif
