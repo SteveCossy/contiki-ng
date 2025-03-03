@@ -132,26 +132,6 @@ rpl_print_neighbor_list(void)
 //#include "net/ipv6/uip-debug.h"
 //	#include "net/routing/rpl-classic/rpl-dag.h"
 
-/*---------------------------------------------------------------------------*/
-static void
-print_dag_table()
-{
-  int i, j;
-  /* Printout all neighbors and which tables they are used in */
-  PRINTF("NBR TABLE:\n");
-  for(i = 0; i < NBR_TABLE_MAX_NEIGHBORS; i++) {
-    if(used_map[i] > 0) {
-      PRINTF(" %02d %02d",i , key_from_index(i)->lladdr.u8[LINKADDR_SIZE - 1]);
-      for(j = 0; j < num_tables; j++) {
-        PRINTF(" [%d:%d]", (used_map[i] & (1 << j)) != 0,
-               (locked_map[i] & (1 << j)) != 0);
-      }
-      PRINTF("\n");
-    }
-  }
-}
-/*---------------------------------------------------------------------------*/
-
 //void display_dodag(void) {
 void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag, *end;

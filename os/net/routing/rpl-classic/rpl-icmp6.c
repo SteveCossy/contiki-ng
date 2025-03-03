@@ -82,7 +82,6 @@ static void dao_output_target_seq(rpl_parent_t *parent, uip_ipaddr_t *prefix,
 //#ifdef RPL_DEBUG_DIO_INPUT
 void RPL_DEBUG_DIO_INPUT(uip_ipaddr_t *, rpl_dio_t *);
 //#endif
-static void print_table(); // added for additional diagnostics
 
 #ifdef RPL_DEBUG_DAO_OUTPUT
 void RPL_DEBUG_DAO_OUTPUT(rpl_parent_t *);
@@ -980,7 +979,7 @@ dao_input_storing(void)
 
   LOG_INFO("Adding DAO route\n");
 
-  print_table();
+  // too hard! print_dag_table(); 
 
   /* Update and add neighbor, and fail if there is no room. */
   nbr = rpl_icmp6_update_nbr_table(&dao_sender_addr,
