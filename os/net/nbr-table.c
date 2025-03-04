@@ -40,7 +40,7 @@
 #include "lib/list.h"
 #include "net/nbr-table.h"
 
-#define DEBUG DEBUG_NONE
+#define DEBUG 1 // DEBUG_NONE
 #include "net/ipv6/uip-debug.h"
 
 #if DEBUG
@@ -439,7 +439,7 @@ nbr_table_add_lladdr(const nbr_table_t *table, const linkaddr_t *lladdr,
   memset(item, 0, table->item_size);
   nbr_set_bit(used_map, table, item, 1);
 
-LOG_WARN("Adding lladdr");
+printf("Adding lladdr");
 
 #if DEBUG
   print_table();
