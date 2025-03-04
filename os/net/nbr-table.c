@@ -439,6 +439,8 @@ nbr_table_add_lladdr(const nbr_table_t *table, const linkaddr_t *lladdr,
   memset(item, 0, table->item_size);
   nbr_set_bit(used_map, table, item, 1);
 
+LOG_WARN("Adding lladdr");
+
 #if DEBUG
   print_table();
 #endif
