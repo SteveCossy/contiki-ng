@@ -522,7 +522,7 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
   unsigned char *buffer;
   int pos, pos_dagid, pos_rank;
   int is_root;
-  rpl_dag_t *dag = instance->current_dag;
+  rpl_dag_t *end, *dag = instance->current_dag;
 #if !RPL_LEAF_ONLY
   uip_ipaddr_t addr;
 #endif /* !RPL_LEAF_ONLY */
@@ -722,7 +722,7 @@ if (instance2 != NULL) {
     set16(buffer, pos_rank, 0x08);
     // set16(buffer, pos, dag->rank);
     if(dag->used) {
-      LOG_INFO("DODAG IPv6 address for Second DIO: ");
+      LOG_INFO("DODAG IPv6 address for DIO: ");
       uip_debug_ipaddr_print(&dag->dag_id); // was &ipaddr2
       LOG_INFO_("\n");
 
