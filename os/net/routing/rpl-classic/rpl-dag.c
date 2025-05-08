@@ -150,7 +150,7 @@ void display_dodag( rpl_instance_t *instance ) {
     // dag = &instance->dag_table[0];
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
 
-    if(dag != NULL) {
+    if(dag->used) {
 
       printf("DODAG ID: ");
       uip_debug_ipaddr_print(&dag->dag_id);
