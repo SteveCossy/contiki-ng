@@ -718,11 +718,11 @@ if (instance2 != NULL) {
   if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR 
   
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-    dag = &instance->dag_table[0];
+    // dag = &instance->dag_table[0];
     set16(buffer, pos_rank, 0x08);
     // set16(buffer, pos, dag->rank);
     if(dag->used) {
-      LOG_INFO("DODAG IPv6 address for DIO: ");
+      LOG_INFO("DODAG IPv6 address for DIO output: ");
       uip_debug_ipaddr_print(&dag->dag_id); // was &ipaddr2
       LOG_INFO_("\n");
 
