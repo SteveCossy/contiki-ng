@@ -717,35 +717,35 @@ if (instance2 != NULL) {
 
   if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR 
   
- //   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-  dag = &instance->dag_table[0];
-  set16(buffer, pos_rank, 0x08);
-  // set16(buffer, pos, dag->rank);
-  if(dag->used) {
-    LOG_INFO("DODAG IPv6 address for Second DIO: ");
-    uip_debug_ipaddr_print(&dag->dag_id); // was &ipaddr2
-    LOG_INFO_("\n");
-
-    memcpy(buffer + pos_dagid, &dag->dag_id, sizeof(dag->dag_id));
-  
-    if(uc_addr == NULL) {
-      LOG_INFO("Second multicast-DIO with rank %u\n",
-              (unsigned)instance->current_dag->rank);
-      uip_create_linklocal_rplnodes_mcast(&addr);
-      uip_icmp6_send(&addr, ICMP6_RPL, RPL_CODE_DIO, pos);
-    } else {
-      LOG_INFO("Second unicast-DIO with rank %u to ",
-              (unsigned)instance->current_dag->rank);
-      LOG_INFO_6ADDR(uc_addr);
+  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+    dag = &instance->dag_table[0];
+    set16(buffer, pos_rank, 0x08);
+    // set16(buffer, pos, dag->rank);
+    if(dag->used) {
+      LOG_INFO("DODAG IPv6 address for Second DIO: ");
+      uip_debug_ipaddr_print(&dag->dag_id); // was &ipaddr2
       LOG_INFO_("\n");
-      uip_icmp6_send(uc_addr, ICMP6_RPL, RPL_CODE_DIO, pos);
+
+      memcpy(buffer + pos_dagid, &dag->dag_id, sizeof(dag->dag_id));
+    
+      if(uc_addr == NULL) {
+        LOG_INFO("Second multicast-DIO with rank %u\n",
+                (unsigned)instance->current_dag->rank);
+        uip_create_linklocal_rplnodes_mcast(&addr);
+        uip_icmp6_send(&addr, ICMP6_RPL, RPL_CODE_DIO, pos);
+      } else {
+        LOG_INFO("Second unicast-DIO with rank %u to ",
+                (unsigned)instance->current_dag->rank);
+        LOG_INFO_6ADDR(uc_addr);
+        LOG_INFO_("\n");
+        uip_icmp6_send(uc_addr, ICMP6_RPL, RPL_CODE_DIO, pos);
+      }
+    } else {
+      LOG_INFO("Second dag is not used: ");
+      uip_debug_ipaddr_print(&ipaddr2);
+      LOG_INFO_("\n");
     }
-  } else {
-    LOG_INFO("Second dag is not used: ");
-    uip_debug_ipaddr_print(&ipaddr2);
-    LOG_INFO_("\n");
-  //} for(dag
-  } 
+  }  // for(dag
 } // This is our BR 
 
 #endif /* RPL_LEAF_ONLY */
