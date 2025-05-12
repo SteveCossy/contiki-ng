@@ -563,7 +563,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   rpl_reset_dio_timer(instance);
 
   // Note that this funtion didn't work before instance values were set above
-  display_dodag(instance);
+  // display_dodag(instance); Commented out 5 May 2025
   // printf("RPL_SECOND_INSTANCE: %d\n", RPL_SECOND_INSTANCE);
 
   return dag;
