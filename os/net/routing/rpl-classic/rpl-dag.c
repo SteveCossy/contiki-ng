@@ -176,7 +176,7 @@ void display_dodag( rpl_instance_t *instance ) {
       }
 
       printf("Neighbours from Display DODAG function:\n");
-//      rpl_print_neighbor_list();
+      rpl_print_neighbor_list();
 
       if(default_instance != NULL && default_instance->current_dag != NULL &&
         default_instance->of != NULL) {
