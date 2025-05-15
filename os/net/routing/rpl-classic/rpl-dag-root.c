@@ -138,7 +138,7 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
   
  // Start the internal id dag first
-  rpl_set_ot(RPL_SECOND_INSTANCE, &dag_id2);
+  rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2);
 
 // Start the dag with external address
   rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
