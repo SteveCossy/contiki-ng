@@ -160,7 +160,7 @@ new_dio_interval(rpl_instance_t *instance)
  printf("\n");
 */
 
- if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR
+if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR
   /* Schedule a DIO for second DODAG. - this created extra DIOs the same as defaults 
   LOG_INFO("Scheduling DIO timer for second DODAG in %lu ticks\n",
            (unsigned long)ticks);
@@ -169,17 +169,16 @@ new_dio_interval(rpl_instance_t *instance)
   rpl_dag_t *dag, *end ;
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-  if(dag->used) {
-    ipaddr2 = dag->dag_id;
-    LOG_INFO("DODAG IPv6 address for DIO interval: ");
-    uip_debug_ipaddr_print(&ipaddr2);
-    LOG_INFO_("\n");
-    LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
-           (unsigned long)ticks);
-    LOG_INFO_("\n");
-    ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
-
-  }
+    if(dag->used) {
+      ipaddr2 = dag->dag_id;
+      LOG_INFO("DODAG IPv6 address for DIO interval: ");
+      uip_debug_ipaddr_print(&ipaddr2);
+      LOG_INFO_("\n");
+      LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
+            (unsigned long)ticks);
+      LOG_INFO_("\n");
+      ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
+    }
   }
  } else {
   LOG_INFO("Not a BR\n");
