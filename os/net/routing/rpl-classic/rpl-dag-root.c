@@ -63,15 +63,15 @@ set_global_address(uip_ipaddr_t *prefix, uip_ipaddr_t *iid)
     memcpy(&root_ipaddr, prefix, 8);
   }
   if(iid == NULL) {
-    LOG_DBG("iid was NULL ");
+    LOG_INFO("iid was NULL ");
    // LOG_DBG_6ADDR(&uip_lladdr);
     uip_ds6_set_addr_iid(&root_ipaddr, &uip_lladdr);
   } else {
-    LOG_DBG("iid not NULL ");
+    LOG_INFO("iid not NULL ");
    // LOG_DBG_6ADDR(&iid);
     memcpy((uint8_t *)&root_ipaddr + 8, (uint8_t *)iid + 8, 8);
   }
-  LOG_DBG_("\n");
+  LOG_INFO_("\n");
 
   uip_ds6_addr_add(&root_ipaddr, 0, ADDR_AUTOCONF);
 
