@@ -129,7 +129,7 @@ rpl_dag_root_start(void)
 
 /*---------------------------------------------------------------------------
 Extra code to enable two DODAGs. Documentation is here:
-okular /home/stevecos/Documents/technotes/Contiki-NG_TwoDODAG.pdf &
+okular /home/stevecos/Documents/technotes/Contiki-NG_TwoDODAG.pdf 
 Maybe rpl-dag.c:474,1231,1330 is a better place ...
 ---------------------------------------------------------------------------*/
 
@@ -139,13 +139,13 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
 	uip_ipaddr_t dag_id2;
 	// Initialize the DAG ID
-	uip_ip6addr(&dag_id2, 0xbbbb, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
+	uip_ip6addr(&dag_id2, UIP_DS6_DEFAULT_PREFIX2, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
   
  // Start the internal id dag first
-  rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2);
+  rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2); // defined as a variable
 
 // Start the dag with external address
-  rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
+  rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr); // defined as a pointer
   rpl_dag_t *dag = rpl_get_any_dag();
   if(dag == NULL) {
     LOG_ERR("failed to create a DAG: cannot get any DAG\n");
