@@ -51,7 +51,7 @@
 #define LOG_MODULE "IPv6 Route"
 #define LOG_LEVEL LOG_LEVEL_IPV6
 
-// enable definition of Display Routing Table here
+// enable definition of 'Display Routing Table' here
 #include "net/ipv6/uiplib.h"
 #include "net/ipv6/uip-debug.h"
 
@@ -120,7 +120,7 @@ void display_routing_table(void) {
     const uip_ipaddr_t *ipaddr = uip_ds6_route_nexthop(route);
     printf("Dest prefix: ");
     uiplib_ipaddr_print(&route->ipaddr);
-    printf("/%u, ", route->length);
+    // printf("/%u, ", route->length); // IPv6 prefix length - always 128
 
     // Print the next-hop address
     printf("Next hop: ");
