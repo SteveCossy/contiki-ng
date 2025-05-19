@@ -26,7 +26,7 @@
  * \see uip-ds6.c
  */
 
-#include "net/ip/uip.h"
+#include "net/ipv6/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "uip-ds6.h"
 
