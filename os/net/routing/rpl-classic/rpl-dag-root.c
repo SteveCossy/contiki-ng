@@ -105,6 +105,7 @@ int
 rpl_dag_root_start(void)
 {
   uip_ipaddr_t *ipaddr = NULL;
+  uint8_t state;
 
   rpl_dag_root_set_prefix(NULL, NULL);
 
@@ -151,6 +152,16 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   if(dag == NULL) {
     LOG_ERR("failed to create a DAG: cannot get any DAG\n");
     return -3;
+  }
+
+  printf("IPv6 addresses: ");
+  for(int i = 0; i < UIP_DS6_ADDR_NB; i++) {
+    state = uip_ds6_if.addr_list[i].state;
+    if(uip_ds6_if.addr_list[i].isused &&
+       (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
+      uip_debug_ipaddr_print(&uip_ds6_if.addr_list[i].ipaddr);
+      printf("\n");
+    }
   }
 
   /* If there are routes in this DAG, we remove them all as we are
