@@ -95,7 +95,10 @@
  * Global ID, e.g. in a RPL network, by configuring it at the root.
  */
 #define UIP_DS6_DEFAULT_PREFIX 0xfd00
-#define UIP_DS6_DEFAULT_PREFIX2 0xfd02
+// #define UIP_DS6_DEFAULT_PREFIX2 0xfd02
+const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2 = {
+  .u16 = {UIP_HTONS(0xfd02), 0, 0, 0, 0, 0, 0, 0}
+};
 #endif /* UIP_CONF_DS6_DEFAULT_PREFIX */
 
 #define UIP_DS6_DEFAULT_PREFIX_0 ((UIP_DS6_DEFAULT_PREFIX >> 8) & 0xff)
