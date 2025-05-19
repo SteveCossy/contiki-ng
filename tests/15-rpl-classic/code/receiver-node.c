@@ -79,6 +79,11 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
+  // Function in ip-ds6-prefixes.c
+  // added by Steve Cosgrove 19 May 2025
+
+ uip_ds6_add_second_global_address();
+
   printf("IPv6 addresses: ");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
     state = uip_ds6_if.addr_list[i].state;

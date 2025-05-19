@@ -47,10 +47,11 @@
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 
 static struct simple_udp_connection unicast_connection;
+/**
 const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2_F = {
   .u16 = {UIP_HTONS(UIP_DS6_DEFAULT_PREFIX2), 0, 0, 0, 0, 0, 0, 0}
 };
-
+ */
 /*---------------------------------------------------------------------------*/
 PROCESS(sender_node_process, "Sender node process");
 AUTOSTART_PROCESSES(&sender_node_process);
@@ -85,7 +86,7 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
   */
- uip_ds6_add_second_global_address()
+ uip_ds6_add_second_global_address();
 
   printf("IPv6 addresses: ");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
