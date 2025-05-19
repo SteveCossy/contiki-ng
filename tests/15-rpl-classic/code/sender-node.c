@@ -69,7 +69,7 @@ static void
 set_global_address(void)
 {
   uip_ipaddr_t ipaddr ;
-  uip_ipaddr_t  default_prefix02;
+  uip_ip6addr_t default_prefix02;
   int i;
   uint8_t state;
   const uip_ipaddr_t *default_prefix = uip_ds6_default_prefix();
@@ -78,8 +78,8 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
-  uip_ip6addr(&default_prefix02 , UIP_DS6_DEFAULT_PREFIX2, 0, 0, 0, 0, 0, 0, 0) ;
-  uip_ip6addr_copy(&ipaddr, default_prefix02);
+  uip_ip6addr(&default_prefix02, 0xfd02, 0, 0, 0, 0, 0, 0, 0) ;
+  uip_ip6addr_copy(&ipaddr, &default_prefix02);
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
