@@ -95,8 +95,52 @@
  * Global ID, e.g. in a RPL network, by configuring it at the root.
  */
 #define UIP_DS6_DEFAULT_PREFIX 0xfd00
-#define UIP_DS6_DEFAULT_PREFIX2 0xfd02
+// #define UIP_DS6_DEFAULT_PREFIX2 0xfd02
 #endif /* UIP_CONF_DS6_DEFAULT_PREFIX */
+
+/**
+ * \def UIP_DS6_DEFAULT_PREFIX2
+ * \brief High-order 16-bit field of the second global IPv6 prefix.
+ *
+ * This macro defines the upper 16 bits of a site-local IPv6 prefix
+ * intended to assign a second global IPv6 address to each node.
+ * It is used to construct a full 128-bit prefix with the remaining
+ * 112 bits set to zero.
+ *
+ * The prefix is used in multi-address or multi-prefix scenarios
+ * such as evaluating source address selection policies or
+ * simulating multiple logical subnets.
+ */
+#define UIP_DS6_DEFAULT_PREFIX2 0xfd02
+
+/**
+ * \brief Full 128-bit representation of the second global IPv6 prefix.
+ *
+ * This constant is defined externally (in dip-ds6-prefixes.c) and should
+ * be used to copy the second prefix into a temporary address structure
+ * before appending an IID (Interface Identifier).
+ *
+ * Example usage:
+ *   \code
+ *   uip_ipaddr_t ipaddr;
+ *   uip_ip6addr_copy(&ipaddr, &UIP_DS6_DEFAULT_PREFIX2_F);
+ *   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
+ *   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+ *   \endcode
+ */
+extern const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2_F;
+
+/**
+ * \brief Adds a second global IPv6 address based on the secondary prefix.
+ *
+ * This function copies the \c UIP_DS6_DEFAULT_PREFIX2_F prefix into a
+ * temporary address, generates an IID from the link-layer address, and
+ * registers the resulting address using \c uip_ds6_addr_add.
+ *
+ * It should be called once during address setup (e.g., in set_global_address()).
+ * Optionally, it can check for prior existence using \c uip_ds6_addr_lookup().
+ */
+void uip_ds6_add_second_global_address(void);
 
 #define UIP_DS6_DEFAULT_PREFIX_0 ((UIP_DS6_DEFAULT_PREFIX >> 8) & 0xff)
 #define UIP_DS6_DEFAULT_PREFIX_1 (UIP_DS6_DEFAULT_PREFIX & 0xff)
