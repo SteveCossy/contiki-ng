@@ -40,6 +40,7 @@
 #include "net/routing/rpl-classic/rpl.h"
 #include "net/routing/rpl-classic/rpl-private.h"
 #include "net/ipv6/uip-ds6-route.h"
+#include "net/ipv6/uip-debug.h"
 
 #include "sys/log.h"
 
