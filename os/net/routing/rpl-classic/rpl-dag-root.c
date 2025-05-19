@@ -74,6 +74,7 @@ set_global_address(uip_ipaddr_t *prefix, uip_ipaddr_t *iid)
   LOG_INFO_("\n");
 
   uip_ds6_addr_add(&root_ipaddr, 0, ADDR_AUTOCONF);
+  uip_ds6_add_second_global_address();
 
   if(LOG_DBG_ENABLED) {
     LOG_DBG("IPv6 addresses: \n");
@@ -139,7 +140,7 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
 	uip_ipaddr_t dag_id2;
 	// Initialize the DAG ID
-	uip_ip6addr(&dag_id2, UIP_DS6_DEFAULT_PREFIX2, 0x0000, 0x0000, 0x0000, 0x0212, 0x0012, 0x0012, 0x0012); // Replace with your desired IPv6 address
+	uip_ip6addr(&dag_id2, UIP_DS6_DEFAULT_PREFIX2, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009); // Replace with your desired IPv6 address
   
  // Start the internal id dag first
   rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2); // defined as a variable
