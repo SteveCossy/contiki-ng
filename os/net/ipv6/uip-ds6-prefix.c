@@ -1,11 +1,12 @@
 /**
  * \file
- *         IPv6 prefix definitions and helper functions for address assignment.
+ *         IPv6 prefix definitions and helper function for second address assignment.
  * \author Steve Cosgrove <steve.cosgrove@rata.co.nz>
  * \date   May 2025
  *
  * \brief
- * This file defines additional IPv6 prefixes and helper routines for
+ * This file define one and perhaps could be more
+ * additional IPv6 prefixes and helper routines for
  * assigning global addresses based on these prefixes. Specifically,
  * it introduces a second site-local IPv6 prefix (fd02::/64) to enable
  * multi-addressing per node in Contiki-NG.
@@ -14,15 +15,16 @@
  * address on each node using an Interface Identifier (IID) derived
  * from the node's link-layer address.
  *
- * The helper function \c uip_ds6_add_second_global_address() ensures
- * the address is only added if it does not already exist.
+ * The helper function \c uip_ds6_add_second_global_address() trieds to
+ * check the address is only added if it does not already exist but this
+ * generated an error listed below (about line 46) so is removed.
  *
  * \note
- * To use this functionality, include "uip-ds6-prefixes.h" and call
+ * To use this functionality, include call
  * \c uip_ds6_add_second_global_address() during address configuration,
- * typically from \c set_global_address().
+ * typically from \c set_global_address() when creating each node.
  *
- * \see uip-ds6-prefixes.h
+ * \see uip-ds6-prefix.h
  * \see uip-ds6.c
  */
 
