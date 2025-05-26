@@ -737,6 +737,7 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
       dag->instance = instance;
 
        // Initialize dag->dag_id after clearing the memory added by Steve
+       // removed 27 May with no obvious change in behaviour
       /* if(dag_id != NULL ) {
            memcpy(&dag->dag_id, dag_id, sizeof(*dag_id));
       } */
