@@ -62,8 +62,8 @@
 #include <string.h>
 
 #define LOG_MODULE "RPL"
-#define LOG_LEVEL LOG_LEVEL_RPL
-// #define LOG_LEVEL LOG_LEVEL_DBG
+//#define LOG_LEVEL LOG_LEVEL_RPL
+#define LOG_LEVEL LOG_LEVEL_DBG
 
 #include "uip-debug.h"
 
