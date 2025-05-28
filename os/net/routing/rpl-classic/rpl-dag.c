@@ -683,7 +683,7 @@ rpl_set_default_route(rpl_instance_t *instance, uip_ipaddr_t *from)
     LOG_DBG_6ADDR(from);
     LOG_DBG_("\n");
     instance->def_route = uip_ds6_defrt_add(from,
-                                            RPL_DEFAULT_ROUTE_INFINITE_LIFETIME ? 0 : RPL_LIFETIME(instance, instance->default_lifetime));
+          RPL_DEFAULT_ROUTE_INFINITE_LIFETIME ? 0 : RPL_LIFETIME(instance, instance->default_lifetime));
     if(instance->def_route == NULL) {
       return 0;
     }
@@ -899,6 +899,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   rpl_dag_t *dag, *end, *best_dag;
   rpl_rank_t old_rank;
 
+  LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n")
   old_rank = instance->current_dag->rank;
   last_parent = instance->current_dag->preferred_parent;
 
