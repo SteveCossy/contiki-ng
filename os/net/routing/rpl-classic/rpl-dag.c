@@ -899,7 +899,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   rpl_dag_t *dag, *end, *best_dag;
   rpl_rank_t old_rank;
 
-  LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n")
+  LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n");
   old_rank = instance->current_dag->rank;
   last_parent = instance->current_dag->preferred_parent;
 
@@ -1019,6 +1019,9 @@ best_parent(rpl_dag_t *dag, int fresh_only)
   rpl_parent_t *p;
   rpl_of_t *of;
   rpl_parent_t *best = NULL;
+  LOG_DBG("Considering dag as parent in 'best_parent':");
+  LOG_DBG_6ADDR(&dag->dag_id);
+  LOG_DBG("/n");
 
   if(dag == NULL || dag->instance == NULL || dag->instance->of == NULL) {
     return NULL;
