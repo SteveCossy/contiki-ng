@@ -900,8 +900,10 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   rpl_rank_t old_rank;
 
   LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n");
+  LOG_DBG("Considering sending dag to 'rpl_select_dag' then 'best_parent':");
+  LOG_DBG_6ADDR(&p->dag->dag_id);
+  LOG_DBG("/n");
 
-  
   old_rank = instance->current_dag->rank;
   last_parent = instance->current_dag->preferred_parent;
 
