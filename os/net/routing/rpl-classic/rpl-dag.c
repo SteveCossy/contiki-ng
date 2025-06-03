@@ -1035,10 +1035,11 @@ best_parent(rpl_dag_t *dag, int fresh_only)
   /* Search for the best parent according to the OF */
   for(p = nbr_table_head(rpl_parents); p != NULL; p = nbr_table_next(rpl_parents, p)) {
 
-    LOG_DBG("Considering parent:")
+    LOG_DBG("Considering parent: ");
     LOG_DBG_6ADDR(&p->dag->dag_id);
-    LOG_DBG_(", Rank: %u, out of \n", (unsigned)&p->dag->rank //, &p->dag->min_rank 
-            );
+    LOG_DBG_(", Rank: %u, out of %u ", p->dag->rank, p->dag->min_rank );
+//    LOG_DBG_(", Parent Rank: %u\n", p->rank );
+//    LOG_DBG_(", Parent Rank: %u, out of %u\n", p->rank, p->min_rank );
 
     /* Exclude parents that are from other DAGs or are announcing an
        infinite rank. */
