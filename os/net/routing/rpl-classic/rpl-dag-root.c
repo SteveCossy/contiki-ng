@@ -192,8 +192,14 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   rpl_set_prefix(dag, &prefix, 64);
   uip_ip6addr_copy(&prefix, &dag_id2);
   rpl_set_prefix(dag2, &prefix, 64);
-
+  
+  LOG_DBG("Prefix 1 and 2 set: ");
+  LOG_DBG_6ADDR(&dag->prefix_info.prefix);
+  LOG_DBG_(" and ");
+  LOG_DBG_6ADDR(&dag2->prefix_info.prefix);
+  LOG_DBG_("\n");
   LOG_INFO("Created new RPL dags\n");
+
   return 0;
 }
 /*---------------------------------------------------------------------------*/
