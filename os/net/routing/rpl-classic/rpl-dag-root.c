@@ -188,7 +188,7 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   }
 
   uip_ipaddr_t prefix;
-  uip_ip6addr_copy(&prefix, &ipaddr);
+  uip_ip6addr_copy(&prefix, ipaddr);
   rpl_set_prefix(dag, &prefix, 64);
   uip_ip6addr_copy(&prefix, &dag_id2);
   rpl_set_prefix(dag2, &prefix, 64);
