@@ -37,11 +37,11 @@ const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2_F = {
 };
 
 void uip_ds6_add_second_global_address(void) {
- // uip_ipaddr_t ipaddr;
+ uip_ipaddr_t ipaddr;
  // if(uip_ds6_addr_lookup(&UIP_DS6_DEFAULT_PREFIX2_F) == NULL) {
  //   uip_ip6addr_copy(&ipaddr, &UIP_DS6_DEFAULT_PREFIX2_F);
- //   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
- //   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+    uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
+    uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
  // }
  /** The if(uip... statement above generated an error
   * ../../../os/net/ipv6/uip-ds6-prefix.c:39:26: error: passing argument 1 of 'uip_ds6_addr_lookup' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]

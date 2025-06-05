@@ -1038,6 +1038,7 @@ best_parent(rpl_dag_t *dag, int fresh_only)
     LOG_DBG("Considering parent: ");
     LOG_DBG_6ADDR(&p->dag->dag_id);
     LOG_DBG_(", Rank: %u, out of %u \n", p->dag->rank, p->dag->min_rank );
+    LOG_DBG_("\n");
 //    LOG_DBG_(", Parent Rank: %u\n", p->rank );
 //    LOG_DBG_(", Parent Rank: %u, out of %u\n", p->rank, p->min_rank );
 
