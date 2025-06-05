@@ -141,17 +141,22 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   // Define instance ID and DAG ID
 	// using same instance_id for both DAGs uint8_t instance_id2 = 42;
 	uip_ipaddr_t dag_id2;
+  rpl_dag_t *dag, *dag2 ;
 	// Initialize the DAG ID
 	uip_ip6addr(&dag_id2, UIP_DS6_DEFAULT_PREFIX2, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009); // Replace with your desired IPv6 address
   
- // Start the internal id dag first
-  rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2); // defined as a variable
+ // Start the second id dag first
+  dag2 = rpl_set_root(RPL_SECOND_INSTANCE, &dag_id2); // defined as a variable
 
 // Start the dag with external address
-  rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr); // defined as a pointer
-  rpl_dag_t *dag = rpl_get_any_dag();
+  dag = rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr); // defined as a pointer
+  // 05-06 rpl_dag_t *dag = rpl_get_any_dag();
   if(dag == NULL) {
-    LOG_ERR("failed to create a DAG: cannot get any DAG\n");
+    LOG_ERR("failed to create first DAG: cannot get any DAG\n");
+    return -3;
+  }
+  if(dag2 == NULL) {
+    LOG_ERR("failed to create second DAG: cannot get any DAG\n");
     return -3;
   }
 
@@ -176,8 +181,10 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   }
 
   uip_ipaddr_t prefix;
-  uip_ip6addr_copy(&prefix, ipaddr);
+  uip_ip6addr_copy(&prefix, &ipaddr);
   rpl_set_prefix(dag, &prefix, 64);
+  uip_ip6addr_copy(&prefix, &dag_id2);
+  rpl_set_prefix(dag2, &prefix, 64);
 
   LOG_INFO("Created new RPL dags\n");
   return 0;
