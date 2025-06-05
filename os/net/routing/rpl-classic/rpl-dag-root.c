@@ -151,6 +151,13 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
 // Start the dag with external address
   dag = rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr); // defined as a pointer
   // 05-06 rpl_dag_t *dag = rpl_get_any_dag();
+  
+  LOG_DBG("Roots 1 and 2 set: ");
+  LOG_DBG_6ADDR(&dag->dag_id);
+  LOG_DBG_(" and ");
+  LOG_DBG_6ADDR(&dag2->dag_id);
+  LOG_DBG_("\n");
+  
   if(dag == NULL) {
     LOG_ERR("failed to create first DAG: cannot get any DAG\n");
     return -3;
