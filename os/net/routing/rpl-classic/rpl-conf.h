@@ -146,7 +146,7 @@
 #define RPL_DEFAULT_INSTANCE	       0x1e
 #endif /* RPL_CONF_DEFAULT_INSTANCE */
 
-#define RPL_SECOND_INSTANCE	       0x1e
+#define RPL_SECOND_INSTANCE	       0x2e
 
 /*
  * This value decides if this node must stay as a leaf or not
