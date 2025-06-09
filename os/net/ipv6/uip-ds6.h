@@ -49,6 +49,7 @@
 #include "net/ipv6/uip-nd6.h"
 #include "net/ipv6/uip-ds6-nbr.h"
 #include "net/ipv6/uip-ds6-route.h"
+#include "net/routing/rpl-classic/rpl.h"
 
 /*--------------------------------------------------*/
 /** Configuration. For all tables (Neighbor cache, Prefix List, Routing Table,
@@ -141,6 +142,11 @@ extern const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2_F;
  * Optionally, it can check for prior existence using \c uip_ds6_addr_lookup().
  */
 void uip_ds6_add_second_global_address(void);
+
+/**
+ * \brief Determine name of OF from OCP
+ */
+char * get_rpl_of_name(rpl_ocp_t ocp)
 
 #define UIP_DS6_DEFAULT_PREFIX_0 ((UIP_DS6_DEFAULT_PREFIX >> 8) & 0xff)
 #define UIP_DS6_DEFAULT_PREFIX_1 (UIP_DS6_DEFAULT_PREFIX & 0xff)

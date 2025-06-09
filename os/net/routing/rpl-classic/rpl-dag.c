@@ -155,17 +155,22 @@ void display_dodag( rpl_instance_t *instance ) {
       printf("DODAG ID: ");
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u\n", dag->rank);
+      
+      rpl_ocp_t current_ocp = instance->of->ocp;
+      const char *of_name = get_rpl_of_name(current_ocp);
 
-      if(dag->used) {
-        printf("DODAG used!\n");
+      LOG_INFO("RPL instance is using OCP %u, which is '%s'\n",
+               (unsigned)current_ocp, of_name);
+
+        if(dag->used) {
+          if(dag->joined) {
+            printf("DODAG joined!\n");
+          } else {
+            printf("DODAG not joined!\n");
+          }
+ 
       } else {
         printf("DODAG not used!\n");
-      }
-
-      if(dag->joined) {
-        printf("DODAG joined!\n");
-      } else {
-        printf("DODAG not joined!\n");
       }
 
       parent = dag->preferred_parent;
