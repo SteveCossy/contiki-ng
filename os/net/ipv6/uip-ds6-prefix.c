@@ -52,8 +52,14 @@ void uip_ds6_add_second_global_address(void) {
   */
 }
 
-// The only significant change is this include path!
-/*#include "sys/log.h"
+/*
+I tried this code to make a tidy function to convert an OCP to a string
+  but decided not to complete it.
+
+There should be a header in uip-ds6.h but that broke something else
+  so I put the switch directly into net/routing/rpl-classic/rpl-dag.c:159
+
+#include "sys/log.h"
 #include <stdio.h>
 
 #define LOG_MODULE "RPL-Classic-OF"
