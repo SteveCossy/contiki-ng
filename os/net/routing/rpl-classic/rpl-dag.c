@@ -498,19 +498,16 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 
   
   dag = rpl_alloc_dag(instance_id, dag_id);
+  
   if(dag != NULL) { // Was if(dag == NULL) {
 	 	// DAG successfully allocated
 	  LOG_DBG("DAG allocated with ID: ");
 		LOG_DBG_6ADDR(dag_id);
 	  LOG_DBG_(", Prefix: ");
     // LOG_DBG_(" %" PRIu16 , dag_id->u16[0]);
-    LOG_DBG_(" %hx " , dag_id->u16[0]);
-    if(dag_id->u16[0] == UIP_DS6_DEFAULT_PREFIX2) {
-      LOG_DBG_(" Two ");
+    LOG_DBG_(" %hx " , uip_ntohs(dag_id->u16[0]));
     }
-    LOG_DBG_("\n");
-    }
-	} else {
+	 else {
 		// DAG allocation failed
 		printf("Failed to allocate a DAG\n");
     LOG_ERR("Failed to allocate a DAG\n");
@@ -526,7 +523,24 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   dag->grounded = RPL_GROUNDED;
   dag->preference = RPL_PREFERENCE;
   instance->mop = RPL_MOP_DEFAULT;
-  instance->of = rpl_find_of(RPL_OF_OCP);
+
+  /*
+  Was: instance->of = rpl_find_of(RPL_OF_OCP);
+  Allocate the default OF to DODAG instance one
+  Should work out which is the other OF for instance two
+  In the meantime, assume default OF is MRHOF so alternative is OF0
+  Note that 
+  */
+  if(uip_ntohs(dag_id->u16[0]) == UIP_DS6_DEFAULT_PREFIX) {
+    LOG_DBG_(" One ");
+    instance->of = rpl_find_of(RPL_OF_OCP);
+  }
+  else {
+    LOG_DBG_(" Two ");
+    instance->of = rpl_find_of(RPL_OCP_OF0);
+  }
+  LOG_DBG_("\n");
+
   if(instance->of == NULL) {
     LOG_WARN("OF with OCP %u not supported\n", RPL_OF_OCP);
     return NULL;
