@@ -31,8 +31,8 @@
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "uip-ds6.h"
-#include "contiki.h"
-#include "net/routing/rpl-classic/rpl.h"
+// #include "contiki.h"
+// #include "net/routing/rpl-classic/rpl.h"
 
 const uip_ipaddr_t UIP_DS6_DEFAULT_PREFIX2_F = {
   .u16 = {UIP_HTONS(UIP_DS6_DEFAULT_PREFIX2), 0, 0, 0, 0, 0, 0, 0}
@@ -62,7 +62,7 @@ void uip_ds6_add_second_global_address(void) {
 
  * This helper function is IDENTICAL to the one for rpl-lite.
  * The RPL_OCP_* definitions are pulled in via rpl.h -> rpl-conf.h -> rpl-const.h
- */
+ 
 const char *
 get_rpl_of_name(rpl_ocp_t ocp)
 {
@@ -75,3 +75,4 @@ get_rpl_of_name(rpl_ocp_t ocp)
       return "Unknown/Custom OF";
   }
 }
+*/

@@ -154,13 +154,21 @@ void display_dodag( rpl_instance_t *instance ) {
 
       printf("DODAG ID: ");
       uip_debug_ipaddr_print(&dag->dag_id);
-      printf(", Rank: %u\n", dag->rank);
-      
-      rpl_ocp_t current_ocp = instance->of->ocp;
-      const char *of_name = get_rpl_of_name(current_ocp);
+      printf(", Rank: %u, OF: ", dag->rank);
 
-      LOG_INFO("RPL instance is using OCP %u, which is '%s'\n",
-               (unsigned)current_ocp, of_name);
+      switch(instance->of->ocp) {
+        case RPL_OCP_OF0:
+          printf("OF0 ");
+          break;
+        case RPL_OCP_MRHOF:
+          printf("MRHOF ");
+          break;
+        default:
+          printf("Unknown/Custom OF ");
+          break;
+      }
+
+      printf("\n");
 
         if(dag->used) {
           if(dag->joined) {
