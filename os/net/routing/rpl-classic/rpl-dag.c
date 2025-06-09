@@ -501,7 +501,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   if(dag != NULL) { // Was if(dag == NULL) {
 	 	// DAG successfully allocated
 	  LOG_DBG("DAG allocated with ID: ");
-		LOG_DBG_6ADDR(&dag->dag_id);
+		LOG_DBG_6ADDR(dag_id);
     LOG_DBG_("\n");
 	} else {
 		// DAG allocation failed
