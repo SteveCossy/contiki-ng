@@ -503,7 +503,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 	  LOG_DBG("DAG allocated with ID: ");
 		LOG_DBG_6ADDR(dag_id);
 	  LOG_DBG(", Prefix: ");
-    LOG_DBG("%u", (unsigned int)dag_id->u16)
+    LOG_DBG(" %"PRIu16" ", dag_id->u16)
     LOG_DBG_("\n");
 	} else {
 		// DAG allocation failed
