@@ -718,6 +718,10 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
   rpl_dag_t *dag, *end;
   rpl_instance_t *instance;
 
+  LOG_DBG("Allocating dag to: ");;
+  LOG_DBG_6ADDR(dag_id);
+  LOG_DBG_("\n");
+
   instance = rpl_get_instance(instance_id);
   if(instance == NULL) {
     instance = rpl_alloc_instance(instance_id);
