@@ -193,13 +193,8 @@ void display_dodag( rpl_instance_t *instance ) {
 
       if(default_instance != NULL && default_instance->current_dag != NULL &&
         default_instance->of != NULL) {
-//        int curr_dio_interval = default_instance->dio_intcurrent;
-//        int curr_rank = default_instance->current_dag->rank;
         rpl_parent_t *p = nbr_table_head(rpl_parents);
         clock_time_t clock_now = clock_time();
-
-//        LOG_DBG("RPL: MOP %u OCP %u rank %u dioint %u, nbr count %u\n",
-//                default_instance->mop, default_instance->of->ocp, curr_rank, curr_dio_interval, uip_ds6_nbr_num());
 
         while(p != NULL) {
           const struct link_stats *stats = rpl_get_parent_link_stats(p);
