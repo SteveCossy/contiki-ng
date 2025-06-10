@@ -132,7 +132,66 @@ rpl_print_neighbor_list(void)
 //#include "net/ipv6/uip-debug.h"
 //	#include "net/routing/rpl-classic/rpl-dag.h"
 
-//void display_dodag(void) {
+
+/*---------------------------------------------------------------------------*/
+// #include "net/routing/rpl-classic/rpl-private.h"
+// #include "net/routing/rpl-classic/rpl-dag-root.h" /* For LOG_INFO_6ADDR etc. */
+// #include "net/ipv6/uip-ds6-nbr.h"
+// #include "net/link-stats.h"
+
+/* Make sure we have LOG_MODULE and LOG_LEVEL defined before this function 
+#define LOG_MODULE "MyRPL"
+#define LOG_LEVEL LOG_LEVEL_INFO */
+
+/* *
+* \ brief Prints the neighbor list ( routing table ) for a specific RPL instance .
+* \ param instance The RPL instance for which to print the neighbor list .
+*/
+void
+rpl_print_neighbor_list_for_instance(rpl_instance_t instance)
+{
+  /* 1. Check if the provided instance and its DAG are valid */
+  if(instance != NULL && instance->current_dag != NULL && instance->of != NULL) {
+    int curr_dio_interval = instance->dio_intcurrent;
+    int curr_rank = instance->current_dag->rank;
+    rpl_parent_t *p = nbr_table_head(rpl_parents);
+    clock_time_t clock_now = clock_time();
+
+    /* 2. Print a clear header identifying the instance */
+    LOG_INFO("--- RPL Routing Table for Instance ID: %u ---\n", instance->instance_id);
+    LOG_INFO("RPL: DODAGID ");
+    /* CORRECTED LINE: Use the address-of operator (&) */
+    LOG_INFO_6ADDR(&instance->current_dag->dag_id);
+    LOG_INFO_("\n");
+    LOG_INFO("RPL: MOP %u, OCP %u, Rank %u, DIOint %u\n",
+             instance->mop, instance->of->ocp, curr_rank, curr_dio_interval);
+
+    while(p != NULL) {
+      /* 3. CRITICAL: Filter parents to only show those for the given instance */
+      if(p->dag->instance == instance) {
+        const struct link_stats *stats = rpl_get_parent_link_stats(p);
+        uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
+        LOG_INFO("RPL: Parent %02x | Rank: %5u, LnkM: %5u, PathCost: %5u | Fresh %c, Pref %c | Last TX: %u min ago\n",
+                 parent_addr != NULL ? parent_addr->u8[15] : 0,
+                 p->rank,
+                 rpl_get_parent_link_metric(p),
+                 rpl_rank_via_parent(p),
+                 link_stats_is_fresh(stats) ? 'Y' : 'N',
+                 /* 4. Check for preferred parent against the current instance */
+                 p == instance->current_dag->preferred_parent ? 'Y' : 'N',
+                 stats != NULL ? (unsigned)((clock_now - stats->last_tx_time) / (60 * CLOCK_SECOND)) : (unsigned)-1
+                 );
+      }
+      p = nbr_table_next(rpl_parents, p);
+    }
+    LOG_INFO("--- End of Table for Instance ID: %u ---\n", instance->instance_id);
+  } else {
+    /* Optional: Add warning logs for invalid states */
+    LOG_WARN("RPL: Instance or DAG not ready for printing routing table (ID: %u)\n", 
+             instance ? instance->instance_id : 0);
+  }
+}
+
 void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag, *end;
   rpl_parent_t *parent;
@@ -227,64 +286,6 @@ void display_dodag( rpl_instance_t *instance ) {
   else // instance != NULL
   {
     printf("No DAG instance found.\n");
-  }
-}
-/*---------------------------------------------------------------------------*/
-// #include "net/routing/rpl-classic/rpl-private.h"
-// #include "net/routing/rpl-classic/rpl-dag-root.h" /* For LOG_INFO_6ADDR etc. */
-// #include "net/ipv6/uip-ds6-nbr.h"
-// #include "net/link-stats.h"
-
-/* Make sure we have LOG_MODULE and LOG_LEVEL defined before this function 
-#define LOG_MODULE "MyRPL"
-#define LOG_LEVEL LOG_LEVEL_INFO */
-
-/* *
-* \ brief Prints the neighbor list ( routing table ) for a specific RPL instance .
-* \ param instance The RPL instance for which to print the neighbor list .
-*/
-void
-rpl_print_neighbor_list_for_instance(rpl_instance_t *instance)
-{
-  /* 1. Check if the provided instance and its DAG are valid */
-  if(instance != NULL && instance->current_dag != NULL && instance->of != NULL) {
-    int curr_dio_interval = instance->dio_intcurrent;
-    int curr_rank = instance->current_dag->rank;
-    rpl_parent_t *p = nbr_table_head(rpl_parents);
-    clock_time_t clock_now = clock_time();
-
-    /* 2. Print a clear header identifying the instance */
-    LOG_INFO("--- RPL Routing Table for Instance ID: %u ---\n", instance->instance_id);
-    LOG_INFO("RPL: DODAGID ");
-    /* CORRECTED LINE: Use the address-of operator (&) */
-    LOG_INFO_6ADDR(&instance->current_dag->dag_id);
-    LOG_INFO_("\n");
-    LOG_INFO("RPL: MOP %u, OCP %u, Rank %u, DIOint %u\n",
-             instance->mop, instance->of->ocp, curr_rank, curr_dio_interval);
-
-    while(p != NULL) {
-      /* 3. CRITICAL: Filter parents to only show those for the given instance */
-      if(p->dag->instance == instance) {
-        const struct link_stats *stats = rpl_get_parent_link_stats(p);
-        uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
-        LOG_INFO("RPL: Parent %02x | Rank: %5u, LnkM: %5u, PathCost: %5u | Fresh %c, Pref %c | Last TX: %u min ago\n",
-                 parent_addr != NULL ? parent_addr->u8[15] : 0,
-                 p->rank,
-                 rpl_get_parent_link_metric(p),
-                 rpl_rank_via_parent(p),
-                 link_stats_is_fresh(stats) ? 'Y' : 'N',
-                 /* 4. Check for preferred parent against the current instance */
-                 p == instance->current_dag->preferred_parent ? 'Y' : 'N',
-                 stats != NULL ? (unsigned)((clock_now - stats->last_tx_time) / (60 * CLOCK_SECOND)) : (unsigned)-1
-                 );
-      }
-      p = nbr_table_next(rpl_parents, p);
-    }
-    LOG_INFO("--- End of Table for Instance ID: %u ---\n", instance->instance_id);
-  } else {
-    /* Optional: Add warning logs for invalid states */
-    LOG_WARN("RPL: Instance or DAG not ready for printing routing table (ID: %u)\n", 
-             instance ? instance->instance_id : 0);
   }
 }
 /*---------------------------------------------------------------------------*/
