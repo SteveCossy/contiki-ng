@@ -148,7 +148,7 @@ rpl_print_neighbor_list(void)
 * \ param instance The RPL instance for which to print the neighbor list .
 */
 void
-rpl_print_neighbor_list_for_instance(rpl_instance_t instance)
+rpl_print_neighbor_list_for_instance(rpl_instance_t *instance)
 {
   /* 1. Check if the provided instance and its DAG are valid */
   if(instance != NULL && instance->current_dag != NULL && instance->of != NULL) {
@@ -195,9 +195,7 @@ rpl_print_neighbor_list_for_instance(rpl_instance_t instance)
 void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag, *end;
   rpl_parent_t *parent;
-  rpl_instance_t *default_instance = NULL;
 
-  //instance = rpl_get_default_instance();
   if(instance != NULL) {
       uip_ds6_addr_t *lladdr;
       lladdr = uip_ds6_get_link_local(-1);
@@ -207,29 +205,37 @@ void display_dodag( rpl_instance_t *instance ) {
       printf("\n");
       
     // dag = &instance->dag_table[0];
-  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
+  // Iterate through all DAGs potentially associated with this instance
+  for(dag = &instance->dag_table[0], 
+        end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
 
+    // Only process DAGs that are actually active/used
     if(dag->used) {
 
-      printf("DODAG ID: ");
+      printf("DODAG ID for Instance %u: ", instance->instance_id);
       uip_debug_ipaddr_print(&dag->dag_id);
       printf(", Rank: %u, OF: ", dag->rank);
 
-      switch(instance->of->ocp) {
-        case RPL_OCP_OF0:
-          printf("OF0 ");
-          break;
-        case RPL_OCP_MRHOF:
-          printf("MRHOF ");
-          break;
-        default:
-          printf("Unknown/Custom OF ");
-          break;
+      // Ensure OF pointer is valid before checking
+      if (instance->of != NULL) {
+        switch(instance->of->ocp) {
+          case RPL_OCP_OF0:
+            printf("OF0 ");
+            break;
+          case RPL_OCP_MRHOF:
+            printf("MRHOF ");
+            break;
+          default:
+            printf("Unknown/Custom OF ");
+            break;
+        }
+      } else {
+           printf("NULL ");
       }
 
       printf("\n");
 
-        if(dag->used) {
+/*       if(dag->used) {
           if(dag->joined) {
             printf("DODAG joined!\n");
           } else {
@@ -239,15 +245,17 @@ void display_dodag( rpl_instance_t *instance ) {
       } else {
         printf("DODAG not used!\n");
       }
-
+*/ 
       parent = dag->preferred_parent;
       if(parent != NULL) {
         printf("Preferred Parent's Local Loop address: ");
         uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
         printf("\n");
-      }
-      rpl_print_neighbor_list_for_instance(&dag->instance);
-/*      printf("Neighbours from Display DODAG function:\n");
+      } else {
+        printf("No preferred parent.\n");
+     }
+/*      rpl_print_neighbor_list_for_instance(instance);
+      printf("Neighbours from Display DODAG function:\n");
       rpl_print_neighbor_list();
 
       if(default_instance != NULL && default_instance->current_dag != NULL &&
@@ -276,16 +284,18 @@ void display_dodag( rpl_instance_t *instance ) {
         printf("RPL: end of list\n");
       }
 */
+    } // if DAG is used
+  } // end for loop
+
+    // Add a check if no DAGs were found at all if needed
+    if(instance->current_dag == NULL) {
+      printf("Instance %u has no current_dag set.\n", instance->instance_id);
     }
-    else // DAG is used
-    {
-    printf("No DAG found with this instance.\n");
-    }
-  }
+
   }
   else // instance != NULL
   {
-    printf("No DAG instance found.\n");
+    printf("display_dodag: NULL instance pointer passed.\n");
   }
 }
 /*---------------------------------------------------------------------------*/
