@@ -248,7 +248,7 @@ void display_dodag( rpl_instance_t *instance ) {
 */ 
       parent = dag->preferred_parent;
       if(parent != NULL) {
-        printf("Preferred Parent's Local Loop address: ");
+        printf("Preferred Parent's Link Local address: ");
         uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
         printf("\n");
       } else {
@@ -284,6 +284,13 @@ void display_dodag( rpl_instance_t *instance ) {
         printf("RPL: end of list\n");
       }
 */
+       // Check if this DAG is the *current* one the instance is actively using
+       if(instance->current_dag == dag) {
+         rpl_print_neighbor_list_for_instance(instance); 
+        } else {
+              printf("Note: This DAG (%p) is used but not instance->current_dag (%p)\n", 
+                    (void*)dag, (void*)instance->current_dag);
+        }
     } // if DAG is used
   } // end for loop
 
