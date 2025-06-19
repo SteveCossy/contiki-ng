@@ -1848,8 +1848,14 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   }
 
   if(dio->rank < ROOT_RANK(instance)) {
-    LOG_INFO("Ignoring DIO with too low rank: %u\n",
+    LOG_INFO("Ignoring DIO with too low rank: %u",
              (unsigned)dio->rank);
+    if(dio->prefix_info.length != 0) {
+      LOG_INFO_(" Prefix: ");
+      LOG_INFO_6ADDR(&dio->prefix_info.prefix);
+    }
+      LOG_INFO_("\n");
+
     return;
   }
 
