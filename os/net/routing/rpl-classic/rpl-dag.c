@@ -1856,7 +1856,9 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   /* Prefix Information Option included to add a new prefix. */
   if(dio->prefix_info.length != 0) {
     if(dio->prefix_info.flags & UIP_ND6_RA_FLAG_AUTONOMOUS) {
-      LOG_DBG("Prefix announced in DIO\n");
+      LOG_DBG("Prefix added from DIO: ");
+      LOG_DBG_6ADDR(&dio->prefix_info.prefix);
+      LOG_DBG_("\n");
       rpl_set_prefix(dag, &dio->prefix_info.prefix, dio->prefix_info.length);
     }
   }
