@@ -158,7 +158,7 @@ rpl_print_neighbor_list_for_instance(rpl_instance_t *instance)
     clock_time_t clock_now = clock_time();
 
     /* 2. Print a clear header identifying the instance */
-    LOG_INFO("--- RPL Routing Table for Instance ID: %u ---\n", instance->instance_id);
+    LOG_INFO("--- RPL Parent Set for Instance ID: %u ---\n", instance->instance_id);
     LOG_INFO("RPL: DODAGID ");
     /* CORRECTED LINE: Use the address-of operator (&) */
     LOG_INFO_6ADDR(&instance->current_dag->dag_id);
