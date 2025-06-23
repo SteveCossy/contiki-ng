@@ -123,7 +123,7 @@ void display_routing_table(void) {
     // printf("/%u, ", route->length); // IPv6 prefix length - always 128
 
     // Print the next-hop address
-    printf("Next hop: ");
+    printf(" Next hop: ");
     uip_debug_ipaddr_print(ipaddr);
     printf(", Lifetime: %lu\n", (unsigned long)route->state.lifetime);
   }
