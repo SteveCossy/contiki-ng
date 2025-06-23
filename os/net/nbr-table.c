@@ -439,7 +439,7 @@ nbr_table_add_lladdr(const nbr_table_t *table, const linkaddr_t *lladdr,
   memset(item, 0, table->item_size);
   nbr_set_bit(used_map, table, item, 1);
 
-printf("Adding lladdr ");
+// printf("Adding lladdr "); // no idea what this was for
 
 #if DEBUG
   print_table();
@@ -522,7 +522,8 @@ print_table()
 {
   int i, j;
   /* Printout all neighbors and which tables they are used in */
-  PRINTF("NBR TABLE:\n");
+  PRINTF("NBR TABLE:\n"
+         "Index Node [Used?] [Locked?] for each table\n");
   for(i = 0; i < NBR_TABLE_MAX_NEIGHBORS; i++) {
     if(used_map[i] > 0) {
       PRINTF(" %02d %02d",i , key_from_index(i)->lladdr.u8[LINKADDR_SIZE - 1]);
