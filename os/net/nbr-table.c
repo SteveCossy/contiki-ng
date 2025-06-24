@@ -524,7 +524,7 @@ print_table()
   /* Printout all neighbors and which tables they are used in */
   PRINTF("Neighbour Table:"
   /* Need to print lladdr here sometime */
-         "\nIndex Node [Used?] [Locked?] for each table\n");
+         "\nIndex Node [Used? : Locked?] for each table\n");
   for(i = 0; i < NBR_TABLE_MAX_NEIGHBORS; i++) {
     if(used_map[i] > 0) {
       PRINTF(" %02d %02d",i , key_from_index(i)->lladdr.u8[LINKADDR_SIZE - 1]);
