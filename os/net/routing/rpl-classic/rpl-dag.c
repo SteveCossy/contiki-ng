@@ -616,7 +616,9 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   */
   if(uip_ntohs(dag_id->u16[0]) == UIP_DS6_DEFAULT_PREFIX) {
     LOG_DBG_(" One ");
-    instance->of = rpl_find_of(RPL_OF_OCP);
+    /* Debug - use OF0 for both DODAGs
+    instance->of = rpl_find_of(RPL_OF_OCP); */
+    instance->of = rpl_find_of(RPL_OCP_OF0);
   }
   else {
     LOG_DBG_(" Two ");
