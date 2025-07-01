@@ -618,7 +618,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
     LOG_DBG_(" One ");
     /* Debug - use OF0 for both DODAGs
     instance->of = rpl_find_of(RPL_OF_OCP); */
-    instance->of = rpl_find_of(RPL_OCP_MRHOF);
+    instance->of = rpl_find_of(RPL_OCP_OF0);
   }
   else {
     LOG_DBG_(" Two ");
