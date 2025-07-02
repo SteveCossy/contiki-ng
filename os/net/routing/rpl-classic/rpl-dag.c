@@ -171,8 +171,10 @@ rpl_print_neighbor_list_for_instance(rpl_instance_t *instance)
       if(p->dag->instance == instance) {
         const struct link_stats *stats = rpl_get_parent_link_stats(p);
         uip_ipaddr_t *parent_addr = rpl_parent_get_ipaddr(p);
-        LOG_INFO("RPL: Parent %02x | Rank: %5u, LnkM: %5u, PathCost: %5u | Fresh %c, Pref %c | Last TX: %u min ago\n",
-                 parent_addr != NULL ? parent_addr->u8[15] : 0,
+        LOG_INFO("RPL: DAG: %02x%02x OCP:  Parent: %02x | Rank: %5u, LnkM: %5u, PathCost: %5u | Fresh %c, Pref %c | Last TX: %u min ago\n",
+                instance->current_dag->dag_id.u8[0],instance->current_dag->dag_id.u8[1],
+                instance->of->ocp,
+                parent_addr != NULL ? parent_addr->u8[15] : 0,
                  p->rank,
                  rpl_get_parent_link_metric(p),
                  rpl_rank_via_parent(p),
