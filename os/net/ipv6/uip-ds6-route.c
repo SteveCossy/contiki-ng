@@ -109,7 +109,8 @@ LIST(notificationlist);
 #include "net/ipv6/uip-debug.h"
 */
 
-void display_routing_table(void) {
+void display_routing_table(void) 
+{
   uip_ds6_route_t *route;
 
   printf("IPv6 Routing Table:\n");
@@ -310,7 +311,7 @@ uip_ds6_route_t *
 uip_ds6_route_lookup(const uip_ipaddr_t *addr)
 {
 #if (UIP_MAX_ROUTES != 0)
-  uip_ds6_route_t *r;uip_ds6_route_lookup
+  uip_ds6_route_t *r;
   uip_ds6_route_t *found_route;
   uint8_t longestmatch;
 
