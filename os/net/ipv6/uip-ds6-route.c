@@ -310,7 +310,7 @@ uip_ds6_route_t *
 uip_ds6_route_lookup(const uip_ipaddr_t *addr)
 {
 #if (UIP_MAX_ROUTES != 0)
-  uip_ds6_route_t *r;
+  uip_ds6_route_t *r;uip_ds6_route_lookup
   uip_ds6_route_t *found_route;
   uint8_t longestmatch;
 
