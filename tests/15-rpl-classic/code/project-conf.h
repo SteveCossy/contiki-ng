@@ -28,3 +28,4 @@
  */
 #define TCPIP_CONF_ANNOTATE_TRANSMISSIONS 1
 #define LOG_CONF_LEVEL_RPL LOG_LEVEL_DBG
+#define LOG_CONF_MAX_ARGS 16 /* added by steve 2 July 2025 */

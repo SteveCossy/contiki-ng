@@ -39,7 +39,7 @@
 #define LOG_CONF_LEVEL_MAIN LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_DBG
 #define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
-
+// doesn't work here #define LOG_CONF_MAX_ARGS 16 // Added by steve 2 July 2025
 
 // #define LOG_CONF_LEVEL_RPL  LOG_LEVEL_INFO
 

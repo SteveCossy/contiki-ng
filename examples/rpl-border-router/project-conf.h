@@ -68,6 +68,9 @@
 #define LOG_CONF_LEVEL_6LOWPAN  NONE
 #define LOG_CONF_LEVEL_NULLNET  NONE */
 
+// doesn't work here #define LOG_CONF_MAX_ARGS 16 // Added by steve 2 July 2025
+#define LOG_CONF_MAX_ARGS 16
+
 /*
 #define LOG_CONF_LEVEL_BR   LOG_LEVEL_DBG
 */
