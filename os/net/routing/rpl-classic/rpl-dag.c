@@ -555,15 +555,19 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   rpl_dag_t *dag;
   rpl_instance_t *instance;
   uint8_t version;
-  int i;
+  //int i;
 
   version = RPL_LOLLIPOP_INIT;
   instance = rpl_get_instance(instance_id);
   if(instance != NULL) {
-    for(i = 0; i < RPL_MAX_DAG_PER_INSTANCE; ++i) {
+    // This can happen if rpl_alloc_dag does not create an instance.
+    // It should be handled by rpl_alloc_dag.
+    LOG_WARN("Instance %u not found initially\n", instance_id);
+  }
+/*    for(i = 0; i < RPL_MAX_DAG_PER_INSTANCE; ++i) {
       dag = &instance->dag_table[i];
       if(dag->used) {
-/*        if(uip_ipaddr_cmp(&dag->dag_id, dag_id)) {
+        if(uip_ipaddr_cmp(&dag->dag_id, dag_id)) {
           version = dag->version;
           RPL_LOLLIPOP_INCREMENT(version);
         } else {
@@ -575,18 +579,29 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
             LOG_INFO("Dropping a DAG when setting this node as root\n");
           }
           rpl_free_dag(dag);
-        } */
+        } 
       }
     }
   }
-
-  LOG_DBG("Allocating a DAG **********************\n");
-  
-
-  
+*/
+  LOG_DBG("Allocating a DAG instance %u **********************\n", instance_id);
   dag = rpl_alloc_dag(instance_id, dag_id);
   
-  if(dag != NULL) { // Was if(dag == NULL) {
+  if(dag != NULL) {
+		// DAG allocation failed
+    LOG_ERR("Failed to allocate a DAG for instance %u\n", instance_id);
+    return NULL;
+  }
+
+  if(instance == NULL) {
+    instance = dag->instance; // Use default instance if we were not given one
+    if(instance == NULL) {
+        LOG_ERR("DAG allocated but has no valid instance!\n");
+        return NULL; // ... or give up
+    }
+  }
+  
+  /*{ // Was if(dag == NULL) {
 	 	// DAG successfully allocated
 	  LOG_DBG("DAG allocated with ID: ");
 		LOG_DBG_6ADDR(dag_id);
@@ -594,22 +609,17 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
     // LOG_DBG_(" %" PRIu16 , dag_id->u16[0]);
     LOG_DBG_(" %hx " , uip_ntohs(dag_id->u16[0]));
     }
-	 else {
-		// DAG allocation failed
-		printf("Failed to allocate a DAG\n");
-    LOG_ERR("Failed to allocate a DAG\n");
-    return NULL;
-  }
+	 else 
 
   instance = dag->instance;
-
+*/
 //  instance = rpl_get_default_instance();
 
   dag->version = version;
   dag->joined = 1;
   dag->grounded = RPL_GROUNDED;
   dag->preference = RPL_PREFERENCE;
-  instance->mop = RPL_MOP_DEFAULT;
+//  instance->mop = RPL_MOP_DEFAULT;
 
   /*
   Was: instance->of = rpl_find_of(RPL_OF_OCP);
@@ -618,17 +628,22 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   In the meantime, assume default OF is MRHOF so alternative is OF0
   Note that 
   */
+
+  // Define the OCPs we intend to use for the next run.
+  const uint8_t first_ocp  = RPL_OCP_MRHOF;
+  const uint8_t second_ocp = RPL_OCP_MRHOF;
+
+  uint8_t ocp_to_assign;
+
   if(uip_ntohs(dag_id->u16[0]) == UIP_DS6_DEFAULT_PREFIX) {
-    LOG_DBG_(" One ");
-    /* Debug - use OF0 for both DODAGs
-    instance->of = rpl_find_of(RPL_OF_OCP); */
-    instance->of = rpl_find_of(RPL_OCP_MRHOF);
+    ocp_to_assign = first_ocp;
+  } else {
+    ocp_to_assign = second_ocp;
   }
-  else {
-    LOG_DBG_(" Two ");
-    instance->of = rpl_find_of(RPL_OCP_MRHOF);
-  }
-  LOG_DBG_("\n");
+
+  LOG_INFO("Assigning OF with OCP %u to instance %u\n", ocp_to_assign, instance_id);
+
+  instance->of = rpl_find_of(ocp_to_assign);
 
   if(instance->of == NULL) {
     LOG_WARN("OF with OCP %u not supported\n", RPL_OF_OCP);
@@ -636,22 +651,24 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   }
 
   rpl_set_preferred_parent(dag, NULL);
+  dag->rank = ROOT_RANK(instance);
 
   memcpy(&dag->dag_id, dag_id, sizeof(dag->dag_id));
 
-  instance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
-  instance->dio_intmin = RPL_DIO_INTERVAL_MIN;
-  /* The current interval must differ from the minimum interval in order to
-     trigger a DIO timer reset. */
-  instance->dio_intcurrent = RPL_DIO_INTERVAL_MIN +
-    RPL_DIO_INTERVAL_DOUBLINGS;
-  instance->dio_redundancy = RPL_DIO_REDUNDANCY;
-  instance->max_rankinc = RPL_MAX_RANKINC;
-  instance->min_hoprankinc = RPL_MIN_HOPRANKINC;
-  instance->default_lifetime = RPL_DEFAULT_LIFETIME;
-  instance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
-
-  dag->rank = ROOT_RANK(instance);
+  // Configure the instance parameters (only if they are not already set)
+  if(instance->dio_intmin == 0) {
+    instance->mop = RPL_MOP_DEFAULT;
+    instance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
+    instance->dio_intmin = RPL_DIO_INTERVAL_MIN;
+    instance->dio_intcurrent = RPL_DIO_INTERVAL_MIN + RPL_DIO_INTERVAL_DOUBLINGS;
+    /* The current interval must differ from the minimum interval in order to
+      trigger a DIO timer reset. */
+    instance->dio_redundancy = RPL_DIO_REDUNDANCY;
+    instance->max_rankinc = RPL_MAX_RANKINC;
+    instance->min_hoprankinc = RPL_MIN_HOPRANKINC;
+    instance->default_lifetime = RPL_DEFAULT_LIFETIME;
+    instance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
+  }
 
   if(instance->current_dag != dag && instance->current_dag != NULL) {
     /* Remove routes installed by DAOs. */
@@ -665,19 +682,14 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   instance->current_dag = dag;
   instance->dtsn_out = RPL_LOLLIPOP_INIT;
   instance->of->update_metric_container(instance);
-  default_instance = instance;
 
-  LOG_INFO("Node set to be a DAG root with DAG ID ");
+  // This function should only affect the state of the passed instance_id.
+
+  LOG_INFO("Node set as root for instance %u with DAG ID ", instance_id);
   LOG_INFO_6ADDR(&dag->dag_id);
   LOG_INFO_("\n");
 
-  LOG_ANNOTATE("#A root=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
-
   rpl_reset_dio_timer(instance);
-
-  // Note that this funtion didn't work before instance values were set above
-  // display_dodag(instance); Commented out 5 May 2025
-  // printf("RPL_SECOND_INSTANCE: %d\n", RPL_SECOND_INSTANCE);
 
   return dag;
 }
