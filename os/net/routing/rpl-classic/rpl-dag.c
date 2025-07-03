@@ -1317,12 +1317,15 @@ rpl_get_any_dag_with_parent(bool requires_parent)
   int i;
 
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
+ //   if(instance_table[i].used
+ //      && instance_table[i].current_dag->joined
+ //      && (!requires_parent || instance_table[i].current_dag->preferred_parent != NULL)) {
     if(instance_table[i].used
-       && instance_table[i].current_dag->joined
-       && (!requires_parent || instance_table[i].current_dag->preferred_parent != NULL)) {
-      return instance_table[i].current_dag;
+      && instance_table[i].current_dag != NULL
+      && instance_table[i].current_dag->preferred_parent != NULL) {
+        return instance_table[i].current_dag;
+      }
     }
-  }
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
