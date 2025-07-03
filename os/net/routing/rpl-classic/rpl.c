@@ -154,7 +154,27 @@ rpl_purge_routes(void)
       r = uip_ds6_route_head();
       LOG_INFO("No more routes to ");
       LOG_INFO_6ADDR(&prefix);
+
+      /************************************************************/
+      /* --- START: ADD THIS CRASH-PREVENTION BLOCK --- */
+      /************************************************************/
+      // This logic is still flawed for multi-instance, but we will make it safe.
+      
+      // 1. Check if default_instance itself is valid
+      if(default_instance == NULL) {
+        LOG_WARN_(" -> default_instance is NULL, cannot send No-Path DAO\n");
+        // We must continue the loop, but using a 'goto' or restructuring
+        // is messy. The simplest is to just skip the DAO logic.
+      } else {
+        // 2. Now that we know default_instance is safe, get the dag.
+
       dag = default_instance->current_dag;
+
+        // 3. Check if the DAG is valid before using it.
+        if(dag == NULL) {
+          LOG_WARN_(" -> default_instance DAG is NULL, cannot send No-Path DAO\n");
+        } else {
+
       /* Propagate this information with a No-Path DAO to the
          preferred parent if we are not a RPL root. */
       if(dag->rank != ROOT_RANK(default_instance)) {
@@ -165,6 +185,13 @@ rpl_purge_routes(void)
         return;
       }
       LOG_INFO_("\n");
+
+    }
+  }
+  /************************************************************/
+  /* --- END: ADD THIS CRASH-PREVENTION BLOCK --- */
+  /************************************************************/
+
     } else {
       r = uip_ds6_route_next(r);
     }
