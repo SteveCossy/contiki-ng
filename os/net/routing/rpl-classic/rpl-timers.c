@@ -85,7 +85,7 @@ handle_periodic_timer(void *ptr)
 {
   rpl_dag_t *dag = rpl_get_any_dag();
 
- // rpl_purge_dags();
+  rpl_purge_dags();
   if(dag != NULL) {
     if(RPL_IS_STORING(dag->instance)) {
       rpl_purge_routes();
