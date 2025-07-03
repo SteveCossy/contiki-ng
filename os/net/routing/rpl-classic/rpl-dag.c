@@ -1379,6 +1379,8 @@ rpl_get_any_dag(void)
 rpl_instance_t *
 rpl_get_instance(uint8_t instance_id)
 {
+  //rpl_instance_t *instance;
+  rpl_instance_t *newInstance; // The declaration happens here!
   int i;
 
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
@@ -1386,6 +1388,37 @@ rpl_get_instance(uint8_t instance_id)
       return &instance_table[i];
     }
   }
+
+  for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
+    if(!instance_table[i].used) {
+      /* Found a free slot, claim it */
+      newInstance = &instance_table[i];
+      memset(newInstance, 0, sizeof(*newInstance));
+      newInstance->instance_id = instance_id;
+      newInstance->used = 1;
+      
+      /************************************************************/
+      /* --- START: ADD THIS INITIALIZATION BLOCK HERE --- */
+      /************************************************************/
+      LOG_INFO("RPL: Initializing new instance %u\n", instance_id);
+      newInstance->mop = RPL_MOP_DEFAULT;
+      newInstance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
+      newInstance->dio_intmin = RPL_DIO_INTERVAL_MIN;
+      /* The current interval must differ from the minimum interval to trigger a timer reset. */
+      newInstance->dio_intcurrent = RPL_DIO_INTERVAL_MIN + RPL_DIO_INTERVAL_DOUBLINGS;
+      newInstance->dio_redundancy = RPL_DIO_REDUNDANCY;
+      newInstance->max_rankinc = RPL_MAX_RANKINC;
+      newInstance->min_hoprankinc = RPL_MIN_HOPRANKINC;
+      newInstance->default_lifetime = RPL_DEFAULT_LIFETIME;
+      newInstance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
+      /************************************************************/
+      /* --- END: ADD THIS INITIALIZATION BLOCK HERE --- */
+      /************************************************************/
+
+      return newInstance;
+    }
+  }
+
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
