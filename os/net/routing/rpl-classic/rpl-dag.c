@@ -587,7 +587,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   LOG_DBG("Allocating a DAG instance %u **********************\n", instance_id);
   dag = rpl_alloc_dag(instance_id, dag_id);
   
-  if(dag != NULL) {
+  if(dag == NULL) {
 		// DAG allocation failed
     LOG_ERR("Failed to allocate a DAG for instance %u\n", instance_id);
     return NULL;
