@@ -593,12 +593,10 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
     return NULL;
   }
 
+  instance = dag->instance; // Use default instance if we were not given one
   if(instance == NULL) {
-    instance = dag->instance; // Use default instance if we were not given one
-    if(instance == NULL) {
-        LOG_ERR("DAG allocated but has no valid instance!\n");
-        return NULL; // ... or give up
-    }
+      LOG_ERR("DAG allocated but has no valid instance!\n");
+      return NULL; // ... or give up
   }
   
   /*{ // Was if(dag == NULL) {
@@ -619,7 +617,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   dag->joined = 1;
   dag->grounded = RPL_GROUNDED;
   dag->preference = RPL_PREFERENCE;
-//  instance->mop = RPL_MOP_DEFAULT;
+  instance->mop = RPL_MOP_DEFAULT;
 
   /*
   Was: instance->of = rpl_find_of(RPL_OF_OCP);
@@ -655,20 +653,18 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
 
   memcpy(&dag->dag_id, dag_id, sizeof(dag->dag_id));
 
-  // Configure the instance parameters (only if they are not already set)
-  if(instance->dio_intmin == 0) {
-    instance->mop = RPL_MOP_DEFAULT;
-    instance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
-    instance->dio_intmin = RPL_DIO_INTERVAL_MIN;
-    instance->dio_intcurrent = RPL_DIO_INTERVAL_MIN + RPL_DIO_INTERVAL_DOUBLINGS;
-    /* The current interval must differ from the minimum interval in order to
-      trigger a DIO timer reset. */
-    instance->dio_redundancy = RPL_DIO_REDUNDANCY;
-    instance->max_rankinc = RPL_MAX_RANKINC;
-    instance->min_hoprankinc = RPL_MIN_HOPRANKINC;
-    instance->default_lifetime = RPL_DEFAULT_LIFETIME;
-    instance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
-  }
+  // Configure the instance parameters
+  instance->mop = RPL_MOP_DEFAULT;
+  instance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
+  instance->dio_intmin = RPL_DIO_INTERVAL_MIN;
+  instance->dio_intcurrent = RPL_DIO_INTERVAL_MIN + RPL_DIO_INTERVAL_DOUBLINGS;
+  /* The current interval must differ from the minimum interval in order to
+    trigger a DIO timer reset. */
+  instance->dio_redundancy = RPL_DIO_REDUNDANCY;
+  instance->max_rankinc = RPL_MAX_RANKINC;
+  instance->min_hoprankinc = RPL_MIN_HOPRANKINC;
+  instance->default_lifetime = RPL_DEFAULT_LIFETIME;
+  instance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
 
   if(instance->current_dag != dag && instance->current_dag != NULL) {
     /* Remove routes installed by DAOs. */
@@ -1379,8 +1375,6 @@ rpl_get_any_dag(void)
 rpl_instance_t *
 rpl_get_instance(uint8_t instance_id)
 {
-  //rpl_instance_t *instance;
-  rpl_instance_t *newInstance; // The declaration happens here!
   int i;
 
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
@@ -1388,37 +1382,7 @@ rpl_get_instance(uint8_t instance_id)
       return &instance_table[i];
     }
   }
-
-  for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
-    if(!instance_table[i].used) {
-      /* Found a free slot, claim it */
-      newInstance = &instance_table[i];
-      memset(newInstance, 0, sizeof(*newInstance));
-      newInstance->instance_id = instance_id;
-      newInstance->used = 1;
-      
-      /************************************************************/
-      /* --- START: ADD THIS INITIALIZATION BLOCK HERE --- */
-      /************************************************************/
-      LOG_INFO("RPL: Initializing new instance %u\n", instance_id);
-      newInstance->mop = RPL_MOP_DEFAULT;
-      newInstance->dio_intdoubl = RPL_DIO_INTERVAL_DOUBLINGS;
-      newInstance->dio_intmin = RPL_DIO_INTERVAL_MIN;
-      /* The current interval must differ from the minimum interval to trigger a timer reset. */
-      newInstance->dio_intcurrent = RPL_DIO_INTERVAL_MIN + RPL_DIO_INTERVAL_DOUBLINGS;
-      newInstance->dio_redundancy = RPL_DIO_REDUNDANCY;
-      newInstance->max_rankinc = RPL_MAX_RANKINC;
-      newInstance->min_hoprankinc = RPL_MIN_HOPRANKINC;
-      newInstance->default_lifetime = RPL_DEFAULT_LIFETIME;
-      newInstance->lifetime_unit = RPL_DEFAULT_LIFETIME_UNIT;
-      /************************************************************/
-      /* --- END: ADD THIS INITIALIZATION BLOCK HERE --- */
-      /************************************************************/
-
-      return newInstance;
-    }
-  }
-
+  
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
