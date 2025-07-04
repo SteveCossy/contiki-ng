@@ -57,7 +57,6 @@
 #include "lib/memb.h"
 #include "sys/ctimer.h"
 #include "sys/log.h"
-#include "net/ipv6/uip-ds6.h"
 
 #include <limits.h>
 #include <string.h>
@@ -642,10 +641,20 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
     ocp_to_assign = second_ocp;
   }
   for (i =0; i <=1; i++)  {
-    LOG_INFO("The OCP %u is %s\n",
-       ocp_to_assign, instance_id,
-       get_rpl_of_name(ocp);
-    )
+    LOG_INFO("The OCP %u maps to ",
+       i);
+       switch(i) {
+          case RPL_OCP_OF0:
+              LOG_INFO_("OF0 ");
+              break;
+          case RPL_OCP_MRHOF:
+              LOG_INFO_("MRHOF ");
+              break;
+          default:
+              printf("Unknown/Custom OF ");
+              break;
+         }
+      LOG_INFO_("\n");
   }
   LOG_INFO("Assigning OF with OCP %u to instance %u\n", ocp_to_assign, instance_id);
 
