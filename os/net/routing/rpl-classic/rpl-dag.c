@@ -1817,6 +1817,14 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   rpl_dag_t *dag, *previous_dag;
   rpl_parent_t *p;
 
+  /* === ADD THIS LOGGING BLOCK === */
+  LOG_INFO("!!! rpl_process_dio called! from: ");
+  LOG_INFO_LLADDR((const uip_lladdr_t *)uip_ds6_nbr_lladdr_from_ipaddr(*from));
+  LOG_INFO_(" for instance %u with DAG ID ", dio->instance_id);
+  LOG_INFO_6ADDR(&dio->dag_id);
+  LOG_INFO_("\n");
+  /* === END LOGGING BLOCK === */
+
 #if RPL_WITH_MULTICAST
   /*
    * If the root is advertising MOP 2, but we support MOP 3, we can
@@ -1948,7 +1956,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
    * At this point, we know that this DIO pertains to a DAG that we
    * are already part of. We consider the sender of the DIO to be a
    * candidate parent, and let rpl_process_parent_event decide whether
-   * to keep it in the set.
+   * Nodeto keep it in the set.
    */
 
   p = rpl_find_parent(dag, from);
