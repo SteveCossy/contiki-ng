@@ -628,10 +628,10 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   */
 
   // Define the OCPs we intend to use for the next run.
-  const uint8_t first_ocp  = RPL_OCP_MRHOF;
-  // const uint8_t first_ocp  = RPL_OCP_OF0;
-  // const uint8_t second_ocp = RPL_OCP_MRHOF;
-  const uint8_t second_ocp = RPL_OCP_OF0;
+  // const uint8_t first_ocp  = RPL_OCP_MRHOF;
+  const uint8_t first_ocp  = RPL_OCP_OF0;
+  const uint8_t second_ocp = RPL_OCP_MRHOF;
+  //  const uint8_t second_ocp = RPL_OCP_OF0;
 
   uint8_t ocp_to_assign;
 
@@ -1831,7 +1831,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
     /* If the lookup failed, print the full IP address instead */
     LOG_INFO_("IP ");
     LOG_INFO_6ADDR(from);
-    LOG_INFO_(" (not in neighbor cache)");
+  //  LOG_INFO_(" (not in neighbor cache)");
   }
   LOG_INFO_(" for instance %u\n", dio->instance_id);
   /* === END LOGGING BLOCK === */
