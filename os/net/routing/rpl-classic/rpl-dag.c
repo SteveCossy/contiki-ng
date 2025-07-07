@@ -1819,7 +1819,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   /* === ADD THIS LOGGING BLOCK === */
   LOG_INFO("!!! rpl_process_dio called! from: ");
-  LOG_INFO_LLADDR((const uip_lladdr_t *)uip_ds6_nbr_lladdr_from_ipaddr(&from));
+  LOG_INFO_LLADDR((const uip_lladdr_t *)uip_ds6_nbr_lladdr_from_ipaddr(from));
   LOG_INFO_(" for instance %u with DAG ID ", dio->instance_id);
   LOG_INFO_6ADDR(&dio->dag_id);
   LOG_INFO_("\n");
