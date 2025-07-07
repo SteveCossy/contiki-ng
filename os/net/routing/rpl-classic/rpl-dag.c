@@ -1817,12 +1817,23 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   rpl_dag_t *dag, *previous_dag;
   rpl_parent_t *p;
 
-  /* === ADD THIS LOGGING BLOCK === */
-  LOG_INFO("!!! rpl_process_dio called! from: ");
-  LOG_INFO_LLADDR((const uip_lladdr_t *)uip_ds6_nbr_lladdr_from_ipaddr(from));
-  LOG_INFO_(" for instance %u with DAG ID ", dio->instance_id);
-  LOG_INFO_6ADDR(&dio->dag_id);
-  LOG_INFO_("\n");
+  /* === ADD THIS SAFE LOGGING BLOCK === */
+  const uip_lladdr_t *sender_lladdr;
+
+  /* First, try to look up the sender in our neighbor cache */
+  sender_lladdr = uip_ds6_nbr_lladdr_from_ipaddr(from);
+
+  LOG_INFO("!!! rpl_process_dio called! from ");
+  if(sender_lladdr != NULL) {
+    /* If the lookup succeeded, print the Link-Layer address */
+    LOG_INFO_LLADDR(sender_lladdr);
+  } else {
+    /* If the lookup failed, print the full IP address instead */
+    LOG_INFO_("IP ");
+    LOG_INFO_6ADDR(from);
+    LOG_INFO_(" (not in neighbor cache)");
+  }
+  LOG_INFO_(" for instance %u\n", dio->instance_id);
   /* === END LOGGING BLOCK === */
 
 #if RPL_WITH_MULTICAST
