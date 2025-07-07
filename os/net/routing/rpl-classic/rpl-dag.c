@@ -1826,7 +1826,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   LOG_INFO("!!! rpl_process_dio called! from ");
   if(sender_lladdr != NULL) {
     /* If the lookup succeeded, print the Link-Layer address */
-    LOG_INFO_LLADDR(sender_lladdr);
+    LOG_INFO_LLADDR((const linkaddr_t *)sender_lladdr);
   } else {
     /* If the lookup failed, print the full IP address instead */
     LOG_INFO_("IP ");
