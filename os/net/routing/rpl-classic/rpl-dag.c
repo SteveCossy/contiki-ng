@@ -1852,7 +1852,9 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
           }
         }
         global_repair(from, dag, dio);
-      } // lollipop_greater_than
+      }
+      
+      // lollipop_greater_than
       return;
     }
 
@@ -1901,8 +1903,9 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   }
 
   if(dio->rank < ROOT_RANK(instance)) {
-    LOG_INFO("Ignoring DIO with too low rank: %u",
-             (unsigned)dio->rank);
+    LOG_INFO("Ignoring DIO with rank: %u (less than %u)",
+             (unsigned)dio->rank,
+             (unsigned)ROOT_RANK(instance));
     if(dio->prefix_info.length != 0) {
       LOG_INFO_(" Prefix: ");
       LOG_INFO_6ADDR(&dio->prefix_info.prefix);
