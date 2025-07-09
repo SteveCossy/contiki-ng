@@ -648,42 +648,6 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
             dag->prefix_info.length);
   }
 
-// See if the second DODAG is still here 
-/* Spoiler alert - it is!
-rpl_instance_t *instance2 = rpl_get_instance(RPL_SECOND_INSTANCE);
-if (instance2 != NULL) {
-  printf("Displaying RPL instance two 0x%x!\n", RPL_SECOND_INSTANCE);
-  display_dodag(instance2);
-} else {
-  printf("RPL instance two 0x%x not found!\n", RPL_SECOND_INSTANCE);
-}
- uip_ds6_addr_t *lladdr;
- uip_ipaddr_t lladdr2, ipaddr2;
- lladdr = uip_ds6_get_link_local(-1); 
- uip_ip6addr(&ipaddr2, 0xfe80, 0x0000, 0x0000, 0x0000, 0x0209, 0x0009, 0x0009, 0x0009);
- uip_ipaddr_copy(&lladdr2, &lladdr->ipaddr);
-
- if(uip_ipaddr_cmp(&lladdr2, &ipaddr2)) { // This is our BR
-  
-  rpl_dag_t *dag, *end ;
-
-  for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
-  if(dag->used) {
-    ipaddr2 = dag->dag_id;
-    LOG_INFO("DODAG IPv6 address for DIO: ");
-    uip_debug_ipaddr_print(&ipaddr2);
-    LOG_INFO_("\n");
-    LOG_INFO("Scheduling DIO timer %lu ticks in future (Interval)\n",
-           (unsigned long)ticks);
-    LOG_INFO_("\n");
-    ctimer_set(&instance->dio_timer, ticks, &handle_dio_timer, instance);
-
-  }
-  }
- } 
-*/
-
-
 #if RPL_LEAF_ONLY
   if(LOG_DBG_ENABLED) {
     if(uc_addr == NULL) {
