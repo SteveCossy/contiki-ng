@@ -699,7 +699,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   instance->of->update_metric_container(instance);
 
   // This function should only affect the state of the passed instance_id.
-
+  LOG_INFO("Node is root of rank %u, DAG ID ",(unsigned)dag->rank);
   LOG_INFO("Node set as root for instance %u with DAG ID ", instance_id);
   LOG_INFO_6ADDR(&dag->dag_id);
   LOG_INFO_("\n");
