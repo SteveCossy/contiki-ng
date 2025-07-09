@@ -598,20 +598,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
       LOG_ERR("DAG allocated but has no valid instance!\n");
       return NULL; // ... or give up
   }
-  
-  /*{ // Was if(dag == NULL) {
-	 	// DAG successfully allocated
-	  LOG_DBG("DAG allocated with ID: ");
-		LOG_DBG_6ADDR(dag_id);
-	  LOG_DBG_(", Prefix: ");
-    // LOG_DBG_(" %" PRIu16 , dag_id->u16[0]);
-    LOG_DBG_(" %hx " , uip_ntohs(dag_id->u16[0]));
-    }
-	 else 
 
-  instance = dag->instance;
-*/
-//  instance = rpl_get_default_instance();
 
   dag->version = version;
   dag->joined = 1;
@@ -668,8 +655,8 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   }
 
   rpl_set_preferred_parent(dag, NULL);
-  //dag->rank = ROOT_RANK(instance);
-  dag->rank = 128;
+  dag->rank = ROOT_RANK(instance);
+  //dag->rank = 128;
 
   memcpy(&dag->dag_id, dag_id, sizeof(dag->dag_id));
 

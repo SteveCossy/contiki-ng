@@ -188,7 +188,8 @@
 #define BASE_RANK                       0
 
 /* Rank of a root node. */
-#define ROOT_RANK(instance)             (instance)->min_hoprankinc
+//#define ROOT_RANK(instance)             (instance)->min_hoprankinc
+#define ROOT_RANK(instance)             128
 
 #define RPL_INFINITE_RANK                   0xffff
 
