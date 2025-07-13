@@ -354,10 +354,12 @@ dio_input(void)
   dio.rank = get16(buffer, i);
   i += 2;
 
-  LOG_DBG("Incoming DIO (id, ver, rank) = (%u,%u,%u)\n",
+  LOG_DBG("Incoming DIO (id, ver, rank): (%u,%u,%u) From:",
           (unsigned)dio.instance_id,
           (unsigned)dio.version,
           (unsigned)dio.rank);
+  LOG_DBG_6ADDR(&from);
+  LOG_DBG_("\n");
 
   dio.grounded = buffer[i] & RPL_DIO_GROUNDED;
   dio.mop = (buffer[i] & RPL_DIO_MOP_MASK) >> RPL_DIO_MOP_SHIFT;
