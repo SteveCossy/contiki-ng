@@ -354,7 +354,7 @@ dio_input(void)
   dio.rank = get16(buffer, i);
   i += 2;
 
-  LOG_INFO("Incoming DIO (id, ver, rank) = (%u,%u,%u)\n",
+  LOG_INFO("Incoming DIO (id, ver, rank) = (%u,%u,%u) from:",
           (unsigned)dio.instance_id,
           (unsigned)dio.version,
           (unsigned)dio.rank);
