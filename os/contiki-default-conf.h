@@ -68,7 +68,8 @@
  /* NBR_TABLE_CONF_MAX_NEIGHBORS specifies the maximum number of neighbors
     that each node will be able to handle. */
 #ifndef NBR_TABLE_CONF_MAX_NEIGHBORS
-#define NBR_TABLE_CONF_MAX_NEIGHBORS 16
+//#define NBR_TABLE_CONF_MAX_NEIGHBORS 16
+#define NBR_TABLE_CONF_MAX_NEIGHBORS 32
 #endif /* NBR_TABLE_CONF_MAX_NEIGHBORS */
 
 /* NETSTACK_MAX_ROUTE_ENTRIES specifies the maximum number of entries
