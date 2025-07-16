@@ -1837,7 +1837,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   if(dio->mop != RPL_MOP_DEFAULT) {
 #endif
     LOG_ERR("Ignoring a DIO with an unsupported MOP: %d\n", dio->mop);
-    return;
+    return; // from 'not RPL_MOP_DEFAULT' if not RPL_WITH_MULTICAST
   }
 
   dag = get_dag(dio->instance_id, &dio->dag_id);
