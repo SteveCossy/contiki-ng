@@ -990,11 +990,31 @@ find_parent_any_dag_any_instance(uip_ipaddr_t *addr)
   const uip_lladdr_t *lladdr = uip_ds6_nbr_get_ll(ds6_nbr);
   return nbr_table_get_from_lladdr(rpl_parents, (linkaddr_t *)lladdr);
 }
+/*---------------------------------------------------------------------------
+      Instance-aware function to provide an alternative to above */
+static rpl_parent_t *
+find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
+{
+        uip_ds6_nbr_t *nbr = uip_ds6_nbr_lookup(addr);
+        if(nbr == NULL) {
+                return NULL;
+        }
+
+        // THE CRITICAL CHECK: Ensure the parent found in the neighbor
+        // entry belongs to the specific DAG we are operating on.
+        if(nbr->rpl_parent.dag != dag) {
+                return NULL; // This neighbor is a parent, but in the wrong DODAG.
+        }
+
+        return &nbr->rpl_parent;
+}
+
 /*---------------------------------------------------------------------------*/
 rpl_parent_t *
 rpl_find_parent(rpl_dag_t *dag, uip_ipaddr_t *addr)
 {
-  rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
+//  rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
+  rpl_parent_t *p = find_parent_in_dag(dag,addr);
   if(p != NULL && p->dag == dag) {
     return p;
   }
