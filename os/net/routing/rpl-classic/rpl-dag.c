@@ -983,13 +983,54 @@ rpl_add_parent(rpl_dag_t *dag, rpl_dio_t *dio, uip_ipaddr_t *addr)
   return p;
 }
 /*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/**
+ * \brief Find a parent in a specific DAG, given the parent's IP address.
+ * \param dag The DAG the parent must belong to.
+ * \param addr The IP address of the potential parent.
+ * \return A pointer to the rpl_parent_t struct if found and in the correct
+ *         DAG, otherwise NULL.
+ *
+ * This function first finds the general neighbor entry to get its link-layer
+ * address, then uses that to look up the specific RPL parent entry in the
+ * rpl_parents table. Finally, it validates that the found parent belongs
+ * to the specified DAG.
+ */
 static rpl_parent_t *
-find_parent_any_dag_any_instance(uip_ipaddr_t *addr)
+find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
 {
+  /* Step 1: Find the neighbor in the generic DS6 neighbor cache */
   uip_ds6_nbr_t *ds6_nbr = uip_ds6_nbr_lookup(addr);
+  if(ds6_nbr == NULL) {
+    /* Not even a neighbor, so cannot be a parent. */
+    return NULL;
+  }
+
+  /* Step 2: Get the Link-Layer address from the DS6 neighbor entry */
   const uip_lladdr_t *lladdr = uip_ds6_nbr_get_ll(ds6_nbr);
-  return nbr_table_get_from_lladdr(rpl_parents, (linkaddr_t *)lladdr);
+  if(lladdr == NULL) {
+    return NULL;
+  }
+
+  /* Step 3: Look up the parent in the dedicated RPL parent table (rpl_parents) */
+  /* This is the key step from your original function. */
+  rpl_parent_t *parent = nbr_table_get_from_lladdr(rpl_parents, (const linkaddr_t *)lladdr);
+  if(parent == NULL) {
+    /* This neighbor exists but is not currently registered as an RPL parent. */
+    return NULL;
+  }
+
+  /* Step 4: THE CRITICAL CHECK */
+  /* We found an RPL parent entry. Now, verify it belongs to the correct DAG. */
+  if(parent->dag != dag) {
+    /* This neighbor IS a parent, but for a different instance/DAG. Ignore it. */
+    return NULL;
+  }
+
+  /* If we reach here, we have found the correct parent in the correct DAG. */
+  return parent;
 }
+/*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------
       Instance-aware function to provide an alternative to above */
 static rpl_parent_t *
@@ -1002,7 +1043,7 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
 
         // THE CRITICAL CHECK: Ensure the parent found in the neighbor
         // entry belongs to the specific DAG we are operating on.
-        if(nbr->rpl_parent.dag != dag) {
+        if(nbr-> .dag != dag) {
                 return NULL; // This neighbor is a parent, but in the wrong DODAG.
         }
 
