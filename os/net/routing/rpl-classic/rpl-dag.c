@@ -998,7 +998,7 @@ find_parent_any_dag_any_instance(uip_ipaddr_t *addr)
  * \return A pointer to the rpl_parent_t struct if found and in the correct
  *         DAG, otherwise NULL.
  *
- * This function first finds the general neighbor entry to get its link-layer
+ * This function first finds the general neighbour entry to get its link-layer
  * address, then uses that to look up the specific RPL parent entry in the
  * rpl_parents table. Finally, it validates that the found parent belongs
  * to the specified DAG.
