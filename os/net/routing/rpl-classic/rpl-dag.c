@@ -1292,9 +1292,9 @@ rpl_select_parent(rpl_dag_t *dag)
 void
 rpl_remove_parent(rpl_parent_t *parent)
 {
-  LOG_INFO("Removing parent ");
-  LOG_INFO_6ADDR(rpl_parent_get_ipaddr(parent));
-  LOG_INFO_("\n");
+  LOG_DBG("Removing parent ");
+  LOG_DBG_6ADDR(rpl_parent_get_ipaddr(parent));
+  LOG_DBG_("\n");
 
   rpl_nullify_parent(parent);
 
