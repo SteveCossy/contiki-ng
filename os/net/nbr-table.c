@@ -41,7 +41,14 @@
 #include "net/nbr-table.h"
 
 #define DEBUG 1 // DEBUG_NONE
+#include "contiki.h"
 #include "net/ipv6/uip-debug.h"
+
+// Added so we can debug the rpl_parents table
+#define LOG_LEVEL LOG_LEVEL_DBG
+#include "sys/log.h"
+#include "net/routing/rpl-classic/rpl-private.h" // For rpl_parents and rpl_parent_t
+#include "net/ipv6/uiplib.h"                     // For uiplib_ipaddr_snprint
 
 #if DEBUG
 #include "sys/ctimer.h"
@@ -459,6 +466,36 @@ nbr_table_get_from_lladdr(const nbr_table_t *table, const linkaddr_t *lladdr)
 int
 nbr_table_remove(const nbr_table_t *table, const void *item)
 {
+
+
+  /* --- BEGIN DEBUG CODE --- */
+
+  // First, check if this is the table we are interested in.
+  // We need to get the global rpl_parents table to compare against.
+  extern nbr_table_t *rpl_parents; // Declare we are using this global variable
+
+  if(table == rpl_parents) {
+    // We've confirmed it's the RPL parent table. Now we can safely cast the item.
+    rpl_parent_t *p = (rpl_parent_t *)item;
+    
+    // Create a buffer to hold the string representation of the IP address.
+    char ipaddr_buf[UIPLIB_IPV6_MAX_STR_LEN];
+    const uip_ipaddr_t *parent_ipaddr = rpl_parent_get_ipaddr(p);
+
+    if(parent_ipaddr != NULL) {
+      uiplib_ipaddr_snprint(ipaddr_buf, sizeof(ipaddr_buf), parent_ipaddr);
+    } else {
+      snprintf(ipaddr_buf, sizeof(ipaddr_buf), "UNKNOWN");
+    }
+
+    LOG_DBG("RPL-DBG: Removing parent %s from instance ID %u (DAG: %p)\n",
+             ipaddr_buf,
+             p->dag->instance->instance_id,
+             p->dag);
+  }
+
+  /* --- END DEBUG CODE --- */
+
   int ret = nbr_set_bit(used_map, table, item, 0);
   nbr_set_bit(locked_map, table, item, 0);
   return ret;
