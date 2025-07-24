@@ -45,7 +45,23 @@
 #include "net/ipv6/uip-debug.h"
 
 // Added so we can debug the rpl_parents table
+#define LOG_MODULE "RPL"
 #define LOG_LEVEL LOG_LEVEL_DBG
+#include "contiki.h"
+#include "net/link-stats.h"
+#include "net/routing/rpl-classic/rpl.h"
+#include "net/routing/rpl-classic/rpl-private.h"
+#include "net/routing/rpl-classic/rpl-dag-root.h"
+#include "net/ipv6/uip.h"
+#include "net/ipv6/uip-nd6.h"
+#include "net/ipv6/uip-ds6-nbr.h"
+#include "net/ipv6/uip-debug.h" // added for display_dodag & display_routing_table
+#include "net/ipv6/uip-ds6-route.h" // added for display_routing_table
+#include "net/nbr-table.h"
+#include "net/ipv6/multicast/uip-mcast6.h"
+#include "lib/list.h"
+#include "lib/memb.h"
+#include "sys/ctimer.h"
 #include "sys/log.h"
 #include "net/routing/rpl-classic/rpl-private.h" // For rpl_parents and rpl_parent_t
 #include "net/ipv6/uiplib.h"                     // For uiplib_ipaddr_snprint
