@@ -474,8 +474,7 @@ nbr_table_remove(const nbr_table_t *table, const void *item)
   // First, check if this is the table we are interested in.
   // We need to get the global rpl_parents table to compare against.
   extern nbr_table_t *rpl_parents; // Declare we are using this global variable
-  printf("nbr_table_remove was called");
-  if(table == rpl_parents) {
+  if(table->index == rpl_parents->index) {
     // We've confirmed it's the RPL parent table. Now we can safely cast the item.
     rpl_parent_t *p = (rpl_parent_t *)item;
     
@@ -494,7 +493,9 @@ nbr_table_remove(const nbr_table_t *table, const void *item)
              p->dag->instance->instance_id,
              p->dag);
   } else { // table not rpl_parents
-    LOG_DBG("RPL-DBG: Removing something other than a parent\n");
+    LOG_DBG("RPL-DBG: Removing %i, rpl_parents is %i.\n",
+      table->index,
+      rpl_parents->index);
   }
   /* --- END DEBUG CODE --- */
 
