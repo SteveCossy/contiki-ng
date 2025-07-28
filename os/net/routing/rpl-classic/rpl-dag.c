@@ -1228,9 +1228,9 @@ best_parent(rpl_dag_t *dag, int fresh_only)
     /* Exclude parents that are from other DAGs or are announcing an
        infinite rank. */
     if(p->dag != dag || p->rank == RPL_INFINITE_RANK ||
-       p->rank < ROOT_RANK(dag->instance)) {
+      p->rank < ROOT_RANK(dag->instance)) {
+      LOG_WARN("Parent has invalid rank or wrong dag\n");
       if(p->rank < ROOT_RANK(dag->instance)) {
-        LOG_WARN("Parent has invalid rank\n");
       }
       continue;
     }
