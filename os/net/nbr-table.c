@@ -494,7 +494,7 @@ nbr_table_remove(const nbr_table_t *table, const void *item)
              p->dag->instance->instance_id,
              p->dag);
   } else { // table not rpl_parents
-    LOG_DBG("RPL-DBG: Removing something other than a parent\n")
+    LOG_DBG("RPL-DBG: Removing something other than a parent\n");
   }
   /* --- END DEBUG CODE --- */
 
