@@ -1208,6 +1208,7 @@ best_parent(rpl_dag_t *dag, int fresh_only)
   rpl_parent_t *best = NULL;
   LOG_DBG("Considering dag as parent in 'best_parent':");
   LOG_DBG_6ADDR(&dag->dag_id);
+  LOG_DBG_("instance ID %u",dag->instance->instance_id);
   LOG_DBG_("\n");
 
   if(dag == NULL || dag->instance == NULL || dag->instance->of == NULL) {
@@ -1220,7 +1221,8 @@ best_parent(rpl_dag_t *dag, int fresh_only)
 
     LOG_DBG("Considering parent: ");
     LOG_DBG_6ADDR(&p->dag->dag_id);
-    LOG_DBG_(", Rank: %u, out of %u \n", p->dag->rank, p->dag->min_rank );
+    LOG_DBG_(", Rank: %u, out of %u, inst: %u\n",
+         p->dag->rank, p->dag->min_rank,p->dag->instance->instance_id );
     LOG_DBG_("\n");
 //    LOG_DBG_(", Parent Rank: %u\n", p->rank );
 //    LOG_DBG_(", Parent Rank: %u, out of %u\n", p->rank, p->min_rank );
