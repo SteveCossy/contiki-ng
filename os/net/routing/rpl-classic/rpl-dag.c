@@ -1736,38 +1736,51 @@ void
 rpl_recalculate_ranks(void)
 {
   rpl_parent_t *p;
+  int i;
+  extern rpl_instance_t instance_table[];
 
   /*
    * We recalculate ranks when we receive feedback from the system rather
    * than RPL protocol messages. This periodical recalculation is called
    * from a timer in order to keep the stack depth reasonably low.
    */
-  LOG_DBG("--- Recalculating all ranks ---\n");
-  p = nbr_table_head(rpl_parents);
-  while(p != NULL) {
-    /* DEBUG - log every parent we consider */
-    if(p->dag != NULL && p->dag->instance != NULL) {
-      LOG_DBG("Considering parent ");
-      LOG_DBG_LLADDR(rpl_get_parent_lladdr(p));
-      LOG_DBG_(" for instance %u\n", p->dag->instance->instance_id);
-    } else {
-      LOG_DBG("Considering parent ");
-      LOG_DBG_LLADDR(rpl_get_parent_lladdr(p));
-      LOG_DBG_(" with no valid DAG/instance\n");
-    }
+  for(i = 0; i < RPL_MAX_INSTANCES; i++)
+    {
+    LOG_DBG("Recalculating all ranks: instance %u, id %u.\n", i, instance_table[i].instance_id );
 
-    if(p->dag != NULL && p->dag->instance && (p->flags & RPL_PARENT_FLAG_UPDATED)) {
-      /* This is the one we are actually processing */
-      LOG_INFO("--> Processing UPDATED parent ");
-      LOG_INFO_LLADDR(rpl_get_parent_lladdr(p));
-      LOG_INFO_(" for instance %u\n", p->dag->instance->instance_id);
+    p = nbr_table_head(rpl_parents);
+    while(p != NULL) {
+      LOG_DBG("Considering instance_id %u. Parent dag is in %u.\n",
+          instance_table[i].instance_id,
+          p->dag->instance->instance_id
+         );
+      if(p->dag->instance->instance_id == instance_table[i].instance_id)
+      {
+        /* DEBUG - log every parent we consider */
+        if(p->dag != NULL && p->dag->instance != NULL) {
+          LOG_DBG("Considering parent ");
+          LOG_DBG_LLADDR(rpl_get_parent_lladdr(p));
+          LOG_DBG_(" for instance %u\n", p->dag->instance->instance_id);
+        } else {
+          LOG_DBG("Considering parent ");
+          LOG_DBG_LLADDR(rpl_get_parent_lladdr(p));
+          LOG_DBG_(" with no valid DAG/instance\n");
+        }
 
-      p->flags &= ~RPL_PARENT_FLAG_UPDATED;
-      if(!rpl_process_parent_event(p->dag->instance, p)) {
-        LOG_DBG("A parent was dropped\n");
+        if(p->dag != NULL && p->dag->instance && (p->flags & RPL_PARENT_FLAG_UPDATED)) {
+          /* This is the one we are actually processing */
+          LOG_INFO("--> Processing UPDATED parent ");
+          LOG_INFO_LLADDR(rpl_get_parent_lladdr(p));
+          LOG_INFO_(" for instance %u\n", p->dag->instance->instance_id);
+
+          p->flags &= ~RPL_PARENT_FLAG_UPDATED;
+          if(!rpl_process_parent_event(p->dag->instance, p)) {
+            LOG_DBG("A parent was dropped\n");
+          }
+        }
       }
+      p = nbr_table_next(rpl_parents, p);
     }
-    p = nbr_table_next(rpl_parents, p);
   }
 }
 /*---------------------------------------------------------------------------*/
