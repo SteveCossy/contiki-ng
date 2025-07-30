@@ -161,8 +161,8 @@ typedef struct rpl_route_entry {
 } rpl_route_entry_t;
 #endif /* UIP_DS6_ROUTE_STATE_TYPE */
 
-/** \brief The neighbor routes hold a list of routing table entries
-    that are attached to a specific neihbor. */
+/** \brief The neighbour routes hold a list of routing table entries
+    that are attached to a specific neighbour. */
 struct uip_ds6_route_neighbor_routes {
   LIST_STRUCT(route_list);
 };
