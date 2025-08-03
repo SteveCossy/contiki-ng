@@ -43,7 +43,7 @@
 
 /* DAG Mode of Operation */
 #define RPL_MOP_NO_DOWNWARD_ROUTES      0
-#define RPL_MOP_NON_STORING             0 // Changed from 1 to 0 - 22 July 2025
+#define RPL_MOP_NON_STORING             1 // Changed from 1 to 0 - 22 July 2025 & back 4 Aug
 #define RPL_MOP_STORING_NO_MULTICAST    2
 #define RPL_MOP_STORING_MULTICAST       3
 
