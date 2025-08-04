@@ -44,11 +44,14 @@
 /* Change the MOP to non-storing, as described in 
 * https://github.com/contiki-ng/contiki-ng/blob/develop/doc/programming/RPL.md#mode-of-operation-0-mop0
 */
+/* turns out this was non routing mode!  Oops
+*#define RPL_CONF_WITH_STORING           0
+*#define RPL_CONF_WITH_NON_STORING       0
+*#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
+*/
 
-#define RPL_CONF_WITH_STORING           0
-#define RPL_CONF_WITH_NON_STORING       0
-#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
-
+//Non-storing routing mode is
+#define RPL_CONF_MOP RPL_MOP_NON_STORING
 
 /* DAG Mode of Operation */
 #define RPL_MOP_NO_DOWNWARD_ROUTES      0
