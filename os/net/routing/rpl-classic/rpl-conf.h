@@ -41,9 +41,18 @@
 #include "contiki.h"
 #include "net/ipv6/multicast/uip-mcast6.h"
 
+/* Change the MOP to non-storing, as described in 
+* https://github.com/contiki-ng/contiki-ng/blob/develop/doc/programming/RPL.md#mode-of-operation-0-mop0
+*/
+
+#define RPL_CONF_WITH_STORING           0
+#define RPL_CONF_WITH_NON_STORING       0
+#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
+
+
 /* DAG Mode of Operation */
 #define RPL_MOP_NO_DOWNWARD_ROUTES      0
-#define RPL_MOP_NON_STORING             1 // Changed from 1 to 0 - 22 July 2025 & back 4 Aug
+#define RPL_MOP_NON_STORING             1 // Tried changing this but it made no (obvious) difference
 #define RPL_MOP_STORING_NO_MULTICAST    2
 #define RPL_MOP_STORING_MULTICAST       3
 
