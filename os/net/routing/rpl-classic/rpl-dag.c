@@ -499,7 +499,9 @@ nullify_parents(rpl_dag_t *dag, rpl_rank_t minimum_rank)
   rpl_parent_t *p;
 
   LOG_INFO("Nullifying parents (minimum rank %u)\n", minimum_rank);
-  /* not found in 10-RPL-20250729103859.txt*/
+  /* not found in 10-RPL-20250729103859.txt
+  * Lots of times in 10-RPL-20250804132307.txt | wc -l 34235
+  */
 
   p = nbr_table_head(rpl_parents);
   while(p != NULL) {
