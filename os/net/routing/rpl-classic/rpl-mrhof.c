@@ -223,6 +223,12 @@ best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
     return p1_is_acceptable ? p1 : NULL;
   }
 
+  LOG_DBG("Running MRHOF to compare ");
+  LOG_DBG_6ADDR(&p1->dag->dag_id);
+  LOG_DBG_(" and ");
+  LOG_DBG_6ADDR(&p2->dag->dag_id);
+  LOG_DBG_("\n");
+
   dag = p1->dag; /* Both parents are in the same DAG. */
   p1_cost = parent_path_cost(p1);
   p2_cost = parent_path_cost(p2);
