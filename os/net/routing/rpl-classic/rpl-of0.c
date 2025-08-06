@@ -164,6 +164,9 @@ parent_has_usable_link(rpl_parent_t *p)
 static rpl_parent_t *
 best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
 {
+# include "sys/log.h"
+# define LOG_MODULE "MyRPL-OF0"
+# define LOG_LEVEL LOG_LEVEL_DBG 
   rpl_dag_t *dag;
   uint16_t p1_cost;
   uint16_t p2_cost;
@@ -179,6 +182,12 @@ best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
   if(!p2_is_acceptable) {
     return p1_is_acceptable ? p1 : NULL;
   }
+
+  LOG_DBG("Running OF0 to compare ");
+  LOG_DBG_6ADDR(&p1.dag->dag_id);
+  LOG_DBG_(" and ");
+  LOG_DBG_6ADDR(&p2.dag->dag_id);
+  LOG_DBG_("\n");
 
   dag = p1->dag; /* Both parents are in the same DAG. */
   p1_cost = parent_path_cost(p1);
