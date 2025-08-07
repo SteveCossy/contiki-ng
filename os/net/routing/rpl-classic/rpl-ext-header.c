@@ -58,6 +58,8 @@
 #include <limits.h>
 #include <string.h>
 
+static rpl_instance_t *current_instance_for_hbh = NULL;
+
 /**
  * \brief Finds an active RPL instance that matches a given IPv6 address prefix.
  * \param addr The IPv6 address to check.
@@ -662,17 +664,25 @@ rpl_ext_header_remove(void)
 int
 rpl_ext_header_update(void)
 {
-  rpl_instance_t *instance;
+  rpl_instance_t *instance = NULL
   const uip_ip6addr_t *dest_addr;
 
   // Get the destination address from the global packet buffer.
   // The destination address is in the main IPv6 header.
   dest_addr = &UIP_IP_BUF->destipaddr;
 
-  // Find the current RPL instance for the destination prefix
-  instance = rpl_get_instance_from_prefix(dest_addr);
+  // Try to get the instance from the packet buffer attributes.
+  // This is the most reliable method for locally generated control packets like DIOs.
+  instance = (rpl_instance_t *)packetbuf_addr(PACKETBUF_ADDR_RPL_INSTANCE);
 
-    // 3. Check if we found a valid instance for this packet.
+  // If the instance was not in the packet buffer, fall back to the prefix method.
+  // This will handle forwarded unicast data packets.
+  if(instance == NULL) {
+    dest_addr = &UIP_IP_BUF->destipaddr;
+    instance = rpl_get_instance_from_prefix(dest_addr);
+  }
+
+    // Check if we found a valid instance for this packet.
   if(instance == NULL || instance->current_dag == NULL) {
     // This packet is not for any known RPL DODAG. Do nothing.
     return 0;
