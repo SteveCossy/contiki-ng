@@ -146,7 +146,7 @@ rpl_ext_header_hbh_update(uint8_t *ext_buf, int opt_offset)
      * routes that go through the neighbor that sent the packet to us.
      */
     if(RPL_IS_STORING(instance)) {
-      route = uip_ds6_route_lookup(&UIP_IP_BUF->destipaddr);
+      route = uip_ds6_route_lookup(&UIP_IP_BUF->srcipaddr);
       if(route != NULL) {
         uip_ds6_route_rm(route);
       }
