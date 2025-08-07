@@ -666,26 +666,33 @@ rpl_ext_header_update(void)
 {
   rpl_instance_t *instance = NULL;
   const uip_ip6addr_t *dest_addr;
+  // rpl_dio_t *dio; // Pointer to the DIO structure
+  // uint8_t instance_id;
 
-  // Get the destination address from the global packet buffer.
-  // The destination address is in the main IPv6 header.
-  dest_addr = &UIP_IP_BUF->srcipaddr; // 0807 
-  // Find the current RPL instance for the destination prefix
-  instance = rpl_get_instance_from_prefix(dest_addr); // 0807 
 
-  // 0807 
-  // // Try to get the instance from the packet buffer attributes.
-  // // This is the most reliable method for locally generated control packets like DIOs.
-  // instance = (rpl_instance_t *)packetbuf_addr(PACKETBUF_ADDR_RPL_INSTANCE);
+  //  Check if the packet is an RPL control message.
+  // The IP header's "Next Header" field tells us this.
+  if(UIP_IP_BUF->proto == UIP_PROTO_ICMP6) {
 
-  // // If the instance was not in the packet buffer, fall back to the prefix method.
-  // // This will handle forwarded unicast data packets.
-  // if(instance == NULL) {
-  //   dest_addr = &UIP_IP_BUF->destipaddr;
-  //   instance = rpl_get_instance_from_prefix(dest_addr);
-  // }
+    // It's an ICMPv6 message. Now check if it is a DIO.
+    // We check the 'code' field of the ICMPv6 header against our known constant.
+    if(UIP_ICMP_BUF->icode == RPL_CODE_DIO) {
 
-    // Check if we found a valid instance for this packet.
+      // It's a DIO. The DIO-specific fields start right after the ICMP header.
+      // We can cast the ICMP payload to an rpl_dio_t struct.
+      rpl_dio_t *dio = (rpl_dio_t *)UIP_ICMP_PAYLOAD;
+      
+      // Now, we can safely read the instance ID from the DIO struct.
+      instance = rpl_get_instance(dio->instance_id);
+
+  } 
+  if(instance == NULL) {
+    // It's not a DIO message. Fall back to the destination prefix method for unicast data.
+    dest_addr = &UIP_IP_BUF->destipaddr;
+    instance = rpl_get_instance_from_prefix(dest_addr);
+  }
+
+  // Check if we found a valid instance for this packet.
   if(instance == NULL || instance->current_dag == NULL) {
     // This packet is not for any known RPL DODAG. Do nothing.
     return 0;
