@@ -684,7 +684,7 @@ rpl_ext_header_update(void)
       
       // Now, we can safely read the instance ID from the DIO struct.
       instance = rpl_get_instance(dio->instance_id);
-
+    }
   } 
   if(instance == NULL) {
     // It's not a DIO message. Fall back to the destination prefix method for unicast data.
@@ -702,7 +702,6 @@ rpl_ext_header_update(void)
   LOG_DBG_6ADDR(dest_addr);
   LOG_DBG_("\n");
 
-//  if(default_instance == NULL || default_instance->current_dag == NULL ||
   if(instance == NULL || instance->current_dag == NULL ||
      uip_is_addr_linklocal(&UIP_IP_BUF->destipaddr) ||
      uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
