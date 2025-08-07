@@ -618,6 +618,8 @@ rpl_ext_header_update(void)
     return 1;
   }
 
+  LOG_DBG("rpl_ext_header_update - instance:%u\n",default_instance->instance_id);
+
   if(default_instance->current_dag->rank == ROOT_RANK(default_instance)) {
     /* At the root, remove headers if any, and insert SRH or HBH.
        (SRH is inserted only if the destination is in the DODAG.) */

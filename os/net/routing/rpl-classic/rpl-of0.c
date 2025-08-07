@@ -164,7 +164,6 @@ parent_has_usable_link(rpl_parent_t *p)
 static rpl_parent_t *
 best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
 {
-//#include "sys/log.h" 
   rpl_dag_t *dag;
   uint16_t p1_cost;
   uint16_t p2_cost;
