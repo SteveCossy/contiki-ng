@@ -92,6 +92,12 @@ rpl_get_instance_from_prefix(const uip_ipaddr_t *addr)
        * uip_ipaddr_prefixcmp() returns true if the prefixes match.
        * The DAG's prefix is stored in the dag_id field.
        */
+            // --- BEGIN NEW DEBUG LOG ---
+      LOG_DBG("RPL-PREFIX-CHECK: Comparing dest ");
+      LOG_DBG_6ADDR(addr);
+      LOG_DBG_(" against DAG prefix ");
+      LOG_DBG_6ADDR(&instance->current_dag->dag_id);
+      LOG_DBG_(" with length %u bits\n", instance->current_dag->prefix_info.length);
       if(uip_ipaddr_prefixcmp(&instance->current_dag->dag_id, addr,
                                instance->current_dag->prefix_info.length / 8)) {
         /* We found a match! Return a pointer to this instance. */
