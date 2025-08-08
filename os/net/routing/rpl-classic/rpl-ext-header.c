@@ -98,7 +98,7 @@ rpl_get_instance_from_prefix(const uip_ipaddr_t *addr)
       LOG_DBG_(" against DAG prefix ");
       LOG_DBG_6ADDR(&instance->current_dag->dag_id);
       LOG_DBG_(" with length %u bits\n", instance->current_dag->prefix_info.length);
-      if(uip_ipaddr_prefixcmp(&instance->current_dag->dag_id, addr,
+      if(uip_ipaddr_prefixcmp(&instance->current_dag->prefix_info.prefix, addr,
                                instance->current_dag->prefix_info.length / 8)) {
         /* We found a match! Return a pointer to this instance. */
         LOG_DBG("Found matching instance ID %u for address ", instance->instance_id);
