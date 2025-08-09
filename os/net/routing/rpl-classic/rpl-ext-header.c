@@ -698,7 +698,14 @@ rpl_ext_header_update(void)
     instance = rpl_get_instance_from_prefix(dest_addr);
   }
 
-  LOG_DBG("rpl_ext_header_update - No instance, icode %u IP:",UIP_ICMP_BUF->icode);
+  LOG_DBG("rpl_ext_header_update - ");
+  if(instance == NULL || instance->current_dag == NULL) {
+    LOG_DBG_("No instance")
+  }
+  else {
+    LOG_DBG_("Instance %u",instance->instance_id)
+    }
+  LOG_DBG_(" icode %u IP:",UIP_ICMP_BUF->icode);
   LOG_DBG_6ADDR(dest_addr);
   LOG_DBG_("\n");
 
