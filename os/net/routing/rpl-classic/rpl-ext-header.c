@@ -694,9 +694,13 @@ rpl_ext_header_update(void)
   } 
   if(instance == NULL) {
     // It's not a DIO message. Fall back to the destination prefix method for unicast data.
-    dest_addr = &UIP_IP_BUF->destipaddr;
+    dest_addr = &UIP_IP_BUF->srcipaddr;
     instance = rpl_get_instance_from_prefix(dest_addr);
   }
+
+  LOG_DBG("rpl_ext_header_update - No instance, icode %u IP:",UIP_ICMP_BUF->icode);
+  LOG_DBG_6ADDR(dest_addr);
+  LOG_DBG_("\n");
 
   // Check if we found a valid instance for this packet.
   if(instance == NULL || instance->current_dag == NULL) {
