@@ -692,14 +692,15 @@ rpl_ext_header_update(void)
     LOG_DBG_("found instance %u.\n",rpl_instance_id);
     // Now, find the instance that corresponds to this ID.
     instance = rpl_get_instance(rpl_instance_id);
-    
+    LOG_DBG("rpl_ext_header_update found %u, instance id:%u.\n",
+      rpl_instance_id, instance->instance_id);
     // It's good practice to also check the ICMPv6 type, though not strictly necessary
     // if we trust the instance ID.
-    // if(UIP_ICMP_BUF->type != RPL_CODE_DIS && UIP_ICMP_BUF->type != RPL_CODE_DIO &&
-    //    UIP_ICMP_BUF->type != RPL_CODE_DAO && UIP_ICMP_BUF->type != RPL_CODE_DAO_ACK) {
-    //   /* This is some other ICMPv6 message, not RPL. Clear the instance. */
-    //   instance = NULL;
-    //}
+    if(UIP_ICMP_BUF->type != RPL_CODE_DIS && UIP_ICMP_BUF->type != RPL_CODE_DIO &&
+       UIP_ICMP_BUF->type != RPL_CODE_DAO && UIP_ICMP_BUF->type != RPL_CODE_DAO_ACK) {
+      /* This is some other ICMPv6 message, not RPL. Clear the instance. */
+      instance = NULL;
+    }
   } else {
     LOG_DBG_("\n");
   }
@@ -710,15 +711,15 @@ rpl_ext_header_update(void)
     instance = rpl_get_instance_from_prefix(dest_addr);
   }
 
-  LOG_DBG("\nrpl_ext_header_update - ");
+  LOG_DBG("rpl_ext_header_update - ");
   if(instance == NULL || instance->current_dag == NULL) {
     LOG_DBG_("No instance");
   }
   else {
     LOG_DBG_("Instance %u",instance->instance_id);
     }
-  LOG_DBG_(" icode %u IP:",UIP_ICMP_BUF->icode);
-  LOG_DBG_6ADDR(dest_addr);
+  // LOG_DBG_(" icode %u IP:",UIP_ICMP_BUF->icode);
+  // LOG_DBG_6ADDR(dest_addr);
   LOG_DBG_("\n");
 
   // Check if we found a valid instance for this packet.
