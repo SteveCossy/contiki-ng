@@ -164,13 +164,6 @@ parent_path_cost(rpl_parent_t *p)
   }
 #else /* RPL_WITH_MC */
   base = p->rank;
-#endif /* RPL_WITH_MC */
-
-  /* path cost upper bound: 0xffff */
-  return MIN((uint32_t)base + parent_link_metric(p), 0xffff);
-}
-/*---------------------------------------------------------------------------*/
-static rpl_rank_t
 rank_via_parent(rpl_parent_t *p)
 {
   uint16_t min_hoprankinc;
@@ -325,7 +318,7 @@ rpl_of_t rpl_mrhof = {
   parent_link_metric,
   parent_has_usable_link,
   parent_path_cost,
-  rank_via_parent,
+//  rank_via_parent,
   best_parent,
   best_dag,
   update_metric_container,

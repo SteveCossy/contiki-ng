@@ -704,7 +704,7 @@ rpl_ext_header_update(void)
     return 0;
   }
 
-  LOG_DBG("rpl_ext_header_update - int:%u IP:",default_instance->instance_id);
+  LOG_DBG("rpl_ext_header_update - int:%u IP:",instance->instance_id);
   LOG_DBG_6ADDR(dest_addr);
   LOG_DBG_("\n");
 
