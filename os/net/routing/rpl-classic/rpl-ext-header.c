@@ -93,10 +93,10 @@ rpl_get_instance_from_prefix(const uip_ipaddr_t *addr)
        * The DAG's prefix is stored in the dag_id field.
        */
             // --- BEGIN NEW DEBUG LOG ---
-      LOG_DBG("RPL-PREFIX-CHECK: Comparing dest ");
+      LOG_DBG("RPL-PREFIX-CHECK: Comparing ");
       LOG_DBG_6ADDR(addr);
       LOG_DBG_(" against DAG prefix ");
-    //  LOG_DBG_6ADDR(&instance->current_dag->dag_id);
+ //     LOG_DBG_6ADDR(&instance->current_dag->dag_id);
       LOG_DBG_6ADDR(&instance->current_dag->prefix_info.prefix);
       LOG_DBG_(" with length %u bits\n", instance->current_dag->prefix_info.length);
       if(uip_ipaddr_prefixcmp(&instance->current_dag->prefix_info.prefix, addr,
@@ -701,10 +701,10 @@ rpl_ext_header_update(void)
 
   LOG_DBG("rpl_ext_header_update - ");
   if(instance == NULL || instance->current_dag == NULL) {
-    LOG_DBG_("No instance")
+    LOG_DBG_("No instance");
   }
   else {
-    LOG_DBG_("Instance %u",instance->instance_id)
+    LOG_DBG_("Instance %u",instance->instance_id);
     }
   LOG_DBG_(" icode %u IP:",UIP_ICMP_BUF->icode);
   LOG_DBG_6ADDR(dest_addr);
