@@ -680,7 +680,7 @@ rpl_ext_header_update(void)
   // Check if this is an ICMPv6 packet destined for an RPL port.
   // Note: This check applies to both incoming packets (which we are not handling here)
   // and outgoing packets (which we are).
-    LOG_DBG("rpl_ext_header_update - checking for ICMPv6 proto %u",UIP_IP_BUF->proto);
+    LOG_DBG("rpl_ext_header_update - checking for ICMPv6 proto %u, ",UIP_IP_BUF->proto);
   if(UIP_IP_BUF->proto == UIP_PROTO_ICMP6) {
     // It's an ICMPv6 packet. Let's inspect the payload to see if it's RPL.
     // The RPL message body starts right after the ICMPv6 header.
@@ -689,18 +689,21 @@ rpl_ext_header_update(void)
     // Based on rfc6550, the first byte of ANY RPL message is the instance_id.
     // This is confirmed by the logic in dio_input().
     rpl_instance_id = rpl_payload[0];
-LOG_DBG_("found instance %u.",rpl_instance_id);
+    LOG_DBG_("found instance %u.\n",rpl_instance_id);
     // Now, find the instance that corresponds to this ID.
     instance = rpl_get_instance(rpl_instance_id);
     
     // It's good practice to also check the ICMPv6 type, though not strictly necessary
     // if we trust the instance ID.
-    if(UIP_ICMP_BUF->type != RPL_CODE_DIS && UIP_ICMP_BUF->type != RPL_CODE_DIO &&
-       UIP_ICMP_BUF->type != RPL_CODE_DAO && UIP_ICMP_BUF->type != RPL_CODE_DAO_ACK) {
-      /* This is some other ICMPv6 message, not RPL. Clear the instance. */
-      instance = NULL;
-    }
-  } 
+    // if(UIP_ICMP_BUF->type != RPL_CODE_DIS && UIP_ICMP_BUF->type != RPL_CODE_DIO &&
+    //    UIP_ICMP_BUF->type != RPL_CODE_DAO && UIP_ICMP_BUF->type != RPL_CODE_DAO_ACK) {
+    //   /* This is some other ICMPv6 message, not RPL. Clear the instance. */
+    //   instance = NULL;
+    //}
+  } else {
+    LOG_DBG_("\n");
+  }
+
   if(instance == NULL) {
     // It's not a DIO message. Fall back to the destination prefix method for unicast data.
     dest_addr = &UIP_IP_BUF->srcipaddr;
