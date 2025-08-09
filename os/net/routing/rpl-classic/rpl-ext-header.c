@@ -689,7 +689,7 @@ rpl_ext_header_update(void)
     // Based on rfc6550, the first byte of ANY RPL message is the instance_id.
     // This is confirmed by the logic in dio_input().
     rpl_instance_id = rpl_payload[0];
-
+LOG_DBG_("found instance %u.",rpl_instance_id);
     // Now, find the instance that corresponds to this ID.
     instance = rpl_get_instance(rpl_instance_id);
     
@@ -707,7 +707,7 @@ rpl_ext_header_update(void)
     instance = rpl_get_instance_from_prefix(dest_addr);
   }
 
-  LOG_DBG("rpl_ext_header_update - ");
+  LOG_DBG("\nrpl_ext_header_update - ");
   if(instance == NULL || instance->current_dag == NULL) {
     LOG_DBG_("No instance");
   }
