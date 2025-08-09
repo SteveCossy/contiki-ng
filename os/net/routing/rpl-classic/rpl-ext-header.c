@@ -671,26 +671,34 @@ rpl_ext_header_remove(void)
 int
 rpl_ext_header_update(void)
 {
+
   rpl_instance_t *instance = NULL;
-  const uip_ip6addr_t *dest_addr;
-  // rpl_dio_t *dio; // Pointer to the DIO structure
-  // uint8_t instance_id;
+  const uip_ipaddr_t *dest_addr;
+  uint8_t *rpl_payload; // A pointer to the start of the RPL message
+  uint8_t rpl_instance_id;
 
-
-  //  Check if the packet is an RPL control message.
-  // The IP header's "Next Header" field tells us this.
+  // Check if this is an ICMPv6 packet destined for an RPL port.
+  // Note: This check applies to both incoming packets (which we are not handling here)
+  // and outgoing packets (which we are).
+    LOG_DBG("rpl_ext_header_update - checking for ICMPv6 proto %u",UIP_IP_BUF->proto);
   if(UIP_IP_BUF->proto == UIP_PROTO_ICMP6) {
+    // It's an ICMPv6 packet. Let's inspect the payload to see if it's RPL.
+    // The RPL message body starts right after the ICMPv6 header.
+    rpl_payload = UIP_ICMP_PAYLOAD;
 
-    // It's an ICMPv6 message. Now check if it is a DIO.
-    // We check the 'code' field of the ICMPv6 header against our known constant.
-    if(UIP_ICMP_BUF->icode == RPL_CODE_DIO) {
+    // Based on rfc6550, the first byte of ANY RPL message is the instance_id.
+    // This is confirmed by the logic in dio_input().
+    rpl_instance_id = rpl_payload[0];
 
-      // It's a DIO. The DIO-specific fields start right after the ICMP header.
-      // We can cast the ICMP payload to an rpl_dio_t struct.
-      rpl_dio_t *dio = (rpl_dio_t *)UIP_ICMP_PAYLOAD;
-      
-      // Now, we can safely read the instance ID from the DIO struct.
-      instance = rpl_get_instance(dio->instance_id);
+    // Now, find the instance that corresponds to this ID.
+    instance = rpl_get_instance(rpl_instance_id);
+    
+    // It's good practice to also check the ICMPv6 type, though not strictly necessary
+    // if we trust the instance ID.
+    if(UIP_ICMP_BUF->type != RPL_CODE_DIS && UIP_ICMP_BUF->type != RPL_CODE_DIO &&
+       UIP_ICMP_BUF->type != RPL_CODE_DAO && UIP_ICMP_BUF->type != RPL_CODE_DAO_ACK) {
+      /* This is some other ICMPv6 message, not RPL. Clear the instance. */
+      instance = NULL;
     }
   } 
   if(instance == NULL) {
