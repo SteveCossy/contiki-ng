@@ -737,10 +737,22 @@ rpl_ext_header_update(void)
   LOG_DBG_6ADDR(dest_addr);
   LOG_DBG_("\n");
 
-  if(instance == NULL || instance->current_dag == NULL ||
-     uip_is_addr_linklocal(&UIP_IP_BUF->destipaddr) ||
-     uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
-    return 1;
+  // if(instance == NULL || instance->current_dag == NULL ||
+  //    uip_is_addr_linklocal(&UIP_IP_BUF->destipaddr) ||
+  //    uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
+  //   return 1;
+  // }
+  /* Stop processing for packets that we are originating and
+  * sending to a link-local/multicast address. For all other
+  * packets (incoming, or unicast we are forwarding),
+  * we must continue processing.*/
+  if(uip_ds6_is_my_addr(&UIP_IP_BUF->srcipaddr)) {
+    /* This is a packet we are sending. */
+    if(uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
+      /* We are sending a multicast packet (like a DIO). The HBH has
+        * been added; no more processing needed from this function. */
+      return 1;
+    }
   }
 
   if(instance->current_dag->rank == ROOT_RANK(instance)) {
