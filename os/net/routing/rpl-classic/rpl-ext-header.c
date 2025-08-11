@@ -712,7 +712,7 @@ rpl_ext_header_update(void)
 
   if(instance == NULL) {
     // It's not a DIO message. Fall back to the destination prefix method for unicast data.
-    dest_addr = &UIP_IP_BUF->srcipaddr;
+    dest_addr = &UIP_IP_BUF->destipaddr;
     instance = rpl_get_instance_from_prefix(dest_addr);
   }
 
