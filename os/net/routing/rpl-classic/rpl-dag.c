@@ -890,12 +890,14 @@ void
 rpl_set_default_instance(rpl_instance_t *instance)
 {
   default_instance = instance;
+  LOG_INFO("default_instance set to %u.",instance->instance_id)
 }
 /*---------------------------------------------------------------------------*/
 rpl_instance_t *
 rpl_get_default_instance(void)
 {
   return default_instance;
+  LOG_INFO("default_instance get.")
 }
 /*---------------------------------------------------------------------------*/
 void
