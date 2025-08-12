@@ -50,8 +50,12 @@
 *#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
 */
 
-//Non-storing routing mode is
-#define RPL_CONF_MOP RPL_MOP_NON_STORING
+// Non-storing routing mode is
+// #define RPL_CONF_MOP RPL_MOP_NON_STORING
+// Storing routing mode is (testing)
+#define RPL_CONF_MOP RPL_MOP_STORING_MULTICAST
+// There is also
+// #define RPL_CONF_MOP RPL_MOP_STORING_NO_MULTICAST
 
 /* DAG Mode of Operation */
 #define RPL_MOP_NO_DOWNWARD_ROUTES      0
