@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1754956167.29197 "/home/stevecos/data/rpl_table.tex" "rpl_table.pdf" "rpl_table" 1754956167.49269 0
+["pdflatex"] 1754957575.04272 "/home/stevecos/data/rpl_table.tex" "rpl_table.pdf" "rpl_table" 1754957575.25757 0
   "/etc/texmf/texmf.cnf" 1749524910 41417 52778f1c32b333fc8558c3678a0dc206 ""
-  "/home/stevecos/data/rpl_table.tex" 1754956165.89062 1126 8132e0c63f8e9ab6fab70d58fd1ae7df ""
+  "/home/stevecos/data/rpl_table.tex" 1754957572.8495 1134 e6a1bdff14add00a320b1d84b84de83b ""
   "/usr/pkg/share/texmf-dist/fonts/map/fontname/texfonts.map" 1749535882 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/pkg/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1749731575 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/pkg/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1749731575 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -24,7 +24,7 @@
   "/usr/pkg/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1749544195 30366 13daaaa774357bc2a262523ba6a04bac ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1753397656 3658076 433b79a69db6851b9a82d91270c6f410 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1749783441 3121482 3942e6b9090ca49e9bc757fa9ebef9c1 ""
-  "rpl_table.aux" 1754956167.47048 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "rpl_table.aux" 1754957575.23351 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
   (generated)
   "rpl_table.aux"
   "rpl_table.log"
