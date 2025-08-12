@@ -59,6 +59,64 @@
 #include <string.h>
 
 /*---------------------------------------------------------------------------*/
+/**
+ * \brief Finds an active RPL instance that matches a given IPv6 address prefix.
+ * \param addr The IPv6 address to check.
+ * \return A pointer to the matching rpl_instance_t, or NULL if no match is found.
+ *
+ * This function iterates through the global instance_table and compares the
+ * prefix of each instance's DODAG with the provided IPv6 address. This is
+ * a crucial helper for making logic instance-aware in a multi-DODAG environment.
+ */
+rpl_instance_t *
+rpl_get_instance_from_prefix(const uip_ipaddr_t *addr)
+{
+  int i;
+  rpl_instance_t *instance;
+
+  if(addr == NULL) {
+    return NULL;
+  }
+
+  /* Iterate through all possible instance slots */
+  for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
+    instance = &instance_table[i];
+    /*
+     * Check if the instance is in use and has a valid DAG configured.
+     * The DAG contains the prefix information.
+     */
+    if(instance->used && instance->current_dag != NULL) {
+      /*
+       * Compare the prefix of the address with the prefix of the DAG.
+       * uip_ipaddr_prefixcmp() returns true if the prefixes match.
+       * The DAG's prefix is stored in the dag_id field.
+       */
+            // --- BEGIN NEW DEBUG LOG ---
+      LOG_DBG("RPL-PREFIX-CHECK: Comparing ");
+      LOG_DBG_6ADDR(addr);
+      LOG_DBG_(" against DAG prefix ");
+ //     LOG_DBG_6ADDR(&instance->current_dag->dag_id);
+      LOG_DBG_6ADDR(&instance->current_dag->prefix_info.prefix);
+      LOG_DBG_(" with length %u bits\n", instance->current_dag->prefix_info.length);
+      if(uip_ipaddr_prefixcmp(&instance->current_dag->prefix_info.prefix, addr,
+                               instance->current_dag->prefix_info.length / 8)) {
+        /* We found a match! Return a pointer to this instance. */
+        LOG_DBG("Found matching instance ID %u for address ", instance->instance_id);
+        LOG_DBG_6ADDR(addr);
+        LOG_DBG_("\n");
+        return instance;
+      }
+    }
+  }
+
+  /* If we get here, no matching instance was found. */
+  LOG_WARN("No matching RPL instance found for address ");
+  LOG_WARN_6ADDR(addr);
+  LOG_WARN_("\n");
+  return NULL;
+}
+
+/*---------------------------------------------------------------------------*/
 int
 rpl_ext_header_hbh_update(uint8_t *ext_buf, int opt_offset)
 {
@@ -612,38 +670,66 @@ rpl_ext_header_remove(void)
 int
 rpl_ext_header_update(void)
 {
-  if(default_instance == NULL || default_instance->current_dag == NULL ||
-     uip_is_addr_linklocal(&UIP_IP_BUF->destipaddr) ||
-     uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
-    return 1;
+  rpl_instance_t *instance = NULL;
+
+  /*
+   * This function is called for both outgoing and forwarded packets.
+   * We must determine the correct RPL instance for the packet in flight.
+   */
+
+  /* Step 1: Check if the packet is an RPL ICMPv6 control message.
+     If so, we can get the instance ID directly from the payload. */
+  if(UIP_IP_BUF->proto == UIP_PROTO_ICMP6) {
+    /* Per rfc6550, the first byte of ANY RPL message payload is the instance ID. */
+    uint8_t rpl_instance_id = UIP_ICMP_PAYLOAD[0];
+    instance = rpl_get_instance(rpl_instance_id);
+
+    /* Safety check: ensure it's a valid RPL code and we found a local instance. */
+    if(instance == NULL ||
+       (UIP_ICMP_BUF->icode != RPL_CODE_DIS && UIP_ICMP_BUF->icode != RPL_CODE_DIO &&
+        UIP_ICMP_BUF->icode != RPL_CODE_DAO && UIP_ICMP_BUF->icode != RPL_CODE_DAO_ACK)) {
+      instance = NULL; /* Not a valid RPL control message we can handle. */
+    }
   }
 
-  if(default_instance->current_dag->rank == ROOT_RANK(default_instance)) {
-    /* At the root, remove headers if any, and insert SRH or HBH.
-       (SRH is inserted only if the destination is in the DODAG.) */
-    rpl_ext_header_remove();
+  /* Step 2: If it wasn't a known RPL control message, it might be a data packet.
+     Try to find the instance based on the destination address prefix. */
+  if(instance == NULL) {
+    instance = rpl_get_instance_from_prefix(&UIP_IP_BUF->destipaddr);
+  }
+
+  /* Step 3: If we still haven't found an instance, this packet is not our concern.
+     Return 1 to allow normal processing to continue without adding/updating headers. */
+  if(instance == NULL || instance->current_dag == NULL) {
+    return 1; /* Let non-RPL traffic pass through */
+  }
+
+  /*
+   * From here on, we have a valid 'instance' pointer.
+   * All previous uses of 'default_instance' MUST be replaced with 'instance'.
+   */
+
+  if(instance->current_dag->rank == ROOT_RANK(instance)) {
+    /* Logic for a DODAG root node. */
+    rpl_ext_header_remove(); /* Remove any existing RPL headers */
+    /* Check if destination is inside our DODAG */
     if(rpl_get_dag(&UIP_IP_BUF->destipaddr) != NULL) {
-      /* dest is in a DODAG; the packet is going down. */
-      if(RPL_IS_NON_STORING(default_instance)) {
+      if(RPL_IS_NON_STORING(instance)) {
         return insert_srh_header();
       } else {
-        return insert_hbh_header(default_instance);
+        return insert_hbh_header(instance);
       }
     } else {
-      /* dest is outside of DODAGs; no ext header is needed. */
-      return 1;
+      return 1; /* Destination is outside DODAG, no header needed */
     }
   } else {
-    if(uip_ds6_is_my_addr(&UIP_IP_BUF->srcipaddr)
-       && UIP_IP_BUF->ttl == uip_ds6_if.cur_hop_limit) {
-      /*
-       * Insert a HBH option at the source. Checking the address is
-       * insufficient because in non-storing mode, a packet may go up
-       * and then down the same path again.
-       */
-      return insert_hbh_header(default_instance);
+    /* Logic for a router/leaf node. */
+    if(uip_ds6_is_my_addr(&UIP_IP_BUF->srcipaddr) &&
+       UIP_IP_BUF->ttl == uip_ds6_if.cur_hop_limit) {
+      /* This is a packet we are originating. Insert a new HBH. */
+      return insert_hbh_header(instance);
     } else {
-      /* Update HBH option at forwarders. */
+      /* This is a packet we are forwarding. Update the existing HBH. */
       return update_hbh_header();
     }
   }
