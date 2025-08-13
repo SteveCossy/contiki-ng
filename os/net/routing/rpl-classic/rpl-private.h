@@ -336,6 +336,7 @@ void rpl_remove_routes_by_nexthop(uip_ipaddr_t *nexthop, rpl_dag_t *dag);
 uip_ds6_route_t *rpl_add_route(rpl_dag_t *dag, uip_ipaddr_t *prefix,
                                int prefix_len, uip_ipaddr_t *next_hop);
 void rpl_purge_routes(void);
+void rpl_purge_routes_for_instance(rpl_instance_t *instance);
 
 /* Objective function. */
 rpl_of_t *rpl_find_of(rpl_ocp_t);
