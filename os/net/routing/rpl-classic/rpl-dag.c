@@ -1549,22 +1549,15 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
   /* So far this is the lowest rank we are aware of. */
   dag->min_rank = dag->rank;
 
-  if(default_instance == NULL) {
-    default_instance = instance;
-  }
+  // if(default_instance == NULL) {
+  //   default_instance = instance;
+  // }
 
   LOG_INFO("Joined DAG with instance ID %u, rank %hu, DAG ID ",
            dio->instance_id, dag->rank);
   LOG_INFO_6ADDR(&dag->dag_id);
   LOG_INFO_("\n");
 
-  // DEBUG 
-  /* printf("Joined DAG with instance ID %u, rank %hu, DAG ID ",
-           dio->instance_id, dag->rank);
-  uip_debug_ipaddr_print(&dag->dag_id);
-  printf("\n");
-  printf("Log Level RPL is %i. Debug Level is %i. \n", LOG_CONF_LEVEL_RPL, LOG_LEVEL_DBG);
- */
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
   rpl_reset_dio_timer(instance);
