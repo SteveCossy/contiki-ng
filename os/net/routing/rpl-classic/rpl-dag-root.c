@@ -203,14 +203,52 @@ Maybe rpl-dag.c:474,1231,1330 is a better place ...
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+// int
+// rpl_dag_root_is_root(void)
+// {
+//   rpl_instance_t *instance = rpl_get_default_instance();
+
+//   return instance && instance->current_dag &&
+//          instance->current_dag->rank == ROOT_RANK(instance);
+// }
+
+// In rpl-dag-root.c
+
 int
 rpl_dag_root_is_root(void)
 {
-  rpl_instance_t *instance = rpl_get_default_instance();
+  int i;
+  rpl_instance_t *instance;
+  LOG_DBG("rpl_dag_root_is_root returned ");
 
-  return instance && instance->current_dag &&
-         instance->current_dag->rank == ROOT_RANK(instance);
+  /* Iterate through all possible instance slots */
+  for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
+    instance = &instance_table[i];
+
+    /* Check if this instance is active and has a DAG */
+    if(instance->used && instance->current_dag != NULL) {
+      /* Check if our rank in THIS instance is the root rank */
+      if(instance->current_dag->rank == ROOT_RANK(instance)) {
+        /*
+         * We have found at least one instance where we are the root.
+         * That's enough to answer "yes". We can stop searching.
+         */
+        return 1; // Return true
+        LOG_DBG_("1\n");
+      }
+    }
+  }
+
+  /*
+   * If we have looped through all instances and haven't found one
+   * where we are the root, then the answer is "no".
+   */
+  LOG_DBG_("0\n");
+  return 0; // Return false
+
+  // --- END NEW LOGIC ---
 }
+
 /*---------------------------------------------------------------------------*/
 
 /** @}*/
