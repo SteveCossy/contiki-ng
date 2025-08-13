@@ -72,6 +72,7 @@ get_rank(const linkaddr_t *lladdr)
 const linkaddr_t *
 rpl_nbr_gc_get_worst(const linkaddr_t *lladdr1, const linkaddr_t *lladdr2)
 {
+  LOG_INFO("*************** ERROR! ***************/nCall to rpl_nbr_gc_get_worst!");
   return get_rank(lladdr2) > get_rank(lladdr1) ? lladdr2 : lladdr1;
 }
 /*---------------------------------------------------------------------------*/
@@ -79,6 +80,9 @@ static bool
 can_accept_new_parent(const linkaddr_t *candidate_for_removal, rpl_dio_t *dio)
 {
   rpl_rank_t rank_candidate;
+
+  // Research 13 August suggests this function is never called
+  LOG_INFO("*************** ERROR! ***************/nCall to can_accept_new_parent!");
 
   /* There's space left in the table or the worst entry has no rank: accept. */
   if(candidate_for_removal == NULL
