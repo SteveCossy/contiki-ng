@@ -88,7 +88,7 @@ handle_periodic_timer(void *ptr)
   rpl_purge_dags();
   if(dag != NULL) {
     if(RPL_IS_STORING(dag->instance)) {
-      rpl_purge_routes();
+    rpl_purge_routes_for_instance(dag->instance);
     }
     if(RPL_IS_NON_STORING(dag->instance)) {
       uip_sr_periodic(1);
