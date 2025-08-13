@@ -114,6 +114,105 @@ rpl_set_mode(enum rpl_mode m)
 }
 /*---------------------------------------------------------------------------*/
 void
+rpl_purge_routes_for_instance(rpl_instance_t *instance)
+{
+  uip_ds6_route_t *r;
+  uip_ipaddr_t prefix;
+  rpl_dag_t *dag;
+#if RPL_WITH_MULTICAST
+  uip_mcast6_route_t *mcast_route;
+#endif
+
+  /* First pass: decrement lifetime */
+  r = uip_ds6_route_head();
+
+  while(r != NULL) {
+    if(r->state.lifetime >= 1 &&
+       r->state.lifetime != RPL_ROUTE_INFINITE_LIFETIME) {
+      /*
+       * If a route is at lifetime == 1, set it to 0, scheduling it
+       * for immediate removal below. This achieves the same as the
+       * original code, which would delete routes with lifetime <= 1.
+       */
+      r->state.lifetime--;
+    }
+    r = uip_ds6_route_next(r);
+  }
+
+  /* Second pass: remove dead routes. */
+  r = uip_ds6_route_head();
+
+  while(r != NULL) {
+    if(r->state.lifetime < 1) {
+      /*
+       * Routes with lifetime == 1 have only just been decremented
+       * from 2 to 1, thus we want to keep them. Hence we use <
+       * instead of <=.
+       */
+      uip_ipaddr_copy(&prefix, &r->ipaddr);
+      uip_ds6_route_rm(r);
+      r = uip_ds6_route_head();
+      LOG_INFO("No more routes to ");
+      LOG_INFO_6ADDR(&prefix);
+
+      /************************************************************/
+      /* --- START: ADD THIS CRASH-PREVENTION BLOCK --- */
+      /************************************************************/
+      // This logic is still flawed for multi-instance, but we will make it safe.
+      
+      // 1. Check if default_instance itself is valid
+      if(instance == NULL) {
+        LOG_WARN_(" -> default_instance is NULL, cannot send No-Path DAO\n");
+        // We must continue the loop, but using a 'goto' or restructuring
+        // is messy. The simplest is to just skip the DAO logic.
+      } else {
+        // 2. Now that we know default_instance is safe, get the dag.
+
+      dag = instance->current_dag;
+
+        // 3. Check if the DAG is valid before using it.
+        if(dag == NULL) {
+          LOG_WARN_(" -> instance %u DAG is NULL, cannot send No-Path DAO\n",
+            instance->instance_id);
+        } else {
+
+      /* Propagate this information with a No-Path DAO to the
+         preferred parent if we are not a RPL root. */
+      if(dag->rank != ROOT_RANK(instance)) {
+        LOG_INFO_(" -> generate No-Path DAO\n");
+        dao_output_target(dag->preferred_parent, &prefix, RPL_ZERO_LIFETIME);
+        /* Don't schedule more than one No-Path DAO, and let next
+           iteration handle that. */
+        return;
+      }
+      LOG_INFO_("\n");
+
+    }
+  }
+  /************************************************************/
+  /* --- END: ADD THIS CRASH-PREVENTION BLOCK --- */
+  /************************************************************/
+
+    } else {
+      r = uip_ds6_route_next(r);
+    }
+  }
+
+#if RPL_WITH_MULTICAST
+  mcast_route = uip_mcast6_route_list_head();
+
+  while(mcast_route != NULL) {
+    if(mcast_route->lifetime <= 1) {
+      uip_mcast6_route_rm(mcast_route);
+      mcast_route = uip_mcast6_route_list_head();
+    } else {
+      mcast_route->lifetime--;
+      mcast_route = list_item_next(mcast_route);
+    }
+  }
+#endif
+}
+void
 rpl_purge_routes(void)
 {
   uip_ds6_route_t *r;
@@ -122,6 +221,8 @@ rpl_purge_routes(void)
 #if RPL_WITH_MULTICAST
   uip_mcast6_route_t *mcast_route;
 #endif
+
+  LOG_DBG("default_instance used in rpl_purge_routes().\n");
 
   /* First pass: decrement lifetime */
   r = uip_ds6_route_head();
