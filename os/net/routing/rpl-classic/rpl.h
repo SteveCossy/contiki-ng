@@ -294,6 +294,7 @@ rpl_rank_t rpl_get_parent_rank(uip_lladdr_t *addr);
 void rpl_dag_init(void);
 uip_ds6_nbr_t *rpl_get_nbr(rpl_parent_t *parent);
 void rpl_print_neighbor_list(void);
+void rpl_print_neighbor_list_for_instance(rpl_instance_t *instance);
 void display_dodag(rpl_instance_t *instance); // added for extra diagnostics
 int rpl_ext_header_srh_update(void);
 int rpl_ext_header_srh_get_next_hop(uip_ipaddr_t *ipaddr);
