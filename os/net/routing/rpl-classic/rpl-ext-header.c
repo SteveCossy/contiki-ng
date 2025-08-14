@@ -704,11 +704,6 @@ rpl_ext_header_update(void)
     return 1; /* Let non-RPL traffic pass through */
   }
 
-  /*
-   * From here on, we have a valid 'instance' pointer.
-   * All previous uses of 'default_instance' MUST be replaced with 'instance'.
-   */
-
   if(instance->current_dag->rank == ROOT_RANK(instance)) {
     /* Logic for a DODAG root node. */
     rpl_ext_header_remove(); /* Remove any existing RPL headers */

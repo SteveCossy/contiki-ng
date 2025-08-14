@@ -1087,7 +1087,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   rpl_dag_t *dag, *end, *best_dag;
   rpl_rank_t old_rank;
 
-  LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n");
+  // LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n"); // Left line here for reference in earlier logs
   LOG_DBG("Considering sending dag to 'rpl_select_dag' then 'best_parent':");
   LOG_DBG_6ADDR(&p->dag->dag_id);
   LOG_DBG_("\n");
