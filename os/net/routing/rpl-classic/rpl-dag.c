@@ -1551,7 +1551,7 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   if(default_instance == NULL) {
     default_instance = instance;
-  }
+  } // lost one DODAG when this was commented out
 
   LOG_INFO("Joined DAG with instance ID %u, rank %hu, DAG ID ",
            dio->instance_id, dag->rank);
