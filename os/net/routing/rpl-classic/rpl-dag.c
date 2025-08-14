@@ -1183,7 +1183,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
 
     rpl_reset_dio_timer(instance);
     if(LOG_DBG_ENABLED) {
-      rpl_print_neighbor_list();
+      rpl_print_neighbor_list_for_instance(instance);
     }
 
     instance = rpl_get_default_instance();

@@ -239,7 +239,7 @@ handle_dio_timer(void *ptr)
   }
 
   if(LOG_DBG_ENABLED) {
-    rpl_print_neighbor_list();
+    rpl_print_neighbor_list_for_instance(instance);
   }
   //display_dodag();
 }
@@ -550,7 +550,7 @@ handle_probing_timer(void *ptr)
   rpl_schedule_probing(instance);
 
   if(LOG_DBG_ENABLED) {
-    rpl_print_neighbor_list();
+    rpl_print_neighbor_list_for_instance(instance);
   }
 }
 /*---------------------------------------------------------------------------*/
