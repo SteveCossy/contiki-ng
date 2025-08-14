@@ -1088,9 +1088,10 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   rpl_rank_t old_rank;
 
   // LOG_DBG("Selecting a DAG - rpl-dag.c: 896\n"); // Left line here for reference in earlier logs
-  LOG_DBG("Considering sending dag to 'rpl_select_dag' then 'best_parent':");
+  // LOG_DBG("Considering sending dag to 'rpl_select_dag' then 'best_parent':"); // also in early logs
+  LOG_DBG("Sending dag to 'rpl_select_dag' then 'best_parent':");
   LOG_DBG_6ADDR(&p->dag->dag_id);
-  LOG_DBG_("\n");
+  LOG_DBG_(", inst: %u\n",instance->instance_id);
 
   old_rank = instance->current_dag->rank;
   last_parent = instance->current_dag->preferred_parent;
@@ -1109,6 +1110,12 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
         best_dag = dag;
       } else {
         best_dag = instance->of->best_dag(best_dag, dag);
+        /* This line is a funtion pointer: rpl_dag_t *(*rpl_of::best_dag)(rpl_dag_t *, rpl_dag_t *)
+        * Translates to "Go to the current RPL instance. From there, find its registered Objective Function (of)
+        * interface. Inside that interface, find the function pointer named best_dag. Call the function at that
+        * memory address, passing it the current best_dag and the next dag from the table as arguments.
+        * Take the rpl_dag_t pointer that is returned and store it in our local best_dag variable."
+        */
       }
     }
   }
@@ -1186,7 +1193,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
       rpl_print_neighbor_list_for_instance(instance);
     }
 
-    instance = rpl_get_default_instance();
+    // instance = rpl_get_default_instance(); // removed 14 August. Now sure why it was here
     display_dodag(instance);
 
     // See if the second DODAG is still here
