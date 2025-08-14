@@ -219,7 +219,7 @@ rpl_dag_root_is_root(void)
 {
   int i;
   rpl_instance_t *instance;
-  printf("rpl_dag_root_is_root returned ");
+  LOG_DBG("rpl_dag_root_is_root returned ");
 
   /* Iterate through all possible instance slots */
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
