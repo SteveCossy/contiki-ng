@@ -885,20 +885,20 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
   RPL_STAT(rpl_stats.mem_overflows++);
   return NULL;
 }
-/*---------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------
 void
 rpl_set_default_instance(rpl_instance_t *instance)
 {
   default_instance = instance;
   LOG_DBG("default_instance set to %u.",instance->instance_id);
-}
-/*---------------------------------------------------------------------------*/
+}--*/
+/*-------------------------------------------------------------------------
 rpl_instance_t *
 rpl_get_default_instance(void)
 {
   return default_instance;
   LOG_DBG("default_instance get.");
-}
+}--*/
 /*---------------------------------------------------------------------------*/
 void
 rpl_free_instance(rpl_instance_t *instance)
