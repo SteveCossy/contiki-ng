@@ -59,11 +59,13 @@
 static rpl_rank_t
 get_rank(const linkaddr_t *lladdr)
 {
+  LOG_DBG("*************** ERROR! ***************/nCall to get_rank!");
   rpl_parent_t *p = rpl_get_parent((uip_lladdr_t *)lladdr);
   if(p == NULL) {
     return RPL_INFINITE_RANK;
   } else {
-    rpl_instance_t *instance = rpl_get_default_instance();
+//    rpl_instance_t *instance = rpl_get_default_instance();
+    rpl_instance_t *instance = &instance_table[0];
     return instance != NULL ?
            instance->of->rank_via_parent(p) : RPL_INFINITE_RANK;
   }
@@ -72,7 +74,7 @@ get_rank(const linkaddr_t *lladdr)
 const linkaddr_t *
 rpl_nbr_gc_get_worst(const linkaddr_t *lladdr1, const linkaddr_t *lladdr2)
 {
-  LOG_INFO("*************** ERROR! ***************/nCall to rpl_nbr_gc_get_worst!");
+  LOG_DBG("*************** ERROR! ***************/nCall to rpl_nbr_gc_get_worst!");
   return get_rank(lladdr2) > get_rank(lladdr1) ? lladdr2 : lladdr1;
 }
 /*---------------------------------------------------------------------------*/
@@ -82,7 +84,7 @@ can_accept_new_parent(const linkaddr_t *candidate_for_removal, rpl_dio_t *dio)
   rpl_rank_t rank_candidate;
 
   // Research 13 August suggests this function is never called
-  LOG_INFO("*************** ERROR! ***************/nCall to can_accept_new_parent!");
+  LOG_DBG("*************** ERROR! ***************/nCall to can_accept_new_parent!");
 
   /* There's space left in the table or the worst entry has no rank: accept. */
   if(candidate_for_removal == NULL
