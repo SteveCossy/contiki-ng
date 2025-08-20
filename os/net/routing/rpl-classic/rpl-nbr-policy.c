@@ -91,7 +91,8 @@ can_accept_new_parent(const linkaddr_t *candidate_for_removal, rpl_dio_t *dio)
      || (rank_candidate = get_rank(candidate_for_removal)) == RPL_INFINITE_RANK) {
     return true;
   } else {
-    rpl_instance_t *instance = rpl_get_default_instance();
+    // rpl_instance_t *instance = rpl_get_default_instance();
+    rpl_instance_t *instance = &instance_table[0];
     rpl_rank_t new_path_rank;
 
     if(instance == NULL || dio == NULL) {
