@@ -233,8 +233,8 @@ rpl_dag_root_is_root(void)
          * We have found at least one instance where we are the root.
          * That's enough to answer "yes". We can stop searching.
          */
-        return 1; // Return true
         LOG_DBG_("1\n");
+        return 1; // Return true
       }
     }
   }
