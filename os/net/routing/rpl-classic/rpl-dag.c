@@ -623,8 +623,8 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   // Define the OCPs we intend to use for the next run.
   // first  = fd00 instance 0x30
   // second = fd02 instance 0x46
- const uint8_t first_ocp = RPL_OCP_MRHOF;
-// const uint8_t first_ocp  = RPL_OCP_OF0;
+//  const uint8_t first_ocp = RPL_OCP_MRHOF;
+const uint8_t first_ocp  = RPL_OCP_OF0;
  const  uint8_t second_ocp = RPL_OCP_MRHOF;
 // const uint8_t second_ocp = RPL_OCP_OF0;
 
