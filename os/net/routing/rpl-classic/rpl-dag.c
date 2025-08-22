@@ -625,8 +625,8 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   // second = fd02 instance 0x46
 //  const uint8_t first_ocp = RPL_OCP_MRHOF;
 const uint8_t first_ocp  = RPL_OCP_OF0;
- const  uint8_t second_ocp = RPL_OCP_MRHOF;
-// const uint8_t second_ocp = RPL_OCP_OF0;
+// const  uint8_t second_ocp = RPL_OCP_MRHOF;
+ const uint8_t second_ocp = RPL_OCP_OF0;
 
   uint8_t ocp_to_assign;
 
