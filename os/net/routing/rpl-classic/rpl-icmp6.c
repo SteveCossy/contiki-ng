@@ -1310,6 +1310,7 @@ dao_output_target_seq(rpl_parent_t *parent, uip_ipaddr_t *prefix,
   int pos;
   uip_ipaddr_t *parent_ipaddr = NULL;
   uip_ipaddr_t *dest_ipaddr = NULL;
+  RPL_DEBUG_DAO_OUTPUT = 1;
 
   /* Destination Advertisement Object */
 
