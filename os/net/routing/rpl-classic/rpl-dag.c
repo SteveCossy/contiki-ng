@@ -2097,6 +2097,14 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
       /* Our parent is requesting a new DAO. Increment DTSN in turn,
          in both storing and non-storing mode (see RFC6550 section 9.6.) */
       RPL_LOLLIPOP_INCREMENT(instance->dtsn_out);
+    if(parent_addr != NULL) {
+      LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
+      LOG_INFO_6ADDR(parent_addr);
+      LOG_INFO_("\n");
+    } else {
+      LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Preferred parent is NULL or invalid.\n",
+         instance->instance_id);
+    }
       rpl_schedule_dao(instance);
     }
     /*
