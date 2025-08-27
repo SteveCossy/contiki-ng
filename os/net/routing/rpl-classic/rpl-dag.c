@@ -1571,6 +1571,17 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
   rpl_set_default_route(instance, from);
 
   if(instance->mop != RPL_MOP_NO_DOWNWARD_ROUTES) {
+    if(instance != NULL && instance->current_dag != NULL && instance->current_dag->preferred_parent != NULL) 
+    {
+        const uip_ipaddr_t *parent_addr = rpl_get_parent((uip_lladdr_t *)instance->current_dag->preferred_parent);
+        LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
+        LOG_INFO_6ADDR(parent_addr);
+        LOG_INFO_(" which belongs to instance %u.\n", 
+                instance->current_dag->preferred_parent->dag->instance->instance_id);
+    }else {
+        LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Preferred parent is NULL or invalid.\n",
+                instance->instance_id);
+    }
     rpl_schedule_dao(instance);
   } else {
     LOG_WARN("The DIO does not meet the prerequisites for sending a DAO\n");
