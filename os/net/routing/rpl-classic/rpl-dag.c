@@ -1581,7 +1581,9 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
       }
     }
     if(parent_addr != NULL) {
-        LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
+        LOG_INFO("DAO-SCHED: DAO for rpl_join_instance %u. DAG is ", instance->instance_id);
+        LOG_INFO_6ADDR(&instance->current_dag->dag_id);
+        LOG_INFO_("Parent is ");
         LOG_INFO_6ADDR(parent_addr);
         LOG_INFO_("\n");
     } else {

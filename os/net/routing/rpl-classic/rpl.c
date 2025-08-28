@@ -89,14 +89,15 @@ rpl_set_mode(enum rpl_mode m)
     mode = m;
 
     if(default_instance != NULL) {
-      if(parent_addr != NULL) {
-        LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
-        LOG_INFO_6ADDR(parent_addr);
-        LOG_INFO_("\n");
-      } else {
-        LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Preferred parent is NULL or invalid.\n",
-                  instance->instance_id);
-      }
+      LOG_WARN("rpl.c:74-rpl_set_mode called with unreliable instance.")
+      // if(parent_addr != NULL) {
+      //   LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
+      //   LOG_INFO_6ADDR(parent_addr);
+      //   LOG_INFO_("\n");
+      // } else {
+      //   LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Preferred parent is NULL or invalid.\n",
+      //             instance->instance_id);
+      // }
       rpl_schedule_dao_immediately(default_instance);
     }
   } else if(m == RPL_MODE_FEATHER) {
