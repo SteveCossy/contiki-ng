@@ -89,7 +89,7 @@ rpl_set_mode(enum rpl_mode m)
     mode = m;
 
     if(default_instance != NULL) {
-      LOG_WARN("rpl.c:74-rpl_set_mode called with unreliable instance.")
+      LOG_WARN("rpl.c:74-rpl_set_mode called with unreliable instance.");
       // if(parent_addr != NULL) {
       //   LOG_INFO("DAO-SCHED: Scheduling DAO for instance %u. Parent is ", instance->instance_id);
       //   LOG_INFO_6ADDR(parent_addr);
