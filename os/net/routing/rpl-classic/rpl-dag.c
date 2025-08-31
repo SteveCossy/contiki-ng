@@ -623,8 +623,8 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
   // Define the OCPs we intend to use for the next run.
   // first  = fd00 instance 0x30
   // second = fd02 instance 0x46
- const uint8_t first_ocp = RPL_OCP_MRHOF;
-// const uint8_t first_ocp  = RPL_OCP_OF0;
+// const uint8_t first_ocp = RPL_OCP_MRHOF;
+ const uint8_t first_ocp  = RPL_OCP_OF0;
  const  uint8_t second_ocp = RPL_OCP_MRHOF;
 // const uint8_t second_ocp = RPL_OCP_OF0;
 
@@ -1091,13 +1091,16 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   // LOG_DBG("Considering sending dag to 'rpl_select_dag' then 'best_parent':"); // also in early logs
   LOG_DBG("Sending dag to 'rpl_select_dag' then 'best_parent':");
   LOG_DBG_6ADDR(&p->dag->dag_id);
-  LOG_DBG_(", inst: %u\n",instance->instance_id);
+  LOG_DBG_(", inst: %u",instance->instance_id);
 
   old_rank = instance->current_dag->rank;
   last_parent = instance->current_dag->preferred_parent;
 
   if(instance->current_dag->rank != ROOT_RANK(instance)) {
+    LOG_DBG_(" select_parent\n");
     rpl_select_parent(p->dag);
+  } else {
+    LOG_DBG_("\n");
   }
 
   best_dag = NULL;
