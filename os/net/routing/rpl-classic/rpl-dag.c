@@ -1028,7 +1028,7 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   }
 
   /* Step 3: Look up the parent in the dedicated RPL parent table (rpl_parents) */
-  /* This is the key step from your original function. */
+  /* This is the key step from the original function. */
   rpl_parent_t *parent = nbr_table_get_from_lladdr(rpl_parents, (const linkaddr_t *)lladdr);
   if(parent == NULL) {
     /* This neighbor exists but is not currently registered as an RPL parent. */
