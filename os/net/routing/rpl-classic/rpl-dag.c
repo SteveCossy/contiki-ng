@@ -832,6 +832,7 @@ rpl_alloc_instance(uint8_t instance_id)
 
   for(instance = &instance_table[0], end = instance + RPL_MAX_INSTANCES;
       instance < end; ++instance) {
+    LOG_DBG("Checking instance table entry %u", instance->instance_id);
     if(instance->used == 0) {
       memset(instance, 0, sizeof(*instance));
       instance->instance_id = instance_id;
