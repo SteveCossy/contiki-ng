@@ -509,7 +509,7 @@ nbr_table_lock(const nbr_table_t *table, const void *item)
 {
 #if DEBUG
   int i = index_from_item(table, item);
-  PRINTF("*** Lock %d\n", i);
+  LOG_DBG("Lock %d\n", i);
 #endif
   return nbr_set_bit(locked_map, table, item, 1);
 }
@@ -520,7 +520,7 @@ nbr_table_unlock(const nbr_table_t *table, const void *item)
 {
 #if DEBUG
   int i = index_from_item(table, item);
-  PRINTF("*** Unlock %d\n", i);
+  LOG_DBG("Unlock %d\n", i);
 #endif
   return nbr_set_bit(locked_map, table, item, 0);
 }
