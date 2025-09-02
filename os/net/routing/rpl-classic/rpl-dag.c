@@ -442,11 +442,11 @@ rpl_set_preferred_parent(rpl_dag_t *dag, rpl_parent_t *p)
     LOG_INFO_(" will be ");
     LOG_INFO_6ADDR(rpl_parent_get_ipaddr(p));
   } else {
-    LOG_INFO_(" New parent NULL, existing ..");
+    LOG_INFO_(" New parent NULL, exiting ..");
   }
   LOG_INFO_(".\n");
 
-  if(dag == NULL || dag->preferred_parent == p) {
+  if(dag == NULL || dag->preferred_parent == p || p == NULL) {
     return;
   }
 
