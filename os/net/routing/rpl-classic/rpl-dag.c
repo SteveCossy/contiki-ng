@@ -433,7 +433,8 @@ rpl_set_preferred_parent(rpl_dag_t *dag, rpl_parent_t *p)
   LOG_INFO("rpl_set_preferred_parent, was:");
   if(dag->preferred_parent != NULL) {
     LOG_INFO_6ADDR(rpl_parent_get_ipaddr(dag->preferred_parent));
-    LOG_INFO_(" Instance %u. \n rpl_set DODAGID:",dag->instance->instance_id);
+    LOG_INFO_(" Instance %u.\n                 rpl_set DODAGID:",
+      dag->instance->instance_id);
     LOG_INFO_6ADDR(&dag->dag_id);
   } else {
     LOG_INFO_("NULL");
