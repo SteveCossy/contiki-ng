@@ -832,7 +832,7 @@ rpl_alloc_instance(uint8_t instance_id)
 
   for(instance = &instance_table[0], end = instance + RPL_MAX_INSTANCES;
       instance < end; ++instance) {
-    LOG_DBG("Checking instance table entry %u", instance->instance_id);
+    LOG_DBG("Checking instance table entry %u\n", instance->instance_id);
     if(instance->used == 0) {
       memset(instance, 0, sizeof(*instance));
       instance->instance_id = instance_id;
@@ -855,17 +855,18 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
 
   LOG_DBG("Allocating dag to: ");;
   LOG_DBG_6ADDR(dag_id);
-  LOG_DBG_("\n");
 
   instance = rpl_get_instance(instance_id);
   if(instance == NULL) {
     instance = rpl_alloc_instance(instance_id);
     if(instance == NULL) {
       RPL_STAT(rpl_stats.mem_overflows++);
+      LOG_DBG_("\n");
       return NULL;
     }
   }
 
+  LOG_DBG_(" with Instance ID %u.\n",instance->instance_id);
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
     if(!dag->used) {
