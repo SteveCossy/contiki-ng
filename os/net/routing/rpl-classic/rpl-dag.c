@@ -864,7 +864,7 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
       LOG_DBG_("\n");
       return NULL;
     }
-    LOG_DBG_("/n");
+    LOG_DBG_("\n");
   }
 
   LOG_DBG_(" with Instance ID %u.\n",instance->instance_id);
