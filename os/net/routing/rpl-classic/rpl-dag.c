@@ -864,6 +864,7 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
       LOG_DBG_("\n");
       return NULL;
     }
+    LOG_DBG_("/n");
   }
 
   LOG_DBG_(" with Instance ID %u.\n",instance->instance_id);
@@ -1454,18 +1455,19 @@ rpl_get_instance(uint8_t instance_id)
 {
   int i;
 
-  for(i = 0; i < RPL_MAX_INSTANCES; ++i);
-    LOG_DBG("1453:rpl_get_instance called, searching for %u table entry %u is %u.",
+  for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
+    LOG_DBG("1453:rpl_get_instance called, searching for %u table entry %u is %u",
       instance_id,
       i,
       instance_table[i].instance_id);
     if(!instance_table[i].used) {
-      LOG_DBG_(" Not used");
-    }
+      LOG_DBG_(". Not used\n");
+    } 
     if(instance_table[i].used && instance_table[i].instance_id == instance_id) {
       LOG_DBG_(".\n");
       return &instance_table[i];
     }
+    LOG_DBG_(".\n");
   }
   
   LOG_DBG_(" returning NULL.\n");
