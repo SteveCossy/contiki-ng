@@ -216,28 +216,28 @@ void display_dodag( rpl_instance_t *instance ) {
     // Only process DAGs that are actually active/used
     if(dag->used) {
 
-      printf("DODAG ID for Instance %u: ", instance->instance_id);
+      LOG_DBG("DODAG ID for Instance %u: ", instance->instance_id);
       uip_debug_ipaddr_print(&dag->dag_id);
-      printf(", Rank: %u, OF: ", dag->rank);
+      LOG_DBG_(", Rank: %u, OF: ", dag->rank);
 
       // Ensure OF pointer is valid before checking
       if (instance->of != NULL) {
         switch(instance->of->ocp) {
           case RPL_OCP_OF0:
-            printf("OF0 ");
+            LOG_DBG_("OF0 ");
             break;
           case RPL_OCP_MRHOF:
-            printf("MRHOF ");
+            LOG_DBG_("MRHOF ");
             break;
           default:
-            printf("Unknown/Custom OF ");
+            LOG_DBG_("Unknown/Custom OF ");
             break;
         }
       } else {
-           printf("NULL ");
+           LOG_DBG_("NULL ");
       }
 
-      printf("\n");
+      LOG_DBG_("\n");
 
 /*       if(dag->used) {
           if(dag->joined) {
@@ -646,7 +646,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
               LOG_INFO_("MRHOF ");
               break;
           default:
-              printf("Unknown/Custom OF ");
+              LOG_INFO_("Unknown/Custom OF ");
               break;
          }
       LOG_INFO_("\n");
