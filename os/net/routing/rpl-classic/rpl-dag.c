@@ -832,8 +832,11 @@ rpl_alloc_instance(uint8_t instance_id)
 
   for(instance = &instance_table[0], end = instance + RPL_MAX_INSTANCES;
       instance < end; ++instance) {
-    LOG_DBG("Checking instance table entry %u\n", instance->instance_id);
+    LOG_DBG_(" alloc_instance called with %u, table entry %u",
+      instance_id,
+      instance->instance_id);
     if(instance->used == 0) {
+      LOG_DBG_(" allocating.\n");
       memset(instance, 0, sizeof(*instance));
       instance->instance_id = instance_id;
       instance->def_route = NULL;
@@ -843,6 +846,7 @@ rpl_alloc_instance(uint8_t instance_id)
 #endif /* RPL_WITH_PROBING */
       return instance;
     }
+    LOG_DBG_(".\n");
   }
   return NULL;
 }
