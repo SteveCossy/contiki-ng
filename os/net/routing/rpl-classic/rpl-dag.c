@@ -853,21 +853,21 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
   rpl_dag_t *dag, *end;
   rpl_instance_t *instance;
 
-  LOG_DBG("Allocating dag to: ");;
-  LOG_DBG_6ADDR(dag_id);
+LOG_DBG("alloc_dag, In ID %u ",instance_id);
+//  LOG_DBG("alloc_dag, In ID %u, to: ",instance_id);
+//  LOG_DBG_6ADDR(dag_id);
+//  LOG_DBG_("\n");
 
   instance = rpl_get_instance(instance_id);
   if(instance == NULL) {
     instance = rpl_alloc_instance(instance_id);
     if(instance == NULL) {
       RPL_STAT(rpl_stats.mem_overflows++);
-      LOG_DBG_("\n");
       return NULL;
     }
-    LOG_DBG_("\n");
   }
 
-  LOG_DBG_(" with Instance ID %u.\n",instance->instance_id);
+//  LOG_DBG_(" with Instance ID %u.\n",instance->instance_id);
 
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE; dag < end; ++dag) {
     if(!dag->used) {
