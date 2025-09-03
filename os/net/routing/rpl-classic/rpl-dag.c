@@ -1456,10 +1456,15 @@ rpl_get_instance(uint8_t instance_id)
 
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
     if(instance_table[i].used && instance_table[i].instance_id == instance_id) {
+      LOG_DBG("1453:rpl_get_instance table entry %u is %u.\n",
+         i,
+         instance_table[i].instance_id);
       return &instance_table[i];
     }
   }
   
+  LOG_DBG("1453:rpl_get_instance returning NULL.\n");
+
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
