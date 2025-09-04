@@ -1460,7 +1460,7 @@ rpl_get_instance(uint8_t instance_id)
   int i;
 
   for(i = 0; i < RPL_MAX_INSTANCES; ++i) {
-    LOG_DBG("1453:rpl_get_instance called, target %u table entry %u is %u",
+    LOG_DBG("1458:rpl_get_instance called, target %u table entry %u is %u",
       instance_id,
       i,
       instance_table[i].instance_id);
