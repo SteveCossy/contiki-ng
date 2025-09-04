@@ -1960,7 +1960,6 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
         }
         global_repair(from, dag, dio);
       }
-      
       // lollipop_greater_than
       return;
     }
