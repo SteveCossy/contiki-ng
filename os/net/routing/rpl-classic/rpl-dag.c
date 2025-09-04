@@ -2058,6 +2058,9 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
    */
 
   p = rpl_find_parent(dag, from);
+  LOG_DBG("Parent, instance %u found: ",p->dag->instance->instance_id);
+  LOG_6ADDR(p->dag->dag_id);
+  LOG_DBG_("\n");
   if(p == NULL) {
     previous_dag = find_parent_dag(instance, from);
     if(previous_dag == NULL) {
