@@ -501,6 +501,10 @@ uip_ds6_nbr_lookup(const uip_ipaddr_t *ipaddr)
     return NULL;
   }
   for(nbr = uip_ds6_nbr_head(); nbr != NULL; nbr = uip_ds6_nbr_next(nbr)) {
+    LOG_DBG("Found parent entry: ");
+    LOG_DBG_6ADDR(&nbr->ipaddr);
+  }
+  for(nbr = uip_ds6_nbr_head(); nbr != NULL; nbr = uip_ds6_nbr_next(nbr)) {
     if(uip_ipaddr_cmp(&nbr->ipaddr, ipaddr)) {
       return nbr;
     }
