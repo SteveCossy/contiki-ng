@@ -2058,11 +2058,23 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
    */
 
   p = rpl_find_parent(dag, from);
-  LOG_DBG("Parent, instance %u found: ",p->dag->instance->instance_id);
-  LOG_6ADDR(p->dag->dag_id);
-  LOG_DBG_("\n");
+  if(p != NULL) {
+   LOG_DBG("Parent, instance %u found: ",p->dag->instance->instance_id);
+   LOG_DBG_6ADDR(&p->dag->dag_id);
+   LOG_DBG_("\n");   
+  } else {
+    LOG_DBG("No parent found\n");
+  }
+
   if(p == NULL) {
     previous_dag = find_parent_dag(instance, from);
+    if(previous_dag != NULL) {
+    LOG_DBG("Previous Parent, instance %u found: ",previous_dag->instance->instance_id);
+    LOG_DBG_6ADDR(&previous_dag->dag_id);
+    LOG_DBG_("\n");   
+    } else {
+      LOG_DBG("No previous parent found\n");
+    }
     if(previous_dag == NULL) {
       /* Add the DIO sender as a candidate parent. */
       p = rpl_add_parent(dag, dio, from);
