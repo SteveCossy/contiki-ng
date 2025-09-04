@@ -997,15 +997,15 @@ rpl_add_parent(rpl_dag_t *dag, rpl_dio_t *dio, uip_ipaddr_t *addr)
 
   return p;
 }
-/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------
 static rpl_parent_t *
-find_parent_any_dag_any_instance(uip_ipaddr_t *addr)
+// find_parent_any_dag_any_instance(uip_ipaddr_t *addr)
 {
   uip_ds6_nbr_t *ds6_nbr = uip_ds6_nbr_lookup(addr);
   const uip_lladdr_t *lladdr = uip_ds6_nbr_get_ll(ds6_nbr);
   return nbr_table_get_from_lladdr(rpl_parents, (linkaddr_t *)lladdr);
 }
-/*---------------------------------------------------------------------------*/
+---------------------------------------------------------------------------*/
 /**
  * \brief Find a parent in a specific DAG, given the parent's IP address.
  * \param dag The DAG the parent must belong to.
@@ -1056,32 +1056,57 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
 rpl_parent_t *
 rpl_find_parent(rpl_dag_t *dag, uip_ipaddr_t *addr)
 {
-//  rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
+/*  rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
   rpl_parent_t *p = find_parent_in_dag(dag,addr);
+  This test is in the refactored function above
   if(p != NULL && p->dag == dag) {
     return p;
   }
 
   return NULL;
+    */
+  // Replace with one call  
+  return find_parent_in_dag(dag,addr);
 }
 /*---------------------------------------------------------------------------*/
 static rpl_dag_t *
 find_parent_dag(rpl_instance_t *instance, uip_ipaddr_t *addr)
 {
+/* Previous version found any dag, regardless whether it is in correct instance
   rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
   if(p != NULL) {
     return p->dag;
+  } 
+  return NULL; */
+  rpl_dag_t *dag;
+  rpl_parent_t *p;
+  // Since we don't know which DAG it might be, we must check the only DAG
+  // in this instance. RPL_MAX_DAG_PER_INSTANCE is 1.
+  dag = &instance->dag_table[0];
+  if(dag->used) {
+    p = find_parent_in_dag(dag, addr);
+    if(p != NULL) {
+      // We found the parent, AND it belongs to this instance's DAG.
+      return p->dag;
+    }
   }
-
+  // The parent was either not found, or it belonged to a different instance.
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
 rpl_parent_t *
 rpl_find_parent_any_dag(rpl_instance_t *instance, uip_ipaddr_t *addr)
 {
+/* Previously looked up a parent then checked it
   rpl_parent_t *p = find_parent_any_dag_any_instance(addr);
   if(p && p->dag && p->dag->instance == instance) {
     return p;
+  } */
+  // The new function can do the check in one place
+  rpl_dag_t *dag = find_parent_dag(instance, addr);
+  // Then return the parent from that dag if we can find one
+  if(dag != NULL) {
+    return find_parent_in_dag(dag, addr);
   }
 
   return NULL;
