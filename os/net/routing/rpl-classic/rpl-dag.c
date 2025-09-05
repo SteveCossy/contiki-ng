@@ -1490,7 +1490,7 @@ rpl_get_instance(uint8_t instance_id)
       i,
       instance_table[i].instance_id);
     if(!instance_table[i].used) {
-      LOG_DBG_(". Not used\n");
+      LOG_DBG_(". Not used");
     } 
     if(instance_table[i].used && instance_table[i].instance_id == instance_id) {
       LOG_DBG_(" returning.\n");
