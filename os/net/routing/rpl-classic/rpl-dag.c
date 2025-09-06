@@ -857,7 +857,7 @@ rpl_alloc_dag(uint8_t instance_id, uip_ipaddr_t *dag_id)
   rpl_dag_t *dag, *end;
   rpl_instance_t *instance;
 
-LOG_DBG("alloc_dag, In ID %u ",instance_id);
+LOG_DBG("alloc_dag, In ID %u \n",instance_id);
 //  LOG_DBG("alloc_dag, In ID %u, to: ",instance_id);
 //  LOG_DBG_6ADDR(dag_id);
 //  LOG_DBG_("\n");
