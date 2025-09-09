@@ -1129,8 +1129,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   last_parent = instance->current_dag->preferred_parent;
 
   if(instance->current_dag->rank != ROOT_RANK(instance)) {
-    LOG_DBG_(" select_parent\n");
-    rpl_select_parent(p->dag);
+    LOG_DBG_(" select_parent commented out\n");
+//    rpl_select_parent(p->dag);
+// --- TEMPORARILY COMMENT THIS OUT TO TEST THE HYPOTHESIS ---
   } else {
     LOG_DBG_("\n");
   }
@@ -1492,7 +1493,7 @@ rpl_get_instance(uint8_t instance_id)
     if(!instance_table[i].used) {
       LOG_DBG_(". Not used.\n");
     } 
-    if(!instance_table[i].instance_id == instance_id){
+    if(!(instance_table[i].instance_id == instance_id)){
       LOG_DBG_(".\n");
     }
     if(instance_table[i].used && instance_table[i].instance_id == instance_id) {
