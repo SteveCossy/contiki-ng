@@ -51,9 +51,9 @@
 */
 
 // Non-storing routing mode is
-// #define RPL_CONF_MOP RPL_MOP_NON_STORING
+ #define RPL_CONF_MOP RPL_MOP_NON_STORING
 // Storing routing mode is (testing)
-#define RPL_CONF_MOP RPL_MOP_STORING_MULTICAST
+// #define RPL_CONF_MOP RPL_MOP_STORING_MULTICAST
 // There is also
 // #define RPL_CONF_MOP RPL_MOP_STORING_NO_MULTICAST
 
