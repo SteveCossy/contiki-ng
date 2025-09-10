@@ -214,7 +214,7 @@ uip_ds6_nbr_add(const uip_ipaddr_t *ipaddr, const uip_lladdr_t *lladdr,
 #endif /* UIP_ND6_SEND_NS */
     LOG_INFO("Adding neighbor, ip addr ");
     LOG_INFO_6ADDR(ipaddr);
-    LOG_INFO("\n");
+    LOG_INFO(
     NETSTACK_ROUTING.neighbor_state_changed(nbr);
     return nbr;
   } else { // not nbr
