@@ -1129,9 +1129,7 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   last_parent = instance->current_dag->preferred_parent;
 
   if(instance->current_dag->rank != ROOT_RANK(instance)) {
-    LOG_DBG_(" select_parent commented out\n");
-//    rpl_select_parent(p->dag);
-// --- TEMPORARILY COMMENT THIS OUT TO TEST THE HYPOTHESIS ---
+    rpl_select_parent(p->dag);
   } else {
     LOG_DBG_("\n");
   }
