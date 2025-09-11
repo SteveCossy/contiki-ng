@@ -1037,7 +1037,7 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   /* Step 2: Get the Link-Layer address from the DS6 neighbor entry */
   const uip_lladdr_t *lladdr = uip_ds6_nbr_get_ll(ds6_nbr);
   if(lladdr == NULL) {
-    LOG_WARN("FIND-PARENT-DBG: FAILED step 1. Addr %s not found in neighbor cache.\n", ipaddr_buf);
+    LOG_WARN("FIND-PARENT-DBG: FAILED step 2. Neighbor %s has no link-layer address.\n", ipaddr_buf);
     return NULL;
   }
 
@@ -1059,6 +1059,7 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   }
 
   /* If we reach here, we have found the correct parent in the correct DAG. */
+  LOG_DBG("FIND-PARENT-DBG: SUCCESS! Found parent %s in the correct DAG.\n", ipaddr_buf);
   return parent;
 }
 /*---------------------------------------------------------------------------*/
