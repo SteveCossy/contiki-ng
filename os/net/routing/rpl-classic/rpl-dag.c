@@ -1021,16 +1021,23 @@ static rpl_parent_t *
 static rpl_parent_t *
 find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
 {
+  char ipaddr_buf[UIPLIB_IPV6_MAX_STR_LEN];
+  uiplib_ipaddr_snprint(ipaddr_buf, sizeof(ipaddr_buf), addr);
+
+  LOG_DBG("FIND-PARENT-DBG: Searching parent %s in DAG instance %u\n",
+          ipaddr_buf, dag->instance->instance_id);
+  
   /* Step 1: Find the neighbor in the generic DS6 neighbor cache */
   uip_ds6_nbr_t *ds6_nbr = uip_ds6_nbr_lookup(addr);
   if(ds6_nbr == NULL) {
-    /* Not even a neighbor, so cannot be a parent. */
+    LOG_WARN("FIND-PARENT-DBG: FAILED step 1. Addr %s not found in neighbor cache.\n", ipaddr_buf);
     return NULL;
   }
 
   /* Step 2: Get the Link-Layer address from the DS6 neighbor entry */
   const uip_lladdr_t *lladdr = uip_ds6_nbr_get_ll(ds6_nbr);
   if(lladdr == NULL) {
+    LOG_WARN("FIND-PARENT-DBG: FAILED step 1. Addr %s not found in neighbor cache.\n", ipaddr_buf);
     return NULL;
   }
 
@@ -1038,14 +1045,15 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   /* This is the key step from the original function. */
   rpl_parent_t *parent = nbr_table_get_from_lladdr(rpl_parents, (const linkaddr_t *)lladdr);
   if(parent == NULL) {
-    /* This neighbor exists but is not currently registered as an RPL parent. */
+    LOG_WARN("FIND-PARENT-DBG: FAILED step 3. Neighbor %s is not in the rpl_parents table.\n", ipaddr_buf);
     return NULL;
   }
 
   /* Step 4: THE CRITICAL CHECK */
   /* We found an RPL parent entry. Now, verify it belongs to the correct DAG. */
   if(parent->dag != dag) {
-    /* This neighbor IS a parent, but for a different instance/DAG. Ignore it. */
+    LOG_WARN("FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! 
+      (Parent's DAG: %p, Expected DAG: %p)\n",
     return NULL;
   }
 
