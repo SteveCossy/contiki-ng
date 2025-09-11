@@ -1052,8 +1052,9 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   /* Step 4: THE CRITICAL CHECK */
   /* We found an RPL parent entry. Now, verify it belongs to the correct DAG. */
   if(parent->dag != dag) {
-    LOG_WARN("FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! 
-      (Parent's DAG: %p, Expected DAG: %p)\n",
+    LOG_WARN(
+    "FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! (Parent's DAG: %p, Expected DAG: %p)\n",
+       ipaddr_buf, parent->dag, dag);
     return NULL;
   }
 
