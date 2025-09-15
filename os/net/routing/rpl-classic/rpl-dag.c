@@ -387,49 +387,78 @@ rpl_get_parent_ipaddr(rpl_parent_t *p)
   }
   return &nbr->ipaddr;
 }
-/**
-* \brief Adds or updates a prefix-specific route in the main IPv6 routing table.
-* \param instance A pointer to the RPL instance for which to add the route.
-*
-* This function is the designated multi-instance-aware replacement for the legacy
-* default route installation logic. It extracts the prefix, prefix length, and
-* preferred parent (next-hop) from the provided instance's current DAG.
-* To prevent stale entries and duplicates, it first attempts to remove any
-* existing route for the same prefix before adding the new one. This ensures
-* that the data plane's forwarding rule for this specific prefix is always
-* synchronized with the control plane's preferred parent.
-* Replaces rpl_set_default_route
-*/
 
+/**
+ * \brief Find a route in the IPv6 routing table given it's prefix
+ * \param prefix A pointer to the prefix being looked up
+ * 
+ * A new helper for rpl_add_prefix_route
+ */
+static uip_ds6_route_t *
+uip_ds6_route_lookup_by_prefix(const uip_ipaddr_t *prefix)
+{
+  uip_ds6_route_t *r;
+  for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
+    if(uip_ipaddr_prefixcmp(&r->ipaddr, prefix, r->length)) {
+      return r;
+    }
+  }
+  return NULL;
+}
+
+/**
+ * \brief Adds or refreshes a prefix-specific route in the main IPv6 routing table.
+ * \param instance A pointer to the RPL instance for which to add/refresh the route.
+ *
+ * This function is the designated multi-instance-aware replacement for the legacy
+ * default route logic. It correctly handles both adding a new prefix route
+ * and refreshing the lifetime of an existing one.
+ */
 static void
 rpl_add_prefix_route(rpl_instance_t *instance)
 {
-/* Safety checks for NULL pointers */
-if(instance == NULL || instance->current_dag == NULL ||
-  instance->current_dag->preferred_parent == NULL) {
-  LOG_WARN("RPL-ROUTE: Aborting add_prefix_route due to NULL context.\n");
-return;
+  uip_ds6_route_t *route;
+  
+  if(instance == NULL || instance->current_dag == NULL ||
+     instance->current_dag->preferred_parent == NULL) {
+    return; // Safety check
+  }
+  
+  uip_ipaddr_t *prefix = &instance->current_dag->prefix_info.prefix;
+  uint8_t prefix_len = instance->current_dag->prefix_info.length;
+  const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
+  
+  if(nexthop == NULL) {
+    return;
+  }
+  
+  // Step 1: Look for an existing route for this prefix.
+  // We may need to write uip_ds6_route_lookup_by_prefix if it doesn't exist.
+  route = uip_ds6_route_lookup_by_prefix(prefix);
+  
+  if(route == NULL) {
+    // Step 2a: No route exists. Add a new one.
+    LOG_INFO("RPL-ROUTE: Adding new route for prefix ");
+    LOG_INFO_6ADDR(prefix);
+    LOG_INFO_(" via ");
+    LOG_INFO_6ADDR(nexthop);
+    LOG_INFO_("\n");
+    
+    uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop);
+    
+  } else {
+    // Step 2b: A route already exists. We just need to refresh its lifetime.
+    LOG_INFO("RPL-ROUTE: Refreshing lifetime for route to prefix ");
+    LOG_INFO_6ADDR(prefix);
+    LOG_INFO_("\n");
+    
+    // The uip_ds6_route_add function is often designed to handle this refresh
+    // if the route already exists. But a more explicit way is to reset the timer.
+    // The exact lifetime value should come from the instance configuration.
+    stimer_set(&route->lifetime, RPL_LIFETIME(instance, instance->default_lifetime));
+  }
 }
-/* Extract necessary routing information from the instance context */
-uip_ipaddr_t *prefix = &instance->current_dag->prefix_info.prefix;
-uint8_t prefix_len = instance->current_dag->prefix_info.length;
-const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
 
-LOG_WARN("RPL-ROUTE: Adding route prefix for ");
-LOG_WARN_6ADDR(prefix);
-LOG_WARN_("\n");
-
-if(nexthop == NULL) {
-  LOG_WARN("RPL-ROUTE: Aborting add_prefix_route, nexthop is NULL.\n");
-  return;
-}
-/* Atomicity: First, remove any pre-existing route for this prefix. */
-rpl_route_rm_by_prefix(prefix);
-/* Add the new route to the main system routing table ('routelist'). */
-if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
-  LOG_ERR("RPL-ROUTE: Failed to add prefix route to the routing table!\n");
-}
-}
 /**
 * \brief Removes a prefix-specific route from the main IPv6 routing table.
 * \param instance A pointer to the RPL instance for which to remove the route.
