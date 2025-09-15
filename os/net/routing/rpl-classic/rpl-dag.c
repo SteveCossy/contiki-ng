@@ -92,6 +92,22 @@ NBR_TABLE_GLOBAL(rpl_parent_t, rpl_parents);
 /* Allocate instance table. */
 rpl_instance_t instance_table[RPL_MAX_INSTANCES];
 rpl_instance_t *default_instance;
+/*---------------------------------------------------------------------------
+New functions added to support multi-instance-aware RPL graphs.
+  ---------------------------------------------------------------------------*/
+// New functions 
+//#include "net/routing/rpl-classic/rpl.h"
+//#include "net/ipv6/uip-debug.h"
+//	#include "net/routing/rpl-classic/rpl-dag.h"
+/*---------------------------------------------------------------------------*/
+// #include "net/routing/rpl-classic/rpl-private.h"
+// #include "net/routing/rpl-classic/rpl-dag-root.h" /* For LOG_INFO_6ADDR etc. */
+// #include "net/ipv6/uip-ds6-nbr.h"
+// #include "net/link-stats.h"
+
+/* Make sure we have LOG_MODULE and LOG_LEVEL defined before this function 
+#define LOG_MODULE "MyRPL"
+#define LOG_LEVEL LOG_LEVEL_INFO */
 
 /*---------------------------------------------------------------------------*/
 void
@@ -127,23 +143,7 @@ rpl_print_neighbor_list(void)
   }
 }
 
-// New functions 
-//#include "net/routing/rpl-classic/rpl.h"
-//#include "net/ipv6/uip-debug.h"
-//	#include "net/routing/rpl-classic/rpl-dag.h"
-
-
-/*---------------------------------------------------------------------------*/
-// #include "net/routing/rpl-classic/rpl-private.h"
-// #include "net/routing/rpl-classic/rpl-dag-root.h" /* For LOG_INFO_6ADDR etc. */
-// #include "net/ipv6/uip-ds6-nbr.h"
-// #include "net/link-stats.h"
-
-/* Make sure we have LOG_MODULE and LOG_LEVEL defined before this function 
-#define LOG_MODULE "MyRPL"
-#define LOG_LEVEL LOG_LEVEL_INFO */
-
-/* *
+/*---------------------------------------------------------------------------
 * \ brief Prints the neighbor list ( routing table ) for a specific RPL instance .
 * \ param instance The RPL instance for which to print the neighbor list .
 */
@@ -196,6 +196,7 @@ rpl_print_neighbor_list_for_instance(rpl_instance_t *instance)
   }
 }
 
+/*---------------------------------------------------------------------------*/
 void display_dodag( rpl_instance_t *instance ) {
   rpl_dag_t *dag, *end;
   rpl_parent_t *parent;
@@ -307,6 +308,79 @@ void display_dodag( rpl_instance_t *instance ) {
   else // instance != NULL
   {
     printf("display_dodag: NULL instance pointer passed.\n");
+  }
+}
+
+/*---------------------------------------------------------------------------*/
+/**
+* \brief Adds or updates a prefix-specific route in the main IPv6 routing table.
+* \param instance A pointer to the RPL instance for which to add the route.
+*
+* This function is the designated multi-instance-aware replacement for the legacy
+* default route installation logic. It extracts the prefix, prefix length, and
+* preferred parent (next-hop) from the provided instance's current DAG.
+* To prevent stale entries and duplicates, it first attempts to remove any
+* existing route for the same prefix before adding the new one. This ensures
+* that the data plane's forwarding rule for this specific prefix is always
+* synchronized with the control plane's preferred parent.
+*/
+static void
+rpl_add_prefix_route(rpl_instance_t *instance)
+{
+/* Safety checks for NULL pointers */
+if(instance == NULL || instance->current_dag == NULL ||
+  instance->current_dag->preferred_parent == NULL) {
+  LOG_WARN("RPL-ROUTE: Aborting add_prefix_route due to NULL context.\n");
+return;
+}
+/* Extract necessary routing information from the instance context */
+uip_ipaddr_t *prefix = &instance->current_dag->prefix_info.prefix;
+uint8_t prefix_len = instance->current_dag->prefix_info.length;
+const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
+
+LOG_WARN("RPL-ROUTE: Adding route prefix for ");
+LOG_WARN_6ADDR(prefix);
+LOG_WARN_("\n");
+
+if(nexthop == NULL) {
+  LOG_WARN("RPL-ROUTE: Aborting add_prefix_route, nexthop is NULL.\n");
+  return;
+}
+/* Atomicity: First, remove any pre-existing route for this prefix. */
+uip_ds6_route_rm_by_prefix(prefix);
+/* Add the new route to the main system routing table ('routelist'). */
+if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
+  LOG_ERR("RPL-ROUTE: Failed to add prefix route to the routing table!\n");
+}
+}
+/**
+* \brief Removes a prefix-specific route from the main IPv6 routing table.
+* \param instance A pointer to the RPL instance for which to remove the route.
+*
+* This function serves as the multi-instance-aware replacement for the legacy
+* default route removal logic. It extracts the prefix from the provided
+* instance context and calls the core IPv6 stack function to remove the
+* corresponding entry from the main routing table. This is essential for
+* cleaning up routes when a node leaves a DODAG or loses its parent.
+*/
+static void
+rpl_remove_prefix_route(rpl_instance_t *instance)
+{
+  /* Safety checks for NULL pointers */
+  if(instance == NULL || instance->current_dag == NULL) {
+    LOG_WARN("RPL-ROUTE: Aborting remove_prefix_route due to NULL context.\n");
+  return;
+  }
+  /* Extract the prefix to be removed from the instance context */
+  uip_ipaddr_t *prefix = &instance->current_dag->prefix_info.prefix;
+  LOG_INFO("RPL-ROUTE: Removing route for prefix ");
+  LOG_INFO_6ADDR(prefix);
+  LOG_INFO_("\n");
+  /* Call the core uIP-DS6 function to remove the route by its prefix. */
+  if(uip_ds6_route_rm_by_prefix(prefix) == 0) {
+    LOG_WARN("RPL-ROUTE: Could not find a route to remove for prefix ");
+    LOG_WARN_6ADDR(prefix);
+    LOG_WARN_("\n");
   }
 }
 /*---------------------------------------------------------------------------*/
