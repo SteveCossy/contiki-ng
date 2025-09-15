@@ -313,6 +313,47 @@ void display_dodag( rpl_instance_t *instance ) {
 
 /*---------------------------------------------------------------------------*/
 /**
+ * \brief Finds and removes a route from the main routing table by its prefix.
+ * \param prefix The prefix of the route to remove.
+ * \return 1 if a route was found and removed, 0 otherwise.
+ *
+ * This utility function iterates through the global routelist, searching for
+ * an entry that matches the given prefix. If found, it removes it using the
+ * core uip_ds6_route_rm function. This is a crucial helper for managing
+ * prefix-specific routes in a multi-instance environment.
+ */
+static int
+rpl_route_rm_by_prefix(const uip_ipaddr_t *prefix)
+{
+  uip_ds6_route_t *r;
+
+  if(prefix == NULL) {
+    return 0;
+  }
+
+  /*
+   * Iterate through the global list of routes ('routelist').
+   * We need to be careful, as we are modifying the list while iterating.
+   * So we use a temporary pointer 'r' and check it at the start of the loop.
+   */
+  r = uip_ds6_route_head();
+  while(r != NULL) {
+    /* Check if the prefix of the current route matches the one we want to delete.
+       We use uip_ipaddr_prefixcmp for a safe, length-aware comparison. */
+    if(uip_ipaddr_prefixcmp(&r->ipaddr, prefix, r->length)) {
+      
+      LOG_INFO("RPL-ROUTE-RM: Found matching route to remove for prefix ");
+      LOG_INFO_6ADDR(prefix);
+      LOG_INFO_("\n");
+      uip_ds6_route_rm(r);
+      return 1;
+    }
+    
+    r = uip_ds6_route_next(r);
+  }
+  return 0;
+}
+/**
  * \brief Gets the IPv6 address of an RPL parent.
  * \param p A pointer to the rpl_parent_t struct.
  * \return A pointer to the parent's IPv6 address, or NULL if not found.
@@ -359,6 +400,7 @@ rpl_get_parent_ipaddr(rpl_parent_t *p)
 * synchronized with the control plane's preferred parent.
 * Replaces rpl_set_default_route
 */
+
 static void
 rpl_add_prefix_route(rpl_instance_t *instance)
 {
@@ -382,7 +424,7 @@ if(nexthop == NULL) {
   return;
 }
 /* Atomicity: First, remove any pre-existing route for this prefix. */
-uip_ds6_route_rm_by_prefix(prefix);
+rpl_route_rm_by_prefix(prefix);
 /* Add the new route to the main system routing table ('routelist'). */
 if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
   LOG_ERR("RPL-ROUTE: Failed to add prefix route to the routing table!\n");
@@ -401,21 +443,21 @@ if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
 static void
 rpl_remove_prefix_route(rpl_instance_t *instance)
 {
-  /* Safety checks for NULL pointers */
   if(instance == NULL || instance->current_dag == NULL) {
     LOG_WARN("RPL-ROUTE: Aborting remove_prefix_route due to NULL context.\n");
-  return;
+    return;
   }
-  /* Extract the prefix to be removed from the instance context */
+
   uip_ipaddr_t *prefix = &instance->current_dag->prefix_info.prefix;
-  LOG_INFO("RPL-ROUTE: Removing route for prefix ");
+  LOG_INFO("RPL-ROUTE: Removing remove route for prefix ");
   LOG_INFO_6ADDR(prefix);
   LOG_INFO_("\n");
-  /* Call the core uIP-DS6 function to remove the route by its prefix. */
-  if(uip_ds6_route_rm_by_prefix(prefix) == 0) {
+
+  // Call your new, safe, prefix-based removal function.
+  if(rpl_route_rm_by_prefix(prefix) == 0) {
     LOG_WARN("RPL-ROUTE: Could not find a route to remove for prefix ");
-    LOG_WARN_6ADDR(prefix);
-    LOG_WARN_("\n");
+    LOG_INFO_6ADDR(prefix);
+    LOG_INFO_("\n");
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -1737,7 +1779,8 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
   LOG_ANNOTATE("#A join=%u\n", dag->dag_id.u8[sizeof(dag->dag_id) - 1]);
 
   rpl_reset_dio_timer(instance);
-  rpl_set_default_route(instance, from);
+  // rpl_set_default_route(instance, from);
+  rpl_add_prefix_route(instance)
 
   if(instance->mop != RPL_MOP_NO_DOWNWARD_ROUTES) {
     rpl_parent_t *p = instance->current_dag->preferred_parent;
