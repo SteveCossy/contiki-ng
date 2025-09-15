@@ -313,6 +313,40 @@ void display_dodag( rpl_instance_t *instance ) {
 
 /*---------------------------------------------------------------------------*/
 /**
+ * \brief Gets the IPv6 address of an RPL parent.
+ * \param p A pointer to the rpl_parent_t struct.
+ * \return A pointer to the parent's IPv6 address, or NULL if not found.
+ *
+ * This function is a crucial helper for translating an RPL parent object
+ * into a usable IPv6 next-hop address. It first gets the parent's
+ * link-layer address and then uses that to look up the corresponding
+ * neighbor in the main uIP-DS6 neighbor cache, from which it can
+ * retrieve the IPv6 address.
+ */
+const uip_ipaddr_t *
+rpl_get_parent_ipaddr(rpl_parent_t *p)
+{
+  const linkaddr_t *lladdr;
+  uip_ds6_nbr_t *nbr;
+
+  if(p == NULL) {
+    return NULL;
+  }
+
+  lladdr = rpl_get_parent_lladdr(p);
+  if(lladdr == NULL) {
+    return NULL;
+  }
+  nbr = uip_ds6_nbr_ll_lookup((const uip_lladdr_t *)lladdr);
+  if(nbr == NULL) {
+    LOG_WARN("RPL: Could not find neighbor cache entry for parent with lladdr ");
+    LOG_WARN_LLADDR((const linkaddr_t *)lladdr);
+    LOG_WARN_("(maybe race condition?)\n");
+    return NULL;
+  }
+  return &nbr->ipaddr;
+}
+/**
 * \brief Adds or updates a prefix-specific route in the main IPv6 routing table.
 * \param instance A pointer to the RPL instance for which to add the route.
 *
@@ -323,6 +357,7 @@ void display_dodag( rpl_instance_t *instance ) {
 * existing route for the same prefix before adding the new one. This ensures
 * that the data plane's forwarding rule for this specific prefix is always
 * synchronized with the control plane's preferred parent.
+* Replaces rpl_set_default_route
 */
 static void
 rpl_add_prefix_route(rpl_instance_t *instance)
@@ -987,7 +1022,7 @@ rpl_free_instance(rpl_instance_t *instance)
   rpl_dag_t *dag;
   rpl_dag_t *end;
 
-  LOG_INFO("Leaving the instance %u\n", instance->instance_id);
+  LOG_INFO("Leaving the instance %u\n", instance->instance_id); // Not found in logs
 
   /* Remove any DAG inside this instance */
   for(dag = &instance->dag_table[0], end = dag + RPL_MAX_DAG_PER_INSTANCE;
@@ -998,7 +1033,8 @@ rpl_free_instance(rpl_instance_t *instance)
     }
   }
 
-  rpl_set_default_route(instance, NULL);
+  // rpl_set_default_route(instance, NULL);
+  rpl_add_prefix_route(instance);
 
 #if RPL_WITH_PROBING
   ctimer_stop(&instance->probing_timer);
@@ -1287,7 +1323,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   }
 
   if(best_dag->preferred_parent != last_parent) {
-    rpl_set_default_route(instance, rpl_parent_get_ipaddr(best_dag->preferred_parent));
+
+//    rpl_set_default_route(instance, rpl_parent_get_ipaddr(best_dag->preferred_parent));
+    rpl_add_prefix_route(instance);
     LOG_INFO("Changed preferred parent, rank changed from %u to %u\n",
              (unsigned)old_rank, best_dag->rank);
     RPL_STAT(rpl_stats.parent_switch++);
