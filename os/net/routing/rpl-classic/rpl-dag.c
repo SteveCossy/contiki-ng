@@ -417,7 +417,6 @@ uip_ds6_route_lookup_by_prefix(const uip_ipaddr_t *prefix)
 static void
 rpl_add_prefix_route(rpl_instance_t *instance)
 {
-  uip_ds6_route_t *route;
   
   if(instance == NULL || instance->current_dag == NULL ||
      instance->current_dag->preferred_parent == NULL) {
@@ -431,31 +430,13 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   if(nexthop == NULL) {
     return;
   }
+
+  // Step 1: Remove any old route for this prefix. This is essential.
+  rpl_route_rm_by_prefix(prefix); // Our new helper
   
-  // Step 1: Look for an existing route for this prefix.
-  // We may need to write uip_ds6_route_lookup_by_prefix if it doesn't exist.
-  route = uip_ds6_route_lookup_by_prefix(prefix);
-  
-  if(route == NULL) {
-    // Step 2a: No route exists. Add a new one.
-    LOG_INFO("RPL-ROUTE: Adding new route for prefix ");
-    LOG_INFO_6ADDR(prefix);
-    LOG_INFO_(" via ");
-    LOG_INFO_6ADDR(nexthop);
-    LOG_INFO_("\n");
-    
-    uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop);
-    
-  } else {
-    // Step 2b: A route already exists. We just need to refresh its lifetime.
-    LOG_INFO("RPL-ROUTE: Refreshing lifetime for route to prefix ");
-    LOG_INFO_6ADDR(prefix);
-    LOG_INFO_("\n");
-    
-    // The uip_ds6_route_add function is often designed to handle this refresh
-    // if the route already exists. But a more explicit way is to reset the timer.
-    // The exact lifetime value should come from the instance configuration.
-    stimer_set(&route->lifetime, RPL_LIFETIME(instance, instance->default_lifetime));
+  // Step 2: Add the new route. This creates a fresh entry.
+  if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
+    LOG_ERR("RPL-ROUTE: Failed to add prefix route!\n");
   }
 }
 
@@ -1809,7 +1790,7 @@ rpl_join_instance(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   rpl_reset_dio_timer(instance);
   // rpl_set_default_route(instance, from);
-  rpl_add_prefix_route(instance)
+  rpl_add_prefix_route(instance);
 
   if(instance->mop != RPL_MOP_NO_DOWNWARD_ROUTES) {
     rpl_parent_t *p = instance->current_dag->preferred_parent;
