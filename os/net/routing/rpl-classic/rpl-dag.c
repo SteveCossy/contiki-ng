@@ -339,7 +339,7 @@ rpl_route_rm_by_prefix(const uip_ipaddr_t *prefix)
    */
   LOG_INFO("RPL-ROUTE-RM: Searching for prefix ");
   LOG_INFO_6ADDR(prefix);
-  LOG_INFO_(".\n")
+  LOG_INFO_(".\n");
   r = uip_ds6_route_head();
   while(r != NULL) {
     /* Check if the prefix of the current route matches the one we want to delete.
@@ -431,7 +431,7 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
   
   LOG_ERR("RPL-ROUTE: Prefix ");
-    LOG_ERR_6ADDR(prefix)
+    LOG_ERR_6ADDR(prefix);
   
   if(nexthop == NULL) {
     LOG_ERR_(". Aborting - nexthop is NULL.\n");
@@ -444,9 +444,9 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   // Step 2: Add the new route. This creates a fresh entry.
   if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
     LOG_ERR_(". Failed to add prefix route.\n");
-  } else [
+  } else {
     LOG_INFO_(". Route added.\n");
-  ]
+  }
 }
 
 /**
