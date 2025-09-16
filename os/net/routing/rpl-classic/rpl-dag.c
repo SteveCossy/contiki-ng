@@ -740,7 +740,7 @@ rpl_set_root(uint8_t instance_id, uip_ipaddr_t *dag_id) // definition
         } else {
           if(dag == dag->instance->current_dag) {
             LOG_INFO("Dropping a joined DAG when setting this node as root\n");
-            rpl_set_default_route(instance, NULL);
+//            rpl_set_default_route(instance, NULL);
             dag->instance->current_dag = NULL;
           } else {
             LOG_INFO("Dropping a DAG when setting this node as root\n");
@@ -966,7 +966,8 @@ int
 rpl_set_default_route(rpl_instance_t *instance, uip_ipaddr_t *from)
 {
   if(instance->def_route != NULL) {
-    LOG_DBG("Removing default route through ");
+//    LOG_DBG("Removing default route through ");
+    LOG_DBG("*** ERROR **** trying to use rpl_set_default_route with ");
     LOG_DBG_6ADDR(&instance->def_route->ipaddr);
     LOG_DBG_("\n");
     uip_ds6_defrt_rm(instance->def_route);
