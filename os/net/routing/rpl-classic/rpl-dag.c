@@ -431,19 +431,19 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
   
   LOG_ERR("RPL-ROUTE: Prefix ");
-    LOG_ERR_6ADDR(prefix);
+  LOG_ERR_6ADDR(prefix);
   
   if(nexthop == NULL) {
     LOG_ERR_(". Aborting - nexthop is NULL.\n");
     return;
   }
-
-  // Step 1: Remove any old route for this prefix. This is essential.
-  rpl_route_rm_by_prefix(prefix); // Our new helper
+  LOG_ERR_(".\n");
+  // Step 1: Remove any old route for this prefix.
+  rpl_route_rm_by_prefix(prefix); 
   
   // Step 2: Add the new route. This creates a fresh entry.
   if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
-    LOG_ERR_(". Failed to add prefix route.\n");
+    LOG_ERR("RPL-ROUTE: Failed to add prefix route.\n");
   } else {
     LOG_INFO_(". Route added.\n");
   }
@@ -472,7 +472,6 @@ rpl_remove_prefix_route(rpl_instance_t *instance)
   LOG_INFO_6ADDR(prefix);
   LOG_INFO_("\n");
 
-  // Call your new, safe, prefix-based removal function.
   if(rpl_route_rm_by_prefix(prefix) == 0) {
     LOG_WARN("RPL-ROUTE: Could not find a route to remove for prefix ");
     LOG_INFO_6ADDR(prefix);
@@ -1311,9 +1310,10 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   last_parent = instance->current_dag->preferred_parent;
 
   if(instance->current_dag->rank != ROOT_RANK(instance)) {
+    LOG_DBG_(".\n");
     rpl_select_parent(p->dag);
   } else {
-    LOG_DBG_("\n");
+    LOG_DBG_("Root Rank!\n");
   }
 
   best_dag = NULL;
