@@ -394,17 +394,17 @@ rpl_get_parent_ipaddr(rpl_parent_t *p)
  * 
  * A new helper for rpl_add_prefix_route
  */
-static uip_ds6_route_t *
-uip_ds6_route_lookup_by_prefix(const uip_ipaddr_t *prefix)
-{
-  uip_ds6_route_t *r;
-  for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
-    if(uip_ipaddr_prefixcmp(&r->ipaddr, prefix, r->length)) {
-      return r;
-    }
-  }
-  return NULL;
-}
+// static uip_ds6_route_t *
+// uip_ds6_route_lookup_by_prefix(const uip_ipaddr_t *prefix)
+// {
+//   uip_ds6_route_t *r;
+//   for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r)) {
+//     if(uip_ipaddr_prefixcmp(&r->ipaddr, prefix, r->length)) {
+//       return r;
+//     }
+//   }
+//   return NULL;
+// }
 
 /**
  * \brief Adds or refreshes a prefix-specific route in the main IPv6 routing table.
@@ -1539,10 +1539,12 @@ rpl_nullify_parent(rpl_parent_t *parent)
     dag->rank = RPL_INFINITE_RANK;
     if(dag->joined) {
       if(dag->instance->def_route != NULL) {
-        LOG_DBG("Removing default route ");
+//        LOG_DBG("Removing default route ");
+        LOG_DBG("Removing default prefix ");
         LOG_DBG_6ADDR(rpl_parent_get_ipaddr(parent));
         LOG_DBG_("\n");
-        uip_ds6_defrt_rm(dag->instance->def_route);
+//        uip_ds6_defrt_rm(dag->instance->def_route);
+        rpl_remove_prefix_route(dag->instance);
         dag->instance->def_route = NULL;
       }
       /* Send a No-Path DAO only when nullifying preferred parent. */
@@ -1571,7 +1573,8 @@ rpl_move_parent(rpl_dag_t *dag_src, rpl_dag_t *dag_dst, rpl_parent_t *parent)
       LOG_DBG_6ADDR(rpl_parent_get_ipaddr(parent));
       LOG_DBG_("\n");
       LOG_DBG("rpl_move_parent\n");
-      uip_ds6_defrt_rm(dag_src->instance->def_route);
+//      uip_ds6_defrt_rm(dag_src->instance->def_route);
+      rpl_remove_prefix_route(dag_src->instance);
       dag_src->instance->def_route = NULL;
     }
   } else if(dag_src->joined) {
