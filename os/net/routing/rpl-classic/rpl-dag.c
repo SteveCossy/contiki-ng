@@ -328,6 +328,7 @@ rpl_route_rm_by_prefix(const uip_ipaddr_t *prefix)
   uip_ds6_route_t *r;
 
   if(prefix == NULL) {
+    LOG_WARN("RPL-ROUTE-RM: Called with NULL prefix.\n");
     return 0;
   }
 
@@ -336,20 +337,21 @@ rpl_route_rm_by_prefix(const uip_ipaddr_t *prefix)
    * We need to be careful, as we are modifying the list while iterating.
    * So we use a temporary pointer 'r' and check it at the start of the loop.
    */
+  LOG_INFO("RPL-ROUTE-RM: Searching for prefix ");
+  LOG_INFO_6ADDR(prefix);
+  LOG_INFO_(".\n")
   r = uip_ds6_route_head();
   while(r != NULL) {
     /* Check if the prefix of the current route matches the one we want to delete.
        We use uip_ipaddr_prefixcmp for a safe, length-aware comparison. */
     if(uip_ipaddr_prefixcmp(&r->ipaddr, prefix, r->length)) {
-      
-      LOG_INFO("RPL-ROUTE-RM: Found matching route to remove for prefix ");
-      LOG_INFO_6ADDR(prefix);
-      LOG_INFO_("\n");
+      LOG_INFO("RPL-ROUTE-RM: Found matching route to remove.\n");
       uip_ds6_route_rm(r);
       return 1;
     }
     
     r = uip_ds6_route_next(r);
+    LOG_INFO("RPL-ROUTE-RM: No matching route to remove.\n");
   }
   return 0;
 }
@@ -420,6 +422,7 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   
   if(instance == NULL || instance->current_dag == NULL ||
      instance->current_dag->preferred_parent == NULL) {
+    LOG_ERR("RPL-ROUTE: Aborting-Null Instance.\n");
     return; // Safety check
   }
   
@@ -427,7 +430,11 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   uint8_t prefix_len = instance->current_dag->prefix_info.length;
   const uip_ipaddr_t *nexthop = rpl_get_parent_ipaddr(instance->current_dag->preferred_parent);
   
+  LOG_ERR("RPL-ROUTE: Prefix ");
+    LOG_ERR_6ADDR(prefix)
+  
   if(nexthop == NULL) {
+    LOG_ERR_(". Aborting - nexthop is NULL.\n");
     return;
   }
 
@@ -436,8 +443,10 @@ rpl_add_prefix_route(rpl_instance_t *instance)
   
   // Step 2: Add the new route. This creates a fresh entry.
   if(uip_ds6_route_add(prefix, prefix_len, (uip_ipaddr_t *)nexthop) == NULL) {
-    LOG_ERR("RPL-ROUTE: Failed to add prefix route!\n");
-  }
+    LOG_ERR_(". Failed to add prefix route.\n");
+  } else [
+    LOG_INFO_(". Route added.\n");
+  ]
 }
 
 /**
