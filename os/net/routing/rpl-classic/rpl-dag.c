@@ -204,10 +204,11 @@ void display_dodag( rpl_instance_t *instance ) {
   if(instance != NULL) {
       uip_ds6_addr_t *lladdr;
       lladdr = uip_ds6_get_link_local(-1);
-      printf("This node Link-local IPv6 address: ");
-      //LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
-      uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
-      printf("\n");
+      LOG_INFO("This node Link-local IPv6 address: ");
+      //printf("This node Link-local IPv6 address: ");
+      LOG_INFO_6ADDR(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      //uip_debug_ipaddr_print(lladdr != NULL ? &lladdr->ipaddr : NULL);
+      LOG_INFO_("\n");
       
     // dag = &instance->dag_table[0];
   // Iterate through all DAGs potentially associated with this instance
@@ -253,11 +254,12 @@ void display_dodag( rpl_instance_t *instance ) {
 */ 
       parent = dag->preferred_parent;
       if(parent != NULL) {
-        printf("Preferred Parent's Link Local address: ");
-        uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
-        printf("\n");
+        LOG_DBG("Preferred Parent's Link Local address: ");
+//        uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
+        LOG_DBG_6ADDR(parent)
+        LOG_DBG_("\n");
       } else {
-        printf("No preferred parent.\n");
+        LOG_DBG("No preferred parent.\n");
      }
 /*      rpl_print_neighbor_list_for_instance(instance);
       printf("Neighbours from Display DODAG function:\n");
@@ -292,7 +294,7 @@ void display_dodag( rpl_instance_t *instance ) {
        // Check if this DAG is the *current* one the instance is actively using
        if(instance->current_dag == dag) {
          rpl_print_neighbor_list_for_instance(instance); 
-        } else {
+        } else {  // This line doesn't get printed
               printf("Note: This DAG (%p) is used but not instance->current_dag (%p)\n", 
                     (void*)dag, (void*)instance->current_dag);
         }
@@ -307,7 +309,7 @@ void display_dodag( rpl_instance_t *instance ) {
   }
   else // instance != NULL
   {
-    printf("display_dodag: NULL instance pointer passed.\n");
+    LOG_INFO("display_dodag: NULL instance pointer passed.\n");
   }
 }
 
