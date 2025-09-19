@@ -498,10 +498,6 @@ dio_output(rpl_instance_t *instance, uip_ipaddr_t *uc_addr)
   uip_ipaddr_t addr;
 #endif /* !RPL_LEAF_ONLY */
 
-if(instance != NULL && instance->current_dag != NULL) {
- LOG_INFO("NON-ROOT-DIO-SEND: Attempting to send DIO for instance %u.\n",
-          instance->instance_id);
-
 #if RPL_LEAF_ONLY
   /* In leaf mode, we only send DIO messages as unicasts in response to
      unicast DIS messages. */
@@ -1170,17 +1166,19 @@ dao_input(void)
   rpl_instance_t *instance;
   uint8_t instance_id;
 
-  /* Find the DODAGID of this DAO
-     The 'rpl_dao_t' struct is defined in 'rpl-private.h'.
-     UIP_ICMP_PAYLOAD points to the memory location right after the main
-     ICMPv6 header, which is where the DAO message body begins.
-     Now we can safely access the fields of the DAO struct. */
-  rpl_dao_t *dao = (rpl_dao_t *)UIP_ICMP_PAYLOAD;
 
   /* Destination Advertisement Object */
   LOG_INFO("Received a DAO from ");
   LOG_INFO_6ADDR(&UIP_IP_BUF->srcipaddr);
-  LOG_INFO_(" for instance ID %u", dao->instance_id);
+  // Check if the ICMPv6 payload is at least 2 bytes long (for code + instance ID).
+  //    uip_len holds the total L2 frame length. We need to subtract the L3 header length.
+  //    Create a raw byte pointer to the start of the ICMP payload.
+  //    The Instance ID is the second byte (at index 1).
+  if((uip_len - UIP_IPH_LEN - UIP_ICMPH_LEN) >= 2) {
+    uint8_t *rpl_payload = (uint8_t *)UIP_ICMP_PAYLOAD;
+    uint8_t instance_id = rpl_payload[1];
+    LOG_INFO_(" for instance ID %u", instance_id);
+      }
   LOG_INFO_("\n");
 
   if(uip_len <= uip_l3_icmp_hdr_len) {
