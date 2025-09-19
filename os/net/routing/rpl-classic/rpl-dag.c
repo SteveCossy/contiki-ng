@@ -256,7 +256,8 @@ void display_dodag( rpl_instance_t *instance ) {
       if(parent != NULL) {
         LOG_DBG("Preferred Parent's Link Local address: ");
 //        uip_debug_ipaddr_print(rpl_parent_get_ipaddr(parent));
-        LOG_DBG_6ADDR(parent)
+//        LOG_DBG_6ADDR(parent->dag->dag_id);
+        LOG_DBG_6ADDR(rpl_parent_get_ipaddr(parent));
         LOG_DBG_("\n");
       } else {
         LOG_DBG("No preferred parent.\n");
@@ -1226,8 +1227,14 @@ find_parent_in_dag(rpl_dag_t *dag, const uip_ipaddr_t *addr)
   /* We found an RPL parent entry. Now, verify it belongs to the correct DAG. */
   if(parent->dag != dag) {
     LOG_WARN(
-    "FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! (Parent's DAG: %p, Expected DAG: %p)\n",
-       ipaddr_buf, parent->dag, dag);
+    "FIND-PARENT-DBG: FAILED step 4. Parent %s found, but wrong DAG! (Parent's DAG: ",ipaddr_buf);
+    LOG_WARN_6ADDR(&parent->dag->dag_id);
+    LOG_WARN_("Expected DAG: ");
+    LOG_WARN_6ADDR(&dag->dag_id);
+    LOG_WARN_("\n");
+//    "FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! (Parent's DAG: %p, Expected DAG: %p)\n",
+//       ipaddr_buf, parent->dag, dag);
+//    "FIND-PARENT-DBG: FAILED step 4. Parent %s found, but belongs to wrong DAG! (Parent's DAG: %p, Expected DAG: %p)\n",
     return NULL;
   }
 
